@@ -1,40 +1,47 @@
 export const checkoutPlaceholder = '#checkout-a-configurer';
 
-export const passPillars = [
-  { label: 'Formations', text: 'Toute la bibliothèque pour créer, produire et faire sonner tes morceaux.' },
-  { label: 'Parcours', text: 'Des portes d’entrée simples pour savoir quoi travailler maintenant.' },
-  { label: 'Nouveautés', text: 'De nouvelles formations et ressources ajoutées régulièrement.' },
-  { label: 'PM School', text: 'Un espace humain pour pratiquer, partager et obtenir du feedback.' },
+export const passRhythm = [
+  { label: '1 focus principal', text: 'Une direction claire pour faire avancer ta musique ce mois-ci.' },
+  { label: '1 challenge', text: 'Une contrainte simple pour passer à l’action et créer davantage.' },
+  { label: '1 live', text: 'Un rendez-vous pour écouter, échanger ou débloquer un point précis.' },
+  { label: '1 ressource', text: 'Un workshop, un template, des stems ou une nouveauté utile — pas une montagne de contenu.' },
 ];
 
 export const passPaths = [
   {
     number: '01',
-    title: 'Partir sur de bonnes bases',
-    description: 'Le Parcours MAO pour débuter, reprendre les fondamentaux ou remettre ta progression dans un ordre logique.',
-    courses: ['Parcours MAO'],
+    title: 'Finis ton morceau',
+    description: 'Pour arrêter d’accumuler les projets inachevés et aller jusqu’au bout d’un titre.',
+    courses: ['Finish Line', 'L’Art de finir', 'Arrangements MAO'],
     accent: 'coral',
   },
   {
     number: '02',
-    title: 'Créer, écrire et finir',
-    description: 'Retrouve des idées, donne une forme à tes morceaux et apprends à aller jusqu’au bout.',
-    courses: ['Étincelle', 'La méthode PMER', 'Melody Maker', 'Arrangements MAO', 'Finish Line', 'L’Art de finir'],
+    title: 'Passe de l’idée à une vraie production',
+    description: 'Structure, choix des sons, arrangement, énergie et prises : les fondations d’un morceau qui existe vraiment.',
+    courses: ['La méthode PMER', 'Arrangements MAO', 'Étincelle'],
     accent: 'sand',
   },
   {
     number: '03',
-    title: 'Faire sonner ses productions',
-    description: 'Prends de meilleures décisions d’écoute, de mixage et de finalisation.',
-    courses: ['Mixage Rapide', 'Comprendre l’EQ', 'Comprendre la Compression', 'Plugin Mastery', 'Mastering Maison'],
+    title: 'Fais mieux sonner tes morceaux',
+    description: 'Écoute, balance, EQ, compression, espace et méthode pour mixer avec plus de recul.',
+    courses: ['Mixage Rapide', 'Comprendre l’EQ', 'Comprendre la Compression'],
     accent: 'sage',
   },
   {
     number: '04',
-    title: 'Maîtriser Logic Pro',
-    description: 'Approfondis l’outil pour qu’il accompagne ta création au lieu de la ralentir.',
-    courses: ['Logic Pro : le Guide vidéo', 'Logic Pro Secrets', 'Smart Tools Logic', 'Logic Pro pour iPad'],
+    title: 'Construis ton workflow MAO',
+    description: 'Organisation, habitudes et technique essentielle pour arrêter de perdre du temps dans ton DAW.',
+    courses: ['Workflow Efficace', 'Musicien Productif', 'Logic Pro Secrets'],
     accent: 'slate',
+  },
+  {
+    number: '05',
+    title: 'Développe ta créativité',
+    description: 'Composition, contraintes, expérimentation et identité : retrouve des idées qui te ressemblent.',
+    courses: ['Étincelle', 'Melody Maker', 'Le Défi Songwriting'],
+    accent: 'plum',
   },
 ];
 
@@ -183,40 +190,31 @@ export const passBonuses = [
 export const passOffers = [
   {
     key: 'monthly',
-    eyebrow: 'Mensuel',
-    price: '49€',
+    eyebrow: 'Founder mensuel',
+    price: '39€',
     suffix: '/mois',
-    description: 'Accès complet au Pass, sans engagement, aussi longtemps que ton abonnement est actif.',
-    cta: 'Choisir le mensuel',
-    note: null,
+    description: 'Un accès complet au système de progression, à la bibliothèque et à la PM School. Sans engagement.',
+    cta: 'Rejoindre le Pass MAO',
+    note: 'Tu gardes ton tarif Founder tant que ton abonnement reste actif.',
   },
   {
-    key: 'founder',
-    eyebrow: 'Offre Fondateur',
+    key: 'annual',
+    eyebrow: 'Founder annuel',
     price: '299€',
-    suffix: 'la première année',
-    description: 'Une année complète de Pass pour avancer avec un cadre, des ressources et une communauté.',
-    cta: 'Rejoindre avec l’offre Fondateur',
-    note: 'Au lieu de 588€ en mensuel · renouvellement ensuite à 399€/an',
-  },
-  {
-    key: 'lifetime',
-    eyebrow: 'Pass à vie',
-    price: '1 490€',
-    suffix: 'une fois',
-    description: 'Accès permanent au contenu du Pass et aux ressources qui enrichiront la bibliothèque.',
-    cta: 'Choisir le Pass à vie',
-    note: '5 places seulement',
+    suffix: '/an',
+    description: 'La même expérience complète, avec une année pour installer un vrai rythme et avancer sur un objectif concret.',
+    cta: 'Choisir le Founder annuel',
+    note: 'Le meilleur rapport qualité/prix : 169€ d’économie par rapport au mensuel.',
   },
 ];
 
 export const passFaq = [
-  { question: 'Je suis débutant, est-ce adapté ?', answer: 'Oui, notamment grâce au Parcours MAO, pensé pour avancer dans un ordre logique.' },
-  { question: 'Je suis déjà expérimenté ?', answer: 'Oui. Les parcours sont des recommandations : tu peux explorer librement toute la bibliothèque selon tes besoins.' },
+  { question: 'Je suis débutant, est-ce adapté ?', answer: 'Oui. Le diagnostic et les parcours t’aident à partir de ton niveau et à travailler une chose à la fois, dans un ordre logique.' },
+  { question: 'Je suis déjà expérimenté ?', answer: 'Oui. Les parcours servent de recommandations, pas de programme imposé. Tu peux aller droit vers le besoin du moment et explorer librement la bibliothèque.' },
   { question: 'Dois-je utiliser Logic Pro ?', answer: 'Non. Seules les formations consacrées spécifiquement à Logic nécessitent Logic Pro.' },
-  { question: 'Puis-je annuler le mensuel ?', answer: 'Oui, le mensuel est sans engagement.' },
+  { question: 'Puis-je annuler le mensuel ?', answer: 'Oui, le mensuel est sans engagement. Ton tarif Founder reste conservé tant que ton abonnement reste actif.' },
   { question: 'Que deviennent mes anciennes formations achetées séparément ?', answer: 'Elles restent à toi selon les conditions d’achat initiales.' },
   { question: 'Toutes les futures offres de Vince seront-elles incluses ?', answer: 'Non nécessairement. Le Pass sera enrichi régulièrement en formations et ressources MAO, mais certains accompagnements ou produits premium peuvent rester séparés.' },
-  { question: 'La communauté est-elle obligatoire ?', answer: 'Non. Elle est là quand tu as envie de partager, de pratiquer ou d’obtenir un regard sur ton travail.' },
+  { question: 'La communauté est-elle obligatoire ?', answer: 'Non. Tu peux tirer énormément de valeur du Pass sans participer à tout. La PM School est là lorsque tu as envie de partager, de pratiquer ou d’obtenir un regard sur ton travail.' },
   { question: 'Je suis déjà membre de la PM School ?', answer: 'Une offre fidélité spécifique est prévue pour les membres actuels de la PM School.' },
 ];

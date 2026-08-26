@@ -468,3 +468,106 @@ html[data-theme='dark'] .pass-pillars-grid article, html[data-theme='dark'] .pas
   .pass-audience .pass-check-list, .pass-recap .pass-check-list { margin-top: 5px; }
   .pass-final { padding: 88px 0; }
 }
+
+/* Pass MAO — progression */
+.pass-hero h1 { max-width: 750px; font-size: clamp(3.4rem, 6vw, 5.9rem); line-height: .9; }
+.pass-hero-actions { display: flex; flex-wrap: wrap; gap: 15px 19px; align-items: center; }
+.pass-hero-secondary { color: rgba(246,240,231,.74); border-bottom: 1px solid rgba(246,240,231,.45); font-size: 11px; font-weight: 750; transition: color 180ms ease, border-color 180ms ease; }
+.pass-hero-secondary:hover { border-color: #ef9273; color: #ef9273; }
+.pass-founder-prices { display: flex; flex-wrap: wrap; gap: 9px 24px; margin-top: 24px; }
+.pass-founder-prices p { margin: 0; color: rgba(246,240,231,.82); font-size: 12px; }
+.pass-founder-prices strong { margin-right: 2px; color: #f6f0e7; font-family: var(--serif); font-size: 25px; font-weight: 400; letter-spacing: -.04em; }
+.pass-founder-prices span { margin-left: 5px; color: #ef9273; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.pass-hero-proof { max-width: 530px; margin: 20px 0 0; color: rgba(246,240,231,.48); font-size: 9px; line-height: 1.5; }
+
+.pass-problem { text-align: left; }
+.pass-problem h2 { max-width: none; margin-inline: 0; }
+.pass-symptoms { display: grid; gap: 11px; margin: 28px 0 25px; padding: 0; list-style: none; }
+.pass-symptoms li { position: relative; padding: 0 0 11px 23px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.48; }
+.pass-symptoms li::before { content: '—'; position: absolute; left: 0; color: var(--coral); font-weight: 800; }
+.pass-problem .pass-problem-conclusion { margin: 0; color: var(--text); font-family: var(--serif); font-size: 27px; line-height: 1.04; letter-spacing: -.04em; }
+
+.pass-loop .pass-section-heading { max-width: 660px; }
+.pass-flow { margin: 31px 0 0; color: var(--text); font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.05em; }
+.pass-flow span { margin: 0 5px; color: var(--coral); }
+
+.pass-next-step { background: var(--surface); }
+.pass-next-step-inner { display: grid; grid-template-columns: minmax(0, .92fr) minmax(360px, .7fr); gap: 78px; align-items: center; }
+.pass-next-step h2 { margin: 0 0 17px; font-family: var(--serif); font-size: clamp(3.2rem, 5.5vw, 5.1rem); font-weight: 400; line-height: .88; letter-spacing: -.07em; }
+.pass-next-step-inner > div > p:not(.pass-eyebrow):not(.pass-large-copy) { max-width: 515px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.pass-next-step .pass-large-copy { max-width: 530px; margin: 21px 0 0; color: var(--text); font-family: var(--serif); font-size: 24px; line-height: 1.08; letter-spacing: -.035em; }
+.pass-next-card { overflow: hidden; padding: 25px; border: 1px solid rgba(239,146,115,.5); border-radius: 18px; background: var(--pass-dark); color: #f6f0e7; box-shadow: 0 18px 42px rgba(38,25,20,.14); }
+.pass-next-card-label { margin: 0 0 27px; color: #ef9273; font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.pass-next-card dl { display: grid; gap: 17px; margin: 0; }
+.pass-next-card dl > div { padding-bottom: 16px; border-bottom: 1px solid rgba(246,240,231,.15); }
+.pass-next-card dt { margin-bottom: 5px; color: rgba(246,240,231,.5); font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.pass-next-card dd { margin: 0; font-family: var(--serif); font-size: 24px; line-height: 1.02; letter-spacing: -.04em; }
+.pass-next-card dl > div:nth-child(2) dd { max-width: 345px; font-size: 29px; }
+.pass-next-card-action { display: flex; align-items: center; justify-content: space-between; margin-top: 21px; color: #ef9273; font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.pass-next-card-action i { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid rgba(239,146,115,.55); border-radius: 50%; font-size: 15px; font-style: normal; }
+
+.pass-paths-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pass-path-card { min-height: 275px; padding: 24px; }
+.pass-path-card h3 { margin-top: 27px; font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.pass-path-card > p { margin-bottom: 19px; }
+.pass-ninety { background: var(--pass-dark); color: #f6f0e7; text-align: center; }
+.pass-ninety .pass-eyebrow { color: #f1a17a; }
+.pass-ninety h2 { max-width: 680px; margin-inline: auto; }
+.pass-ninety p:not(.pass-eyebrow) { max-width: 620px; margin: 23px auto 0; color: rgba(246,240,231,.7); font-size: 15px; line-height: 1.6; }
+.pass-ninety .pass-ninety-emphasis { color: #ef9273; font-family: var(--serif); font-size: 25px; line-height: 1.08; letter-spacing: -.04em; }
+
+.pass-catalogue-more { max-width: 740px; margin: 27px auto 0; color: rgba(246,240,231,.6); font-size: 11px; line-height: 1.55; text-align: center; }
+
+.pass-rhythm { border-block: 1px solid var(--line-strong); }
+.pass-rhythm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.pass-rhythm-grid article { min-height: 192px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.pass-rhythm-grid article > span { color: var(--coral); font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+.pass-rhythm-grid h3 { margin: 30px 0 9px; font-family: var(--serif); font-size: 25px; font-weight: 400; line-height: 1; letter-spacing: -.04em; }
+.pass-rhythm-grid p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.pass-school-optional { margin: 22px 0 0; color: var(--text); font-family: var(--serif); font-size: 22px; line-height: 1.08; letter-spacing: -.035em; }
+
+.pass-anti-overwhelm { background: #25211e; color: #f6f0e7; text-align: center; }
+.pass-anti-overwhelm .pass-eyebrow { color: #f1a17a; }
+.pass-anti-overwhelm h2 { max-width: 650px; margin-inline: auto; }
+.pass-anti-overwhelm p:not(.pass-eyebrow) { max-width: 620px; margin: 22px auto 0; color: rgba(246,240,231,.7); font-size: 15px; line-height: 1.6; }
+.pass-anti-overwhelm .pass-large-copy { color: #f6f0e7; font-family: var(--serif); font-size: 25px; line-height: 1.08; letter-spacing: -.04em; }
+.pass-anti-overwhelm strong { color: #ef9273; }
+
+.pass-pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
+.pass-price-card { min-height: 355px; }
+.pass-price-card--featured { transform: translateY(-7px); }
+.pass-loyalty-note strong { color: var(--coral); }
+.pass-final-price { margin: 16px auto 0 !important; color: rgba(246,240,231,.58) !important; font-size: 10px !important; line-height: 1.55; }
+
+html[data-theme='dark'] .pass-next-step, html[data-theme='dark'] .pass-rhythm { background: #1b1b19; }
+html[data-theme='dark'] .pass-rhythm-grid article { background: #20201d; }
+
+@media (max-width: 900px) {
+  .pass-next-step-inner { grid-template-columns: 1fr .78fr; gap: 38px; }
+  .pass-paths-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pass-rhythm-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 620px) {
+  .pass-hero h1 { font-size: clamp(3.35rem, 15vw, 4.35rem); }
+  .pass-hero-actions { display: grid; gap: 16px; justify-items: start; }
+  .pass-founder-prices { gap: 8px 15px; margin-top: 21px; }
+  .pass-founder-prices strong { font-size: 23px; }
+  .pass-symptoms { margin-top: 24px; }
+  .pass-symptoms li { font-size: 13px; }
+  .pass-problem .pass-problem-conclusion { font-size: 24px; }
+  .pass-flow { margin-top: 23px; font-size: 20px; line-height: 1.4; }
+  .pass-next-step-inner { grid-template-columns: 1fr; gap: 30px; }
+  .pass-next-step h2 { font-size: clamp(3.1rem, 16vw, 4.2rem); }
+  .pass-next-step .pass-large-copy { font-size: 22px; }
+  .pass-next-card { padding: 20px; }
+  .pass-next-card dd { font-size: 22px; }
+  .pass-next-card dl > div:nth-child(2) dd { font-size: 26px; }
+  .pass-paths-grid, .pass-rhythm-grid { grid-template-columns: 1fr; }
+  .pass-path-card { min-height: 0; }
+  .pass-ninety p:not(.pass-eyebrow), .pass-anti-overwhelm p:not(.pass-eyebrow) { font-size: 14px; }
+  .pass-ninety .pass-ninety-emphasis, .pass-anti-overwhelm .pass-large-copy { font-size: 22px; }
+  .pass-rhythm-grid article { min-height: 158px; }
+  .pass-rhythm-grid h3 { margin-top: 24px; }
+  .pass-pricing-grid { grid-template-columns: 1fr; }
+}
