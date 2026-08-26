@@ -1,0 +1,36 @@
+---
+import type { Formation } from '../data/formations';
+import { formationCategories } from '../data/formations';
+
+interface Props {
+  formation: Formation;
+  compact?: boolean;
+}
+const { formation, compact = false } = Astro.props;
+const category = formationCategories[formation.category];
+const isExternal = /^https?:\/\//.test(formation.url);
+---
+
+<a
+  class:list={[
+    'option-card',
+    'formation-card',
+    `option-${category.accent}`,
+    { 'formation-card--compact': compact, 'formation-card--featured': formation.featured },
+  ]}
+  href={formation.url}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noreferrer' : undefined}
+  data-formation-card
+  data-category={formation.category}
+  data-featured={formation.featured ? 'true' : 'false'}
+>
+  <div class="formation-meta">
+    <span>{category.label}</span>
+    {formation.duration && <span>{formation.duration}</span>}
+  </div>
+  {formation.badge && <span class="formation-badge">{formation.badge}</span>}
+  <span class="option-arrow" aria-hidden="true">↗</span>
+  <h3><span>{formation.title}</span></h3>
+  <p>{formation.description}</p>
+</a>

@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OptionIcon from '../components/OptionIcon.astro';
+import { homeOptions } from '../data/site';
+---
+
+<BaseLayout
+  title="Vince — Le Musicien"
+  description="Musicien, producteur et formateur. Vince partage ce qu’il apprend sur la création musicale, la production et le home studio."
+  image="/images/vince-home-studio.png"
+  pageClass="home-page"
+>
+  <div class="home-wrap">
+    <section class="profile-intro" aria-labelledby="home-title">
+      <h1 id="home-title">Fais plein de <span>musique</span></h1>
+      <img class="profile-photo" src="/images/vince-home-studio.png" alt="Vince dans son home studio" width="828" height="552" fetchpriority="high" />
+      <div class="profile-copy">
+        <h2>Vince <span>— Le Musicien</span></h2>
+        <p class="profile-role">Musicien, producteur et formateur.</p>
+        <p>Je partage depuis plus de douze ans ce que j’apprends sur la création musicale, la production et le home studio.</p>
+        <p>Mon objectif : t’aider à faire plus de musique, sans te perdre dans la technique ou le matériel.</p>
+      </div>
+      <p class="profile-proof"><strong>+28 000</strong> abonnés YouTube <i>·</i> <strong>+6 000</strong> musiciens formés <i>·</i> production audio notamment pour RTL</p>
+    </section>
+
+    <section class="options-section" aria-labelledby="options-title">
+      <header class="options-heading">
+        <h2 id="options-title">Ce que je propose</h2>
+        <p>Six façons de faire avancer ta musique avec moi.</p>
+      </header>
+      <div class="options-grid">
+        {homeOptions.map((item) => (
+          <a class:list={['option-card', `option-${item.accent}`]} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>
+            <div class="option-top">
+              <OptionIcon name={item.icon} />
+              <span class="option-arrow" aria-hidden="true">{item.external ? '↗' : '→'}</span>
+            </div>
+            <h3><span>{item.title}</span></h3>
+            <p>{item.description}</p>
+            <span class="option-cta">{item.cta} <i aria-hidden="true">{item.external ? '↗' : '→'}</i></span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

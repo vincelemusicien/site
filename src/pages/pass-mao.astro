@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  checkoutPlaceholder,
+  passBonuses,
+  passInteractiveCourses,
+  passFaq,
+  passOffers,
+  passPaths,
+  passPillars,
+} from '../data/pass-mao';
+---
+
+<BaseLayout
+  title="Pass MAO — Le Musicien"
+  description="Crée plus. Finis tes morceaux. Fais-les mieux sonner. Toutes les formations, les parcours et la PM School dans un seul accès."
+>
+  <div class="pass-page">
+    <section class="pass-hero" aria-labelledby="pass-title">
+      <div class="pass-wrap pass-hero-inner">
+        <div class="pass-hero-copy">
+          <p class="pass-eyebrow">Pass MAO</p>
+          <h1 id="pass-title">Crée plus.<br />Finis tes morceaux.<br /><span>Fais-les mieux sonner.</span></h1>
+          <p class="pass-lead">Toutes les formations, les parcours et la communauté dont tu as besoin pour progresser durablement en production musicale.</p>
+          <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre le Pass MAO <span aria-hidden="true">→</span></a>
+          <p class="pass-price-note">À partir de 49€/mois, sans engagement.</p>
+        </div>
+        <figure class="pass-hero-visual">
+          <img class="pass-hero-product" src="/images/pass/pass-mao-visuel.png" alt="Carte membre premium du Pass MAO dans un home studio" fetchpriority="high" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="pass-section pass-problem" aria-labelledby="problem-title">
+      <div class="pass-narrow">
+        <p class="pass-eyebrow">Le vrai problème</p>
+        <h2 id="problem-title">Tu n’as probablement pas besoin d’un tuto de plus.</h2>
+        <p class="pass-large-copy">Tu regardes des vidéos, découvres des plugins, apprends des techniques isolées… mais tes morceaux continuent de tourner en rond.</p>
+        <p>Le problème n’est pas le manque d’informations. C’est la <strong>dispersion</strong>.</p>
+      </div>
+    </section>
+
+    <section class="pass-section pass-loop" aria-labelledby="loop-title">
+      <div class="pass-wrap">
+        <header class="pass-section-heading">
+          <p class="pass-eyebrow">Un écosystème, pas une pile de tutos</p>
+          <h2 id="loop-title">Ici, tout se reconnecte.</h2>
+        </header>
+        <ol class="pass-loop-list">
+          <li><strong>Apprends</strong><span>Choisis ce dont tu as besoin.</span></li>
+          <li><strong>Crée</strong><span>Applique-le immédiatement.</span></li>
+          <li><strong>Partage</strong><span>Montre ton travail et échange.</span></li>
+          <li><strong>Progresse</strong><span>Obtiens du feedback et continue.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="pass-section pass-pillars" aria-labelledby="pillars-title">
+      <div class="pass-wrap">
+        <header class="pass-section-heading">
+          <p class="pass-eyebrow">Ce qui est inclus</p>
+          <h2 id="pillars-title">Tout ce qu’il faut pour avancer, au bon moment.</h2>
+        </header>
+        <div class="pass-pillars-grid">
+          {passPillars.map((pillar, index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <h3>{pillar.label}</h3>
+              <p>{pillar.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pass-section pass-paths" aria-labelledby="paths-title">
+      <div class="pass-wrap">
+        <header class="pass-section-heading pass-heading-split">
+          <div><p class="pass-eyebrow">Les parcours</p><h2 id="paths-title">Quatre portes d’entrée.</h2></div>
+          <p>Utilise-les comme un GPS, pas comme un programme scolaire. Tu peux aussi explorer librement toute la bibliothèque.</p>
+        </header>
+        <div class="pass-paths-grid">
+          {passPaths.map((path) => (
+            <article class:list={['pass-path-card', `option-${path.accent}`]}>
+              <span class="pass-path-number">{path.number}</span>
+              <h3>{path.title}</h3>
+              <p>{path.description}</p>
+              <ul>{path.courses.map((course) => <li>{course}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pass-section pass-catalogue" aria-labelledby="catalogue-title">
+      <div class="pass-wrap">
+        <header class="pass-section-heading pass-heading-split">
+          <div><p class="pass-eyebrow">La bibliothèque</p><h2 id="catalogue-title">Explore une partie de la bibliothèque.</h2></div>
+          <p>Tu n’as pas besoin de tout suivre. Choisis simplement ce dont tu as besoin aujourd’hui. Clique sur une formation pour découvrir ce qu’elle peut t’apporter.</p>
+        </header>
+        <div class="pass-training-grid" data-training-grid>
+          {passInteractiveCourses.map((course, index) => (
+            <article class:list={['pass-training-card', `option-${course.accent}`]} data-training-card>
+              <button
+                class="pass-training-summary"
+                type="button"
+                aria-expanded="false"
+                aria-controls={`pass-training-details-${index}`}
+                data-training-trigger
+              >
+                <span class="pass-training-media" aria-hidden="true">
+                  <img src={course.image} alt="" loading="lazy" />
+                </span>
+                <span class="pass-training-meta">{course.category} <i>·</i> {course.format}</span>
+                <h3>{course.title}</h3>
+                <span class="pass-training-promise">{course.promise}</span>
+                <span class="pass-training-value">Valeur {course.value}</span>
+                <span class="pass-training-action">Voir ce que tu vas apprendre <i aria-hidden="true">+</i></span>
+              </button>
+              <div class="pass-training-details" id={`pass-training-details-${index}`} data-training-details aria-hidden="true">
+                <div>
+                  <p>{course.description}</p>
+                  <ul>
+                    {course.benefits.map((benefit) => <li>{benefit}</li>)}
+                  </ul>
+                  <p class="pass-training-included">Valeur {course.value} <span>· Inclus dans le Pass</span></p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pass-section pass-school" aria-labelledby="school-title">
+      <div class="pass-wrap pass-school-inner">
+        <div class="pass-school-copy">
+          <p class="pass-eyebrow">La PM School</p>
+          <h2 id="school-title">La formation te donne les outils. La PM School t’aide à les utiliser.</h2>
+          <p>Regarder des formations ne suffit pas toujours à progresser. La PM School existe depuis plusieurs années : un espace à taille humaine, où de vrais musiciens partagent leurs morceaux, leurs blocages et leurs avancées.</p>
+          <p class="pass-school-value">Valeur : <strong>120€/an</strong></p>
+          <ul class="pass-check-list">
+            <li>Un défi créatif chaque mois</li>
+            <li>Un live mensuel d’écoute et feedback</li>
+            <li>Tous les replays, les petits tutos et les contenus exclusifs</li>
+            <li>Une communauté de musiciens qui se connaissent et échangent</li>
+            <li>Une application iOS et Android dédiée, pour rester connectés</li>
+          </ul>
+        </div>
+        <figure class="pass-school-shot">
+          <img src="/images/pass/pm-school.png" alt="Aperçu de la PM School" loading="lazy" />
+          <figcaption>Apprendre → mettre en pratique → partager → continuer.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="pass-bonus" aria-labelledby="bonus-title">
+      <div class="pass-wrap">
+        <header class="pass-bonus-heading">
+          <p class="pass-eyebrow">+750€ de contenus bonus</p>
+          <h2 id="bonus-title">Mais ce n’est pas tout <span>!!</span></h2>
+          <p>Tu accèdes aussi à tous ces bonus, en plus de la bibliothèque principale.</p>
+        </header>
+        <div class="pass-bonus-grid">
+          {passBonuses.map((bonus) => (
+            <article>
+              <span>Valeur {bonus.value}</span>
+              <h3>{bonus.title}</h3>
+              <p>{bonus.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pass-section pass-growth" aria-labelledby="growth-title">
+      <div class="pass-narrow">
+        <p class="pass-eyebrow">Le Pass grandit avec toi</p>
+        <h2 id="growth-title">Tu n’as pas besoin de tout apprendre aujourd’hui.</h2>
+        <p>Un jour tu cherches comment créer. Puis comment arranger, mixer, finaliser ou sortir ta musique. Le Pass est là pour que tu aies la bonne ressource quand ton prochain vrai besoin apparaît.</p>
+      </div>
+    </section>
+
+    <section class="pass-section pass-recap" aria-labelledby="recap-title">
+      <div class="pass-wrap pass-recap-inner">
+        <div><p class="pass-eyebrow">En résumé</p><h2 id="recap-title">Ce que ton accès débloque.</h2></div>
+        <ul class="pass-check-list">
+          <li>25+ formations et ressources MAO</li><li>Le Parcours MAO et des parcours recommandés</li><li>De nouvelles ressources ajoutées régulièrement</li><li>La commu PM School</li><li>Une collection de contenus bonus</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="pass-section pass-pricing" id="tarifs" aria-labelledby="pricing-title">
+      <div class="pass-wrap">
+        <header class="pass-section-heading"><p class="pass-eyebrow">Choisis ton accès</p><h2 id="pricing-title">Avance à ton rythme.</h2></header>
+        <div class="pass-pricing-grid">
+          {passOffers.map((offer) => (
+            <article class:list={['pass-price-card', { 'pass-price-card--featured': offer.key === 'founder' }]}>
+              {offer.key === 'founder' && <p class="pass-price-ribbon">Quasiment 6 mois offerts</p>}
+              <p class="pass-price-eyebrow">{offer.eyebrow}</p>
+              <p class="pass-price"><strong>{offer.price}</strong> <span>{offer.suffix}</span></p>
+              <p class="pass-price-description">{offer.description}</p>
+              <a class:list={['pass-button', { 'pass-button--quiet': offer.key !== 'founder' }]} href={checkoutPlaceholder} data-checkout-placeholder>{offer.cta} <span aria-hidden="true">→</span></a>
+              {offer.note && <p class="pass-price-note pass-price-note--card">{offer.note}</p>}
+            </article>
+          ))}
+        </div>
+        <p class="pass-loyalty-note">Déjà membre de la PM School ? Une offre fidélité spéciale est prévue pour toi : <strong>contacte-moi dans la School ;)</strong></p>
+      </div>
+    </section>
+
+    <section class="pass-section pass-legacy" aria-labelledby="legacy-title">
+      <div class="pass-narrow">
+        <p class="pass-eyebrow">Déjà client ?</p>
+        <h2 id="legacy-title">Tes anciennes formations restent à toi.</h2>
+        <p>Selon les conditions d’achat initiales, tes formations déjà achetées restent accessibles. Le Pass donne accès à tout ce que tu n’as pas encore, aux nouvelles ressources et à la PM School.</p>
+      </div>
+    </section>
+
+    <section class="pass-section pass-audience" aria-labelledby="audience-title">
+      <div class="pass-wrap pass-audience-inner">
+        <div><p class="pass-eyebrow">Pour qui ?</p><h2 id="audience-title">Pour faire de la musique chez toi, et aller plus loin.</h2></div>
+        <ul class="pass-check-list"><li>Tu veux devenir plus autonome dans ta création.</li><li>Tu commences plus de morceaux que tu n’en termines.</li><li>Tu es perdu face à trop d’informations.</li><li>Tu veux améliorer ton son sans devenir ingénieur du son.</li><li>Tu aimerais partager ta musique avec des personnes qui comprennent tes problématiques.</li></ul>
+      </div>
+    </section>
+
+    <section class="pass-section pass-faq" aria-labelledby="faq-title">
+      <div class="pass-narrow">
+        <p class="pass-eyebrow">FAQ</p>
+        <h2 id="faq-title">Quelques questions légitimes.</h2>
+        <div class="pass-faq-list">
+          {passFaq.map((item) => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="pass-final" aria-labelledby="final-title">
+      <div class="pass-narrow">
+        <p class="pass-eyebrow">Le Pass MAO</p>
+        <h2 id="final-title">Crée plus. Finis tes morceaux. <span>Fais-les mieux sonner.</span></h2>
+        <p>Tu peux continuer à accumuler des tutos. Ou commencer à avancer.</p>
+        <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre avec l’offre Fondateur <span aria-hidden="true">→</span></a>
+        <a class="pass-final-secondary" href="#tarifs">Voir les autres formules</a>
+      </div>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const cards = Array.from(document.querySelectorAll('[data-training-card]'));
+
+      cards.forEach((card) => {
+        const trigger = card.querySelector('[data-training-trigger]');
+        const details = card.querySelector('[data-training-details]');
+
+        trigger?.addEventListener('click', () => {
+          const willOpen = trigger.getAttribute('aria-expanded') !== 'true';
+
+          cards.forEach((item) => {
+            item.classList.remove('is-open');
+            item.querySelector('[data-training-trigger]')?.setAttribute('aria-expanded', 'false');
+            item.querySelector('[data-training-details]')?.setAttribute('aria-hidden', 'true');
+          });
+
+          if (willOpen) {
+            card.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+            details?.setAttribute('aria-hidden', 'false');
+          }
+        });
+      });
+    })();
+  </script>
+</BaseLayout>

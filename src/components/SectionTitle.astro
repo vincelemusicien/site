@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  invert?: boolean;
+}
+const { eyebrow, title, intro, invert = false } = Astro.props;
+---
+
+<header class:list={['section-title', { invert }]} data-reveal>
+  <p class="eyebrow"><span aria-hidden="true"></span>{eyebrow}</p>
+  <div class="section-title-row">
+    <h2 set:html={title}></h2>
+    {intro && <p>{intro}</p>}
+  </div>
+</header>

@@ -1,0 +1,96 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  pageClass?: string;
+}
+
+const {
+  title,
+  description,
+  image = '/social-card.jpg',
+  pageClass = '',
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+        try {
+          const saved = localStorage.getItem('lemusicien-theme');
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = saved === 'light' || saved === 'dark' ? saved : (systemDark ? 'dark' : 'light');
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+        } catch {
+          root.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f2efe8" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Le Musicien" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+  </head>
+  <body class={pageClass}>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <Header />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const button = document.querySelector('[data-theme-toggle]');
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const savedTheme = () => {
+          try { return localStorage.getItem('lemusicien-theme'); } catch { return null; }
+        };
+
+        const applyTheme = (theme, persist = false) => {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#171715' : '#f2efe8');
+          if (button) {
+            const dark = theme === 'dark';
+            button.setAttribute('aria-pressed', String(dark));
+            button.setAttribute('aria-label', dark ? 'Activer le mode clair' : 'Activer le mode sombre');
+            button.setAttribute('title', dark ? 'Mode clair' : 'Mode sombre');
+          }
+          if (persist) {
+            try { localStorage.setItem('lemusicien-theme', theme); } catch {}
+          }
+        };
+
+        applyTheme(root.dataset.theme || (media.matches ? 'dark' : 'light'));
+        button?.addEventListener('click', () => applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true));
+        media.addEventListener?.('change', (event) => {
+          if (!savedTheme()) applyTheme(event.matches ? 'dark' : 'light');
+        });
+      })();
+    </script>
+  </body>
+</html>

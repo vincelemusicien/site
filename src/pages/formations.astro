@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FormationCard from '../components/FormationCard.astro';
+import { individualFormations, passExclusivePreview, formationCategories } from '../data/formations';
+
+const filters = [
+  { key: 'all', label: 'Toutes', description: 'Toutes les formations, regroupées par grands besoins.' },
+  ...Object.entries(formationCategories).map(([key, value]) => ({ key, label: value.label, description: value.description })),
+];
+---
+
+<BaseLayout
+  title="Formations — Le Musicien"
+  description="Des formations concrètes pour créer, produire et terminer davantage de musique, sans te perdre dans la technique ou le matériel."
+>
+  <div class="catalog-wrap">
+    <section class="catalog-intro" aria-labelledby="catalog-title">
+      <svg class="catalog-daw-backdrop" viewBox="0 0 1200 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <g class="daw-track-lines">
+          <path d="M0 92H1200M0 173H1200M0 254H1200M0 335H1200" />
+          <path d="M132 38V410M333 38V410M534 38V410M735 38V410M936 38V410M1137 38V410" />
+        </g>
+        <g class="daw-waveforms">
+          <path d="M42 132c20-20 38 20 58 0s39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0" />
+          <path d="M95 294c28-33 52 33 80 0s51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0" />
+        </g>
+        <g class="daw-automation">
+          <path d="M0 214L178 204 301 225 466 184 618 205 759 171 926 211 1200 156" />
+          <circle cx="301" cy="225" r="5" /><circle cx="618" cy="205" r="5" /><circle cx="926" cy="211" r="5" />
+        </g>
+        <g class="daw-markers"><path d="M178 49v18M466 49v18M759 49v18M1048 49v18" /><path d="M178 49h28M466 49h28M759 49h28M1048 49h28" /></g>
+      </svg>
+      <div class="catalog-intro-content">
+        <p class="catalog-label">Formations</p>
+        <h1 id="catalog-title">Apprends ce qui compte vraiment.</h1>
+        <p>Des formations concrètes pour créer, produire et terminer davantage de musique, sans te perdre dans la technique ou le matériel.</p>
+        <a href="/pass-mao/">Tu veux accéder à toute l’école ? <span>Découvrir le Pass MAO →</span></a>
+      </div>
+    </section>
+
+    <section class="catalog-section" aria-labelledby="catalog-heading">
+      <header class="catalog-heading">
+        <h2 id="catalog-heading">Choisis ton univers</h2>
+        <p data-filter-description>{filters[0].description}</p>
+      </header>
+
+      <div class="catalog-filters" role="group" aria-label="Filtrer les formations">
+        {filters.map((filter, index) => (
+          <button
+            type="button"
+            data-filter={filter.key}
+            data-description={filter.description}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+          >{filter.label}</button>
+        ))}
+      </div>
+
+      <p class="catalog-count" aria-live="polite" data-filter-count>{individualFormations.length} formations</p>
+
+      <div class="formation-grid">
+        {individualFormations.map((formation) => <FormationCard formation={formation} />)}
+      </div>
+    </section>
+
+    <section class="pass-library" aria-labelledby="pass-library-title">
+      <header class="pass-library-heading">
+        <p>Le Pass MAO</p>
+        <h2 id="pass-library-title">Encore plus dans le Pass MAO</h2>
+        <span>Certaines formations, masterclasses et ressources de ma bibliothèque sont exclusivement disponibles avec le Pass.</span>
+      </header>
+      <div class="pass-library-grid">
+        {passExclusivePreview.map((formation) => <FormationCard formation={formation} compact />)}
+      </div>
+      <a class="pass-library-link" href="/pass-mao/">Voir tous les bonus du Pass <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('[data-filter]'));
+      const cards = Array.from(document.querySelectorAll('[data-formation-card]'));
+      const count = document.querySelector('[data-filter-count]');
+      const description = document.querySelector('[data-filter-description]');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.filter;
+          let visible = 0;
+
+          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          cards.forEach((card) => {
+            const show = filter === 'all' || card.dataset.category === filter;
+            card.hidden = !show;
+            if (show) visible += 1;
+          });
+
+          if (count) count.textContent = `${visible} formation${visible > 1 ? 's' : ''}`;
+          if (description) description.textContent = button.dataset.description || '';
+        });
+      });
+    })();
+  </script>
+</BaseLayout>
