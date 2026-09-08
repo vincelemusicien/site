@@ -16,7 +16,7 @@ export const homeOptions = [
     icon: 'book',
   },
   {
-    title: 'Pass MAO',
+    title: 'Le Pass MAO',
     description: 'Accède à toute mon école de production musicale avec un seul abonnement.',
     cta: 'Découvrir le Pass',
     href: '/pass-mao/',
@@ -51,8 +51,8 @@ export const homeOptions = [
     icon: 'sliders',
   },
   {
-    title: 'Email',
-    description: 'Reçois mes idées, conseils, nouveautés et offres directement par email.',
+    title: 'Les emails privés',
+    description: 'Pour rester motivé et faire plein de musique.',
     cta: 'Recevoir mes emails',
     href: 'https://productionmusicale.systeme.io/619551c5',
     external: true,

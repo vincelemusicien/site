@@ -66,12 +66,12 @@ html[data-theme='dark'] .theme-icon-moon { display: none; }
 .home-wrap { width: min(1040px, calc(100% - 48px)); margin-inline: auto; }
 .profile-intro { display: flex; align-items: center; flex-direction: column; padding: 68px 0 66px; text-align: center; }
 .profile-intro > h1 { margin-bottom: 29px; font-family: var(--serif); font-size: clamp(3.1rem, 5.5vw, 4.6rem); line-height: 0.94; letter-spacing: -0.05em; text-transform: uppercase; }
-.profile-intro > h1 span { position: relative; display: inline-block; color: var(--coral); }
-.profile-intro > h1 span::after { content: ''; position: absolute; left: 7%; right: 5%; bottom: -7px; height: 2px; border-radius: 2px; background: currentColor; opacity: 0.55; transform: rotate(-1.5deg); }
+.profile-intro > h1 span { position: relative; display: inline-block; color: var(--text); }
+.profile-intro > h1 span::after { content: ''; position: absolute; left: 7%; right: 5%; bottom: -7px; height: 2px; border-radius: 2px; background: var(--coral); opacity: 0.55; transform: rotate(-1.5deg); }
 .profile-photo { display: block; width: 118px; height: 118px; margin-bottom: 23px; border: 1px solid var(--line-strong); border-radius: 50%; object-fit: cover; object-position: 42% center; filter: saturate(0.75) contrast(1.03); }
 .profile-copy { max-width: 650px; }
 .profile-copy h2 { margin-bottom: 7px; font-family: var(--serif); font-size: 32px; line-height: 1; letter-spacing: -0.04em; }
-.profile-copy h2 span { color: var(--coral); }
+.profile-copy h2 span { color: var(--text); }
 .profile-copy > p { margin-bottom: 7px; color: var(--muted); font-size: 14px; line-height: 1.52; }
 .profile-copy .profile-role { margin-bottom: 16px; color: var(--text); font-size: 13px; font-weight: 700; }
 .profile-proof { max-width: 800px; margin: 23px 0 0; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 0.055em; line-height: 1.7; text-transform: uppercase; }
