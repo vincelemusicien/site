@@ -25,11 +25,11 @@ import {
             <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre le Pass MAO <span aria-hidden="true">→</span></a>
             <a class="pass-hero-secondary" href="#comment-ca-marche">Découvrir comment ça marche <span aria-hidden="true">↓</span></a>
           </div>
-          <div class="pass-founder-prices" aria-label="Tarifs Founder">
-            <p><strong>39€</strong> /mois <span>Founder</span></p>
-            <p><strong>299€</strong> /an <span>Founder</span></p>
+          <div class="pass-founder-prices" aria-label="Tarifs Fondateur">
+            <p><strong>39€</strong> /mois <span>Fondateur</span><em>au lieu de 49€</em></p>
+            <p><strong>299€</strong> /an <span>Fondateur</span><em>au lieu de 399€</em></p>
           </div>
-          <p class="pass-price-note">Tarif membre Founder conservé tant que ton abonnement reste actif.</p>
+          <p class="pass-price-note">Tarif membre Fondateur conservé tant que ton abonnement reste actif.</p>
           <p class="pass-hero-proof">Créé par Vince, musicien, producteur, ancien compositeur pour RTL et formateur de milliers de musiciens.</p>
         </div>
         <figure class="pass-hero-visual">
@@ -212,13 +212,13 @@ import {
 
     <section class="pass-section pass-pricing" id="tarifs" aria-labelledby="pricing-title">
       <div class="pass-wrap">
-        <header class="pass-section-heading"><p class="pass-eyebrow">Tarif Founder</p><h2 id="pricing-title">Choisis le rythme qui te convient.</h2><p>Le tarif Founder est conservé tant que ton abonnement reste actif.</p></header>
+        <header class="pass-section-heading"><p class="pass-eyebrow">Tarif Fondateur</p><h2 id="pricing-title">Choisis le rythme qui te convient.</h2><p>Le tarif Fondateur est conservé tant que ton abonnement reste actif.</p></header>
         <div class="pass-pricing-grid">
           {passOffers.map((offer) => (
             <article class:list={['pass-price-card', { 'pass-price-card--featured': offer.key === 'annual' }]}>
               {offer.key === 'annual' && <p class="pass-price-ribbon">Meilleur rapport qualité/prix</p>}
               <p class="pass-price-eyebrow">{offer.eyebrow}</p>
-              <p class="pass-price"><strong>{offer.price}</strong> <span>{offer.suffix}</span></p>
+              <p class="pass-price"><strong>{offer.price}</strong> <span>{offer.suffix}</span> <small>{offer.referencePrice}</small></p>
               <p class="pass-price-description">{offer.description}</p>
               <a class:list={['pass-button', { 'pass-button--quiet': offer.key !== 'annual' }]} href={checkoutPlaceholder} data-checkout-placeholder>{offer.cta} <span aria-hidden="true">→</span></a>
               {offer.note && <p class="pass-price-note pass-price-note--card">{offer.note}</p>}
@@ -253,7 +253,7 @@ import {
         <h2 id="final-title">Dans 90 jours, tu peux encore regarder des tutos au hasard. <span>Ou savoir exactement ce que tu es en train de construire.</span></h2>
         <p>Moins consommer. Plus créer. La technique doit servir la musique, pas l’inverse.</p>
         <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre le Pass MAO <span aria-hidden="true">→</span></a>
-        <p class="pass-final-price">39€/mois Founder ou 299€/an Founder<br />Tu gardes ton tarif Founder tant que ton abonnement reste actif.</p>
+        <p class="pass-final-price">39€/mois Fondateur ou 299€/an Fondateur<br />Tu gardes ton tarif Fondateur tant que ton abonnement reste actif.</p>
       </div>
     </section>
   </div>

@@ -381,6 +381,7 @@ html[data-theme='dark'] .catalog-daw-backdrop { opacity: 0.78; }
 .pass-price { display: flex; align-items: baseline; gap: 8px; margin: 0 0 15px; }
 .pass-price strong { font-family: var(--serif); font-size: 52px; font-weight: 400; letter-spacing: -.065em; }
 .pass-price span { color: var(--muted); font-size: 11px; }
+.pass-price small { color: var(--muted); font-size: 9px; font-weight: 700; }
 .pass-price-description { min-height: 58px; margin: 0 0 24px; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .pass-button--quiet { border-color: var(--line-strong); background: transparent; color: var(--text); }
 .pass-button--quiet:hover { border-color: var(--coral); background: var(--coral); color: #fffaf4; }
@@ -478,6 +479,7 @@ html[data-theme='dark'] .pass-pillars-grid article, html[data-theme='dark'] .pas
 .pass-founder-prices p { margin: 0; color: rgba(246,240,231,.82); font-size: 12px; }
 .pass-founder-prices strong { margin-right: 2px; color: #f6f0e7; font-family: var(--serif); font-size: 25px; font-weight: 400; letter-spacing: -.04em; }
 .pass-founder-prices span { margin-left: 5px; color: #ef9273; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.pass-founder-prices em { margin-left: 5px; color: rgba(246,240,231,.55); font-size: 9px; font-style: normal; }
 .pass-hero-proof { max-width: 530px; margin: 20px 0 0; color: rgba(246,240,231,.48); font-size: 9px; line-height: 1.5; }
 
 .pass-problem { text-align: left; }

@@ -190,20 +190,22 @@ export const passBonuses = [
 export const passOffers = [
   {
     key: 'monthly',
-    eyebrow: 'Founder mensuel',
+    eyebrow: 'Fondateur mensuel',
     price: '39€',
     suffix: '/mois',
+    referencePrice: 'au lieu de 49€',
     description: 'Un accès complet au système de progression, à la bibliothèque et à la PM School. Sans engagement.',
     cta: 'Rejoindre le Pass MAO',
-    note: 'Tu gardes ton tarif Founder tant que ton abonnement reste actif.',
+    note: 'Tu gardes ton tarif Fondateur tant que ton abonnement reste actif.',
   },
   {
     key: 'annual',
-    eyebrow: 'Founder annuel',
+    eyebrow: 'Fondateur annuel',
     price: '299€',
     suffix: '/an',
+    referencePrice: 'au lieu de 399€',
     description: 'La même expérience complète, avec une année pour installer un vrai rythme et avancer sur un objectif concret.',
-    cta: 'Choisir le Founder annuel',
+    cta: 'Choisir le Fondateur annuel',
     note: 'Le meilleur rapport qualité/prix : 169€ d’économie par rapport au mensuel.',
   },
 ];
@@ -212,9 +214,9 @@ export const passFaq = [
   { question: 'Je suis débutant, est-ce adapté ?', answer: 'Oui. Le diagnostic et les parcours t’aident à partir de ton niveau et à travailler une chose à la fois, dans un ordre logique.' },
   { question: 'Je suis déjà expérimenté ?', answer: 'Oui. Les parcours servent de recommandations, pas de programme imposé. Tu peux aller droit vers le besoin du moment et explorer librement la bibliothèque.' },
   { question: 'Dois-je utiliser Logic Pro ?', answer: 'Non. Seules les formations consacrées spécifiquement à Logic nécessitent Logic Pro.' },
-  { question: 'Puis-je annuler le mensuel ?', answer: 'Oui, le mensuel est sans engagement. Ton tarif Founder reste conservé tant que ton abonnement reste actif.' },
+  { question: 'Puis-je annuler le mensuel ?', answer: 'Oui, le mensuel est sans engagement. Ton tarif Fondateur reste conservé tant que ton abonnement reste actif.' },
   { question: 'Que deviennent mes anciennes formations achetées séparément ?', answer: 'Elles restent à toi selon les conditions d’achat initiales.' },
-  { question: 'Toutes les futures offres de Vince seront-elles incluses ?', answer: 'Non nécessairement. Le Pass sera enrichi régulièrement en formations et ressources MAO, mais certains accompagnements ou produits premium peuvent rester séparés.' },
+  { question: 'Toutes les futures offres de Vince seront-elles incluses ?', answer: 'Pas nécessairement. Le Pass sera enrichi régulièrement en formations et ressources MAO, mais certains accompagnements ou produits premium peuvent rester séparés.' },
   { question: 'La communauté est-elle obligatoire ?', answer: 'Non. Tu peux tirer énormément de valeur du Pass sans participer à tout. La PM School est là lorsque tu as envie de partager, de pratiquer ou d’obtenir un regard sur ton travail.' },
   { question: 'Je suis déjà membre de la PM School ?', answer: 'Une offre fidélité spécifique est prévue pour les membres actuels de la PM School.' },
 ];
