@@ -4,7 +4,7 @@ export const passRhythm = [
   { label: '1 focus principal', text: 'Une direction claire pour faire avancer ta musique ce mois-ci.' },
   { label: '1 challenge', text: 'Une contrainte simple pour passer à l’action et créer davantage.' },
   { label: '1 live', text: 'Un rendez-vous pour écouter, échanger ou débloquer un point précis.' },
-  { label: '1 ressource', text: 'Un workshop, un template, des stems ou une nouveauté utile — pas une montagne de contenu.' },
+  { label: '1 ressource', text: 'Un workshop, un template, des stems, voire une nouvelle formation. Ta bibliothèque grossit un peu plus chaque mois.' },
 ];
 
 export const passPaths = [
@@ -51,7 +51,7 @@ export const passInteractiveCourses = [
     format: '4h40 environ',
     title: 'Logic Pro Secrets',
     image: '/images/pass/logic-pro-training.webp',
-    promise: 'Deviens beaucoup plus rapide dans Logic',
+    promise: 'Deviens plus rapide et efficace dans Logic Pro',
     description: 'Plus de 300 astuces, fonctions cachées et raccourcis pour mieux maîtriser Logic Pro et réduire le temps entre tes idées et leur réalisation.',
     benefits: [
       'Accélère ton workflow et arrête de chercher constamment dans les menus.',
@@ -65,7 +65,7 @@ export const passInteractiveCourses = [
     format: '1h30 environ',
     title: 'La méthode PMER™',
     image: '/images/pass/course-pmer.png',
-    promise: 'Crée plus, même sans inspiration',
+    promise: 'Compose dans ton DAW, même sans inspiration',
     description: 'Un processus simple pour arrêter de fixer la page blanche et construire rapidement l’armature de nouveaux morceaux dans ton DAW.',
     benefits: [
       'Trouve toujours un point de départ quand tu manques d’idées.',
@@ -149,7 +149,7 @@ export const passInteractiveCourses = [
     format: 'Programme méthode',
     title: 'La Méthode Finish Line',
     image: '/images/pass/finishline.png',
-    promise: 'De la page blanche à un morceau publié',
+    promise: 'De la page blanche à un morceau finalisé',
     description: 'Un système en 5 étapes basé sur les contraintes, les deadlines et moins de décisions pour arrêter d’accumuler les projets abandonnés.',
     benefits: [
       'Donne un cadre clair à tes sessions pour savoir exactement quoi faire ensuite.',

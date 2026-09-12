@@ -516,7 +516,7 @@ html[data-theme='dark'] .pass-pillars-grid article, html[data-theme='dark'] .pas
 .pass-ninety .pass-eyebrow { color: #f1a17a; }
 .pass-ninety h2 { max-width: 680px; margin-inline: auto; }
 .pass-ninety p:not(.pass-eyebrow) { max-width: 620px; margin: 23px auto 0; color: rgba(246,240,231,.7); font-size: 15px; line-height: 1.6; }
-.pass-ninety .pass-ninety-emphasis { color: #ef9273; font-family: var(--serif); font-size: 25px; line-height: 1.08; letter-spacing: -.04em; }
+.pass-ninety .pass-ninety-emphasis { color: #ef9273; font-family: inherit; font-size: 9px; font-weight: 800; line-height: 1.4; letter-spacing: .13em; }
 
 .pass-catalogue-more { max-width: 740px; margin: 27px auto 0; color: rgba(246,240,231,.6); font-size: 11px; line-height: 1.55; text-align: center; }
 
@@ -536,6 +536,7 @@ html[data-theme='dark'] .pass-pillars-grid article, html[data-theme='dark'] .pas
 .pass-anti-overwhelm strong { color: #ef9273; }
 
 .pass-pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin-inline: auto; }
+.pass-pricing-heading { max-width: 780px; margin-inline: auto; text-align: center; }
 .pass-price-card { min-height: 355px; }
 .pass-price-card--featured { transform: translateY(-7px); }
 .pass-loyalty-note strong { color: var(--coral); }
@@ -568,7 +569,7 @@ html[data-theme='dark'] .pass-rhythm-grid article { background: #20201d; }
   .pass-paths-grid, .pass-rhythm-grid { grid-template-columns: 1fr; }
   .pass-path-card { min-height: 0; }
   .pass-ninety p:not(.pass-eyebrow), .pass-anti-overwhelm p:not(.pass-eyebrow) { font-size: 14px; }
-  .pass-ninety .pass-ninety-emphasis, .pass-anti-overwhelm .pass-large-copy { font-size: 22px; }
+  .pass-anti-overwhelm .pass-large-copy { font-size: 22px; }
   .pass-rhythm-grid article { min-height: 158px; }
   .pass-rhythm-grid h3 { margin-top: 24px; }
   .pass-pricing-grid { grid-template-columns: 1fr; }

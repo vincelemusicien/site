@@ -114,7 +114,7 @@ import {
         <p class="pass-eyebrow">Un objectif, 90 jours</p>
         <h2 id="ninety-title">Où pourrait en être ta musique dans 90 jours ?</h2>
         <p>Pas besoin de tout apprendre. Choisis un objectif réaliste et fais-le avancer pendant 90 jours : terminer un morceau, débloquer une production, réaliser un vrai mix, installer un workflow ou développer une compétence précise.</p>
-        <p class="pass-ninety-emphasis">Faire de la musique reste le meilleur moyen de progresser en musique.</p>
+        <p class="pass-ninety-emphasis">FAIRE DE LA MUSIQUE RESTE LE MEILLEUR MOYEN DE PROGRESSER EN MUSIQUE.</p>
       </div>
     </section>
 
@@ -122,7 +122,7 @@ import {
       <div class="pass-wrap">
         <header class="pass-section-heading pass-heading-split">
           <div><p class="pass-eyebrow">La bibliothèque</p><h2 id="catalogue-title">Et quand tu as besoin d’aller plus loin, toute la bibliothèque est là.</h2></div>
-          <p>Les formations sont la bibliothèque. Le Pass te donne le chemin. Tu peux approfondir le besoin du moment sans devoir tout regarder.</p>
+          <p>Voici toutes les ressources auxquelles tu as accès avec le Pass MAO.</p>
         </header>
         <div class="pass-training-grid" data-training-grid>
           {passInteractiveCourses.map((course, index) => (
@@ -164,7 +164,7 @@ import {
         <header class="pass-section-heading">
           <p class="pass-eyebrow">Le rythme du Pass</p>
           <h2 id="rhythm-title">Chaque mois, une raison simple de faire de la musique.</h2>
-          <p>Le but n’est pas de t’ajouter du contenu à consommer. Le but est de t’aider à garder un cap et à créer.</p>
+          <p>Avance à ton rythme, garde le cap sans pression.</p>
         </header>
         <div class="pass-rhythm-grid">
           {passRhythm.map((item, index) => (
@@ -212,7 +212,7 @@ import {
 
     <section class="pass-section pass-pricing" id="tarifs" aria-labelledby="pricing-title">
       <div class="pass-wrap">
-        <header class="pass-section-heading"><p class="pass-eyebrow">Tarif Fondateur</p><h2 id="pricing-title">Choisis le rythme qui te convient.</h2><p>Le tarif Fondateur est conservé tant que ton abonnement reste actif.</p></header>
+        <header class="pass-section-heading pass-pricing-heading"><h2 id="pricing-title">Choisis le rythme qui te convient.</h2><p>Le tarif Fondateur est conservé tant que ton abonnement reste actif.</p></header>
         <div class="pass-pricing-grid">
           {passOffers.map((offer) => (
             <article class:list={['pass-price-card', { 'pass-price-card--featured': offer.key === 'annual' }]}>
