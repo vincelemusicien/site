@@ -81,12 +81,12 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
 
     <section class="lp-community lp-wrap" aria-labelledby="school-title">
       <div class="lp-community-copy">
-        <span class="lp-community-label">La PM School est incluse</span>
-        <h2 id="school-title">Le catalogue t’apprend.<br />La communauté te fait pratiquer.</h2>
-        <p>Tu apprends une méthode dans la bibliothèque, puis tu viens l’essayer sur un vrai morceau. Dans la PM School, tu peux publier un brouillon, demander un retour et trouver l’élan pour terminer.</p>
+        <span class="lp-community-label">L’accompagnement PM School est inclus</span>
+        <h2 id="school-title">Le catalogue t’apprend.<br />L’accompagnement te fait avancer.</h2>
+        <p>Tu apprends une méthode dans la bibliothèque, puis tu viens l’essayer sur un vrai morceau. Dans la PM School, tu n’avances pas seul : tu peux publier un brouillon, demander un retour et retrouver l’élan pour terminer.</p>
         <ol class="lp-practice-loop" aria-label="Comment le catalogue et la communauté se complètent"><li><span>01</span>Apprendre</li><li><span>02</span>Essayer</li><li><span>03</span>Partager</li><li><span>04</span>Avancer</li></ol>
         <ul><li>Un défi créatif pour passer à l’action chaque mois</li><li>Un live mensuel d’écoute et de retours avec Vince</li><li>Des échanges bienveillants avec d’autres musiciens</li><li>Les replays et ressources sur mobile et ordinateur</li></ul>
-        <p class="lp-small">Tu participes quand cela aide ta musique. Aucun rythme ne t’est imposé.</p>
+        <p class="lp-small">C’est un accompagnement collectif : tu participes quand cela aide ta musique. Aucun rythme ne t’est imposé.</p>
       </div>
       <div class="lp-community-gallery" aria-label="Aperçu de la PM School">
         {pmSchoolScreens.map((screen, index) => <figure class={`lp-community-shot lp-community-shot-${index + 1}`}><img src={pictures[screen.path]} alt={screen.alt} loading="lazy" width="520" height="1125" /><figcaption>{screen.label}</figcaption></figure>)}
