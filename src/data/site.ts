@@ -9,7 +9,7 @@ export const headerNavigation = [
 export const homePass = {
   eyebrow: 'Le Pass MAO',
   title: 'Toute mon école.<br />En ligne.',
-  description: 'Plus de douze ans de ressources, de formations et de méthodes réunis dans un seul abonnement. La bibliothèque complète, la communauté PM School et ses rendez-vous pour apprendre, pratiquer et continuer d’avancer.',
+  description: 'Plus de dix ans de ressources, de formations et de méthodes réunis dans un seul abonnement. La bibliothèque complète, la communauté PM School et ses rendez-vous pour apprendre, pratiquer et continuer d’avancer.',
   items: ['Toute la bibliothèque de formations', 'La communauté PM School incluse', 'De nouvelles ressources au fil du temps'],
   cta: 'Découvrir le Pass MAO',
   href: '/pass-mao/',
@@ -34,10 +34,11 @@ export const homeOptions = [
     icon: 'people',
   },
   {
-    title: 'Finisher Premium',
+    title: 'Accompagnement 1:1',
     description: 'Un accompagnement personnel pour faire aboutir le morceau qui compte vraiment.',
-    cta: 'Me faire accompagner',
-    href: '/formations/#services-title',
+    cta: 'Découvrir Finisher Premium',
+    href: 'https://formations.lemusicien.fr/finisher',
+    external: true,
     accent: 'coral',
     icon: 'sliders',
   },
