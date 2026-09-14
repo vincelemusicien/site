@@ -181,7 +181,7 @@ export const formations: Formation[] = [
     slug: 'comprendre-compression',
     category: 'sound',
     description: 'Comprends enfin quoi écouter et comment compresser sans écraser ton morceau.',
-    url: 'https://formations.lemusicien.fr/compression/',
+    url: catalogueUrl,
     duration: null,
     image: null,
     availableIndividually: true,

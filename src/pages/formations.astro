@@ -1,103 +1,58 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FormationCard from '../components/FormationCard.astro';
-import { individualFormations, passExclusivePreview, formationCategories } from '../data/formations';
-
-const filters = [
-  { key: 'all', label: 'Toutes', description: 'Toutes les formations, regroupées par grands besoins.' },
-  ...Object.entries(formationCategories).map(([key, value]) => ({ key, label: value.label, description: value.description })),
-];
+import CourseCover from '../components/CourseCover.astro';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { catalogueCourses, catalogueCategories, catalogueNeeds } from '../data/catalogue';
+import '../styles/pass-library.css';
+import '../styles/catalogue.css';
+const sources = import.meta.glob<{ default: ImageMetadata }>('../../public/images/**/*.{png,webp}', { eager: true });
+const pictures = Object.fromEntries(await Promise.all([...new Set(catalogueCourses.map((course) => course.image).filter(Boolean))].map(async (path) => {
+  const source = sources[`../../public${path}`]?.default;
+  return [path!, source ? (await getImage({ src: source, width: 640, format: 'webp', quality: 78 })).src : path];
+})));
+const featured = ['mixage-rapide', 'methode-pmer', 'finishline'].map((id) => catalogueCourses.find((course) => course.id === id)!);
 ---
-
-<BaseLayout
-  title="Formations — Le Musicien"
-  description="Des formations concrètes pour créer, produire et terminer davantage de musique, sans te perdre dans la technique ou le matériel."
->
-  <div class="catalog-wrap">
-    <section class="catalog-intro" aria-labelledby="catalog-title">
-      <svg class="catalog-daw-backdrop" viewBox="0 0 1200 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <g class="daw-track-lines">
-          <path d="M0 92H1200M0 173H1200M0 254H1200M0 335H1200" />
-          <path d="M132 38V410M333 38V410M534 38V410M735 38V410M936 38V410M1137 38V410" />
-        </g>
-        <g class="daw-waveforms">
-          <path d="M42 132c20-20 38 20 58 0s39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0 39 20 59 0 38 20 58 0" />
-          <path d="M95 294c28-33 52 33 80 0s51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0 52 33 80 0 51 33 79 0" />
-        </g>
-        <g class="daw-automation">
-          <path d="M0 214L178 204 301 225 466 184 618 205 759 171 926 211 1200 156" />
-          <circle cx="301" cy="225" r="5" /><circle cx="618" cy="205" r="5" /><circle cx="926" cy="211" r="5" />
-        </g>
-        <g class="daw-markers"><path d="M178 49v18M466 49v18M759 49v18M1048 49v18" /><path d="M178 49h28M466 49h28M759 49h28M1048 49h28" /></g>
-      </svg>
-      <div class="catalog-intro-content">
-        <p class="catalog-label">Formations</p>
-        <h1 id="catalog-title">Apprends ce qui compte vraiment.</h1>
-        <p>Des formations concrètes pour créer, produire et terminer davantage de musique, sans te perdre dans la technique ou le matériel.</p>
-        <a href="/pass-mao/">Tu veux accéder à toute l’école ? <span>Découvrir le Pass MAO →</span></a>
-      </div>
+<BaseLayout title="Formations en production musicale et MAO — Le Musicien" description="Explore les formations de Vince : mixage, composition, créativité, Logic Pro et workflow. Des méthodes concrètes pour faire avancer tes morceaux en home studio." pageClass="library-page formations-page">
+  <div class="lp catalogue">
+    <nav class="lp-subnav lp-wrap" aria-label="Le catalogue"><a class="lp-wordmark" href="#contenu">FORMATIONS<span>par Vince</span></a><div><a href="#catalogue">Le catalogue</a><a href="/pass-mao/">Le Pass MAO</a></div></nav>
+    <section class="fc-hero lp-wrap" aria-labelledby="catalog-title"><p class="fc-eyebrow">La musique s’apprend en la faisant.</p><h1 id="catalog-title">Apprends ce qui compte.<br /><span>Fais avancer ta musique.</span></h1><div class="fc-hero-bottom"><p>Des formations concrètes pour composer, produire, mixer et terminer tes morceaux. Dans ton home studio, avec les outils que tu possèdes déjà.</p><a class="lp-button" href="#catalogue">Explorer les formations <span aria-hidden="true">→</span></a></div></section>
+    <aside class="fc-pass lp-wrap" aria-label="Accéder au catalogue avec le Pass MAO"><div><span class="fc-eyebrow">Le Pass MAO</span><h2>Tu veux accéder à tout le catalogue du Pass ?</h2><p>La bibliothèque et la communauté PM School, dans un même abonnement.</p></div><div class="fc-pass-action"><p><strong>39 €</strong>/mois <span>ou 299 €/an · offre de lancement</span></p><a class="lp-text-link" href="/pass-mao/">Découvrir le Pass MAO <span aria-hidden="true">→</span></a></div></aside>
+    <section class="fc-featured lp-wrap" aria-labelledby="featured-title"><div class="fc-section-heading"><h2 id="featured-title">Trois portes d’entrée.</h2><p>Un mix à éclaircir, une idée à développer, un morceau à finir.</p></div><div class="fc-featured-grid">{featured.map((course, index) => <a class:list={['fc-feature', `lp-tone-${course.tone}`]} href={`#formation-${course.id}`} data-feature-link={course.id}><span class="fc-feature-number">0{index + 1} / {['Faire sonner', 'Composer', 'Terminer'][index]}</span><div><h3>{course.title}</h3><p>{course.promise}</p><span class="lp-text-link">Explorer <span aria-hidden="true">→</span></span></div><img src={pictures[course.image!]} alt={`Visuel de ${course.title}`} width="320" height="320" loading="lazy" /></a>)}</div></section>
+    <section class="fc-catalogue lp-wrap" id="catalogue" aria-labelledby="all-title">
+      <div class="fc-section-heading"><div><p class="fc-eyebrow">À toi de choisir</p><h2 id="all-title">Toutes les formations.</h2></div><p>Va droit à ce qui t’aide aujourd’hui.<br />À l’unité ou dans le Pass, selon la formation.</p></div>
+      <div class="lp-library-controls" data-catalog-controls hidden><div class="lp-filters" role="group" aria-label="Filtrer les formations">{catalogueCategories.map((category) => <button type="button" data-category={category.id} aria-pressed={String(category.id === 'all')}>{category.label}</button>)}</div><label class="lp-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input type="search" data-catalog-search placeholder="Une formation, un sujet…" aria-label="Rechercher une formation" /></label></div>
+      <div class="fc-results"><p data-results aria-live="polite">{catalogueCourses.length} formations et ressources</p><a class="lp-text-link fc-help" href="#needs-title">Besoin d’aide pour choisir ?</a><button type="button" class="lp-text-link fc-reset" data-reset hidden>Tout afficher</button></div>
+      <div class="fc-grid">{catalogueCourses.map((course) => <article class:list={['fc-course', `lp-tone-${course.tone}`]} id={`formation-${course.id}`} data-course data-id={course.id} data-category={course.category} data-search={`${course.title} ${course.promise} ${course.description}`}><a class="fc-course-link" href={course.url}><CourseCover title={course.title} category={catalogueCategories.find((category) => category.id === course.category)?.label || ''} image={pictures[course.image!]} badge={course.exclusive ? 'Exclusif Pass' : course.inPass ? 'Inclus dans le Pass' : ''} /><p class="fc-promise">{course.promise}</p><div class="fc-card-bottom">{course.duration && <span>{course.duration}</span>}<span class="fc-card-cta">{course.cta}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></div></a></article>)}</div>
+      <div class="lp-empty" data-empty hidden><h3>Aucune formation trouvée.</h3><p>Essaie un autre sujet ou affiche de nouveau tout le catalogue.</p></div>
     </section>
-
-    <section class="catalog-section" aria-labelledby="catalog-heading">
-      <header class="catalog-heading">
-        <h2 id="catalog-heading">Choisis ton univers</h2>
-        <p data-filter-description>{filters[0].description}</p>
-      </header>
-
-      <div class="catalog-filters" role="group" aria-label="Filtrer les formations">
-        {filters.map((filter, index) => (
-          <button
-            type="button"
-            data-filter={filter.key}
-            data-description={filter.description}
-            aria-pressed={index === 0 ? 'true' : 'false'}
-          >{filter.label}</button>
-        ))}
-      </div>
-
-      <p class="catalog-count" aria-live="polite" data-filter-count>{individualFormations.length} formations</p>
-
-      <div class="formation-grid">
-        {individualFormations.map((formation) => <FormationCard formation={formation} />)}
-      </div>
-    </section>
-
-    <section class="pass-library" aria-labelledby="pass-library-title">
-      <header class="pass-library-heading">
-        <p>Le Pass MAO</p>
-        <h2 id="pass-library-title">Encore plus dans le Pass MAO</h2>
-        <span>Certaines formations, masterclasses et ressources de ma bibliothèque sont exclusivement disponibles avec le Pass.</span>
-      </header>
-      <div class="pass-library-grid">
-        {passExclusivePreview.map((formation) => <FormationCard formation={formation} compact />)}
-      </div>
-      <a class="pass-library-link" href="/pass-mao/">Voir tous les bonus du Pass <span aria-hidden="true">→</span></a>
-    </section>
+    <section class="fc-needs lp-wrap" aria-labelledby="needs-title"><div class="fc-section-heading"><h2 id="needs-title">Tu bloques où ?</h2><p>Pars de ton morceau.<br />On trouve ensuite la formation.</p></div><div class="fc-need-grid">{catalogueNeeds.map((need) => <a href="#catalogue" data-need={need.ids.join(',')} data-need-label={need.title}><span><strong>{need.title}</strong><small>{need.hint}</small></span><span aria-hidden="true">→</span></a>)}</div></section>
+    <section class="fc-philosophy lp-wrap" aria-labelledby="philosophy-title"><div><p class="fc-eyebrow">Vince / Le Musicien</p><h2 id="philosophy-title">Des oreilles.<br />Des idées.<br />Des morceaux terminés.</h2></div><div><p>Apprendre une technique, l’essayer dans un morceau, écouter ce qui change. C’est le fil rouge de ces formations : faire simple et devenir plus autonome, avec ce que tu as déjà.</p><p>Plus de 15 ans en production musicale, plusieurs milliers d’élèves et clients, et une expérience de composition notamment pour RTL. Je partage aussi cette approche sur la chaîne YouTube Le Musicien.</p><a class="lp-text-link" href="https://www.youtube.com/@vincelemusicien">Découvrir la chaîne YouTube <span aria-hidden="true">↗</span></a></div></section>
+    <section class="fc-services lp-wrap" aria-labelledby="services-title"><div><p class="fc-eyebrow">Un accompagnement personnel</p><h2 id="services-title">Et pour ton projet à toi ?</h2><p>Coaching, retour sur une production ou aide dans Logic Pro : échangeons sur ce que tu veux débloquer.</p></div><a class="lp-button lp-button-outline" href="mailto:contact@lemusicien.fr?subject=Accompagnement%20musical">Parler de mon projet <span aria-hidden="true">→</span></a></section>
   </div>
-
-  <script is:inline>
-    (() => {
-      const buttons = Array.from(document.querySelectorAll('[data-filter]'));
-      const cards = Array.from(document.querySelectorAll('[data-formation-card]'));
-      const count = document.querySelector('[data-filter-count]');
-      const description = document.querySelector('[data-filter-description]');
-
-      buttons.forEach((button) => {
-        button.addEventListener('click', () => {
-          const filter = button.dataset.filter;
-          let visible = 0;
-
-          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-          cards.forEach((card) => {
-            const show = filter === 'all' || card.dataset.category === filter;
-            card.hidden = !show;
-            if (show) visible += 1;
-          });
-
-          if (count) count.textContent = `${visible} formation${visible > 1 ? 's' : ''}`;
-          if (description) description.textContent = button.dataset.description || '';
-        });
-      });
-    })();
+  <script>
+    const root = document.querySelector<HTMLElement>('.catalogue')!;
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-course]')];
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('button[data-category]')];
+    const search = root.querySelector<HTMLInputElement>('[data-catalog-search]')!;
+    const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
+    let category = 'all', need: string[] | null = null, needLabel = '';
+    const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    function render() {
+      const query = normalize(search.value.trim()); let count = 0;
+      cards.forEach((card) => { const visible = (category === 'all' || card.dataset.category === category) && (!need || need.includes(card.dataset.id!)) && normalize(card.dataset.search || '').includes(query); card.hidden = !visible; if (visible) count++; });
+      filters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.category === category && !need)));
+      root.querySelector('[data-results]')!.textContent = `${count} formation${count > 1 ? 's' : ''} et ressource${count > 1 ? 's' : ''}${need ? ` — ${needLabel}` : ''}`;
+      root.querySelector<HTMLElement>('[data-empty]')!.hidden = count !== 0;
+      reset.hidden = category === 'all' && !query && !need;
+    }
+    function clear() { category = 'all'; need = null; search.value = ''; }
+    filters.forEach((button) => button.addEventListener('click', () => { category = button.dataset.category!; need = null; render(); }));
+    search.addEventListener('input', render);
+    reset.addEventListener('click', () => { clear(); render(); search.focus(); });
+    root.querySelectorAll<HTMLAnchorElement>('[data-need]').forEach((link) => link.addEventListener('click', () => { clear(); need = link.dataset.need!.split(','); needLabel = link.dataset.needLabel!; render(); }));
+    root.querySelectorAll<HTMLAnchorElement>('[data-feature-link]').forEach((link) => link.addEventListener('click', () => { clear(); render(); }));
+    root.querySelector<HTMLElement>('[data-catalog-controls]')!.hidden = false;
+    render();
   </script>
 </BaseLayout>

@@ -1,287 +1,167 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import {
-  checkoutPlaceholder,
-  passFaq,
-  passInteractiveCourses,
-  passOffers,
-  passPaths,
-  passRhythm,
-} from '../data/pass-mao';
+import CourseCover from '../components/CourseCover.astro';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { libraryCourses, libraryCategories, passCheckout, passQuestions } from '../data/pass-library';
+import '../styles/pass-library.css';
+
+const sourceImages = import.meta.glob<{ default: ImageMetadata }>('../../public/images/**/*.{png,webp}', { eager: true });
+const pmSchoolScreens = [
+  { path: '/images/pass/pm-school-training.png', alt: 'Espace de formation continue de la PM School', label: 'Se former' },
+  { path: '/images/pass/pm-school-feed.png', alt: 'Fil de discussion et de partage de morceaux de la PM School', label: 'Partager' },
+  { path: '/images/pass/pm-school-menu.png', alt: 'Les espaces et rendez-vous de la communauté PM School', label: 'Pratiquer' },
+];
+const imagePaths = [...new Set([...libraryCourses.map((course) => course.image), '/images/vince-home-studio.png', ...pmSchoolScreens.map((screen) => screen.path)].filter(Boolean))] as string[];
+const pictures = Object.fromEntries(await Promise.all(imagePaths.map(async (path) => {
+  const source = sourceImages[`../../public${path}`]?.default;
+  return [path, source ? (await getImage({ src: source, width: path.includes('pm-school') ? 1000 : 640, format: 'webp', quality: 78 })).src : path];
+})));
+const heroCourses = [libraryCourses[1], libraryCourses[0], libraryCourses[3], libraryCourses[5], libraryCourses[2], libraryCourses[4]];
+const categoryName = (id: string) => libraryCategories.find((category) => category.id === id)?.label;
 ---
 
-<BaseLayout
-  title="Pass MAO — Un chemin clair pour ta musique"
-  description="Le Pass MAO t’aide à savoir quoi apprendre, quoi appliquer et quoi travailler ensuite pour avancer dans ton home studio."
->
-  <div class="pass-page">
-    <section class="pass-hero" aria-labelledby="pass-title">
-      <div class="pass-wrap pass-hero-inner">
-        <div class="pass-hero-copy">
-          <p class="pass-eyebrow">Pass MAO</p>
-          <h1 id="pass-title">Arrête de tourner en rond <span>dans ton home studio.</span></h1>
-          <p class="pass-lead">Le Pass MAO te donne un chemin clair pour progresser en production musicale, appliquer ce que tu apprends et finir plus de musique.</p>
-          <div class="pass-hero-actions">
-            <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre le Pass MAO <span aria-hidden="true">→</span></a>
-            <a class="pass-hero-secondary" href="#comment-ca-marche">Découvrir comment ça marche <span aria-hidden="true">↓</span></a>
-          </div>
-          <div class="pass-founder-prices" aria-label="Tarifs Fondateur">
-            <p><strong>39€</strong> /mois <span>Fondateur</span><em>au lieu de 49€</em></p>
-            <p><strong>299€</strong> /an <span>Fondateur</span><em>au lieu de 399€</em></p>
-          </div>
-          <p class="pass-price-note">Tarif membre Fondateur conservé tant que ton abonnement reste actif.</p>
-          <p class="pass-hero-proof">Créé par Vince, musicien, producteur, ancien compositeur pour RTL et formateur de milliers de musiciens.</p>
-        </div>
-        <figure class="pass-hero-visual">
-          <img class="pass-hero-product" src="/images/pass/pass-mao-visuel.png" alt="Carte membre premium du Pass MAO dans un home studio" fetchpriority="high" />
-        </figure>
+<BaseLayout title="PASS MAO — Toute ta musique. Un seul Pass." description="La bibliothèque de formations de Vince pour composer, produire, mixer et finir tes morceaux. Tout le catalogue du Pass et la PM School : 39 €/mois ou 299 €/an." image="/images/pass/pass-mao-visuel.png" pageClass="library-page">
+  <div class="lp">
+    <nav class="lp-subnav lp-wrap" aria-label="Le Pass MAO">
+      <a class="lp-wordmark" href="#contenu">PASS MAO<span>par Vince</span></a>
+      <div><a href="#bibliotheque">La bibliothèque</a><a href="#tarifs">Les tarifs</a><a class="lp-nav-join" href="#tarifs">Choisir mon Pass</a></div>
+    </nav>
+
+    <section class="lp-hero lp-wrap" aria-labelledby="lp-title">
+      <div class="lp-hero-copy">
+        <h1 id="lp-title">Toute ta musique.<br />Un seul Pass.</h1>
+        <p class="lp-lead">La bibliothèque de formations pour <strong>composer, produire, mixer et finir tes morceaux.</strong> Et une communauté pour les mettre en pratique, partager et continuer d’avancer.</p>
+        <div class="lp-hero-price"><strong>39 €<span>/mois</span></strong><p>ou <b>299 €/an</b><br />Tout le catalogue du Pass inclus.</p></div>
+        <div class="lp-actions"><a class="lp-button" href="#tarifs">Choisir mon Pass<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a><a class="lp-text-link" href="#bibliotheque">Explorer les formations</a></div>
+        <p class="lp-small">Tarif de lancement. Mensuel sans engagement.</p>
+      </div>
+      <div class="lp-sleeves" aria-label="Un aperçu des formations incluses">
+        {heroCourses.map((course, index) => (
+          <a class:list={['lp-sleeve', `lp-tone-${course.category}`]} href={`#cours-${course.id}`} data-course-link={course.id}>
+            <div class="lp-sleeve-title"><span>{categoryName(course.category)}</span><strong>{course.title.replace('La Méthode ', '').replace('La méthode ', '')}</strong></div>
+            <img src={pictures[course.image!]} alt="" width="320" height="210" loading={index < 3 ? 'eager' : 'lazy'} fetchpriority={index === 1 ? 'high' : 'auto'} />
+            <span class="lp-sleeve-foot">Inclus dans le Pass<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></span>
+          </a>
+        ))}
       </div>
     </section>
 
-    <section class="pass-section pass-problem" aria-labelledby="problem-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">Tu reconnais ça ?</p>
-        <h2 id="problem-title">Tu apprends beaucoup. Mais est-ce que ta musique avance vraiment ?</h2>
-        <ul class="pass-symptoms">
-          <li>Tu regardes beaucoup de tutos, mais tu ne sais plus quoi travailler.</li>
-          <li>Tu commences des morceaux qui restent inachevés.</li>
-          <li>Tu passes du temps sur des détails techniques sans savoir si c’est vraiment la priorité.</li>
-          <li>Tu accumules plugins, techniques et idées, mais tu progresses un peu au hasard.</li>
-          <li>Tu ouvres ton DAW sans toujours savoir par quoi commencer.</li>
-        </ul>
-        <p class="pass-problem-conclusion">Le problème n’est pas forcément le manque d’informations. C’est souvent le <strong>manque de direction.</strong></p>
+    <div class="lp-reassurance lp-wrap"><p>De la première idée au morceau terminé.</p><p>Avec Vince, formateur de <strong>plusieurs milliers de musiciens.</strong></p></div>
+
+    <section class="lp-catalogue lp-wrap" id="bibliotheque" aria-labelledby="library-title">
+      <div class="lp-section-intro"><h2 id="library-title">Oui, tout ça.<br />Dans ton Pass.</h2><div><p>Un mix à éclaircir. Une idée à développer. Un morceau à finir. <strong>Pioche selon ce qui compte pour toi, aujourd’hui.</strong></p><span class="lp-included">{libraryCourses.length} formations & ressources à explorer</span></div></div>
+      <div class="lp-needs" data-enhanced hidden><span>En ce moment…</span><button type="button" data-need="mix">Mon mix manque de clarté</button><button type="button" data-need="create">Je tourne en rond sur 8 mesures</button><button type="button" data-need="workflow">Je veux finir mes morceaux</button></div>
+      <div class="lp-library-controls" data-enhanced hidden>
+        <div class="lp-filters" role="group" aria-label="Filtrer les formations par univers">{libraryCategories.map((category) => <button type="button" data-category={category.id} aria-pressed={category.id === 'all' ? 'true' : 'false'}>{category.label}</button>)}</div>
+        <label class="lp-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg><input type="search" placeholder="Une formation, un sujet…" aria-label="Rechercher une formation" autocomplete="off" data-search /></label>
+      </div>
+      <p class="lp-result-count" data-enhanced hidden aria-live="polite" aria-atomic="true" data-results></p>
+      <div class="lp-course-grid" data-grid>
+        {libraryCourses.map((course, index) => (
+          <article class:list={['lp-course', `lp-tone-${course.category}`]} data-course data-category-id={course.category} data-search-text={`${course.title} ${course.promise} ${course.description}`} id={`cours-${course.id}`}>
+            <details>
+              <summary>
+                <CourseCover title={course.title} category={categoryName(course.category) || ''} image={course.image ? pictures[course.image] : null} />
+                <div class="lp-course-copy"><p>{course.promise}</p><span class="lp-course-meta"><span>{course.format || 'Formation & ressources'}</span><span class="lp-detail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg></span></span><span class="sr-only">Voir le détail de {course.title}</span></div>
+              </summary>
+              <div class="lp-course-details"><p>{course.description}</p>{course.benefits.length > 0 && <ul>{course.benefits.map((benefit) => <li>{benefit}</li>)}</ul>}<a href="#tarifs">Accéder avec le Pass</a></div>
+            </details>
+          </article>
+        ))}
+      </div>
+      <div class="lp-empty" data-empty hidden><h3>Aucune formation pour cette recherche.</h3><p>Essaie « mixage », « composition » ou « Logic ».</p><button class="lp-button lp-button-outline" type="button" data-reset>Réinitialiser les filtres</button></div>
+      <div class="lp-more" data-enhanced hidden><button class="lp-button lp-button-outline" type="button" data-more aria-expanded="false">Explorer les {libraryCourses.length} formations<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button><p>Et une bibliothèque qui s’enrichit au fil du temps.</p></div>
+      <aside class="lp-value"><p><strong>Plus de 2 000 € de contenus réunis.</strong><br />Les formations, les ressources et la PM School dans un même espace.</p><p><strong>Avec le Pass : 39 €/mois ou 299 €/an.</strong><br />Tu explores ce dont ton morceau a besoin, quand tu en as besoin.</p><span>Accès à toute la bibliothèque pendant ton abonnement</span></aside>
+    </section>
+
+    <section class="lp-manifesto" aria-labelledby="manifesto-title"><div class="lp-wrap lp-manifesto-inner"><h2 id="manifesto-title">Une bibliothèque.<br />Pas une liste de devoirs.</h2><div><p>Tu n’as pas besoin de tout regarder pour que le Pass change quelque chose à ta musique.</p><p><strong>Un problème. Une formation. Un morceau qui avance.</strong> Tu prends ce qu’il te faut, tu l’appliques dans ton DAW, puis tu retournes faire de la musique.</p><a href="#bibliotheque" class="lp-text-link">Trouver mon point de départ</a></div></div></section>
+
+    <section class="lp-vince lp-wrap" aria-labelledby="vince-title"><figure><img src={pictures['/images/vince-home-studio.png']} alt="Vince dans son home studio, au travail dans son logiciel de production musicale" width="640" height="427" loading="lazy" /><figcaption>Vince / Le Musicien</figcaption></figure><div><h2 id="vince-title">Faire de la musique.<br />Avec ce qu’on a.</h2><p>C’est le fil rouge de mes formations : développer ton écoute, garder les choses simples et apprendre en faisant. Tu peux créer avant de tout comprendre parfaitement.</p><p>Je suis Vince. J’enseigne la MAO depuis des années et j’ai accompagné plusieurs milliers de musiciens à travers mes formations. J’ai aussi travaillé comme compositeur, notamment pour RTL.</p><p class="lp-vince-note">Ici, la technique sert tes morceaux.<br />Et pas l’inverse.</p></div></section>
+
+    <section class="lp-community lp-wrap" aria-labelledby="school-title">
+      <div class="lp-community-copy">
+        <span class="lp-community-label">La PM School est incluse</span>
+        <h2 id="school-title">Le catalogue t’apprend.<br />La communauté te fait pratiquer.</h2>
+        <p>Tu apprends une méthode dans la bibliothèque, puis tu viens l’essayer sur un vrai morceau. Dans la PM School, tu peux publier un brouillon, demander un retour et trouver l’élan pour terminer.</p>
+        <ol class="lp-practice-loop" aria-label="Comment le catalogue et la communauté se complètent"><li><span>01</span>Apprendre</li><li><span>02</span>Essayer</li><li><span>03</span>Partager</li><li><span>04</span>Avancer</li></ol>
+        <ul><li>Un défi créatif pour passer à l’action chaque mois</li><li>Un live mensuel d’écoute et de retours avec Vince</li><li>Des échanges bienveillants avec d’autres musiciens</li><li>Les replays et ressources sur mobile et ordinateur</li></ul>
+        <p class="lp-small">Tu participes quand cela aide ta musique. Aucun rythme ne t’est imposé.</p>
+      </div>
+      <div class="lp-community-gallery" aria-label="Aperçu de la PM School">
+        {pmSchoolScreens.map((screen, index) => <figure class={`lp-community-shot lp-community-shot-${index + 1}`}><img src={pictures[screen.path]} alt={screen.alt} loading="lazy" width="520" height="1125" /><figcaption>{screen.label}</figcaption></figure>)}
       </div>
     </section>
 
-    <section class="pass-section pass-loop" id="comment-ca-marche" aria-labelledby="loop-title">
-      <div class="pass-wrap">
-        <header class="pass-section-heading">
-          <p class="pass-eyebrow">Comment ça marche</p>
-          <h2 id="loop-title">Apprends. Applique. Avance.</h2>
-          <p>Le Pass ne te donne pas seulement des ressources. Il t’aide à choisir la prochaine action utile pour ta musique.</p>
-        </header>
-        <ol class="pass-loop-list">
-          <li><strong>Diagnostic</strong><span>Tu identifies ton niveau, ton objectif et ton vrai blocage.</span></li>
-          <li><strong>Parcours</strong><span>Le Pass te recommande un chemin adapté, sans fouiller partout.</span></li>
-          <li><strong>Action</strong><span>Chaque étape débouche sur quelque chose de concret dans ton DAW ou ton projet.</span></li>
-          <li><strong>Résultat</strong><span>Un morceau avance, un mix se débloque, une compétence devient plus claire.</span></li>
-        </ol>
-        <p class="pass-flow" aria-label="Progression du Pass">Diagnostic <span>→</span> Parcours <span>→</span> Action <span>→</span> Résultat</p>
-      </div>
-    </section>
+    <section class="lp-pricing" id="tarifs" aria-labelledby="pricing-title"><div class="lp-wrap"><div class="lp-section-intro"><h2 id="pricing-title">Tout le Pass.<br />À ton rythme.</h2><p>La bibliothèque, les ressources et la PM School.<br />Le même accès, deux façons de le rejoindre.</p></div><div class="lp-pricing-grid">
+      <article class="lp-price-card"><div class="lp-plan-heading"><h3>Un mois à la fois</h3><span>Offre de lancement</span></div><p class="lp-price"><strong>39 €</strong><span>/mois</span></p><p>Pour explorer librement, sans engagement.</p><p class="lp-future-price">Puis <strong>49 €/mois</strong> pour les nouvelles inscriptions.</p><ul><li>Tout le catalogue du Pass</li><li>La PM School et ses rendez-vous</li><li>La bibliothèque grossit régulièrement</li></ul>{passCheckout.monthly ? <a class="lp-button lp-button-outline" href={passCheckout.monthly}>Choisir le Pass mensuel</a> : <a class="lp-button lp-button-outline" href="#inscription" data-plan="mensuel">Choisir le Pass mensuel</a>}<p class="lp-small">Facturation mensuelle. Résiliable à tout moment.</p></article>
+      <article class="lp-price-card lp-price-annual"><div class="lp-plan-heading"><h3>Une année pour créer</h3><span>Offre de lancement</span></div><p class="lp-price"><strong>299 €</strong><span>/an</span></p><p>Soit <strong>24,92 €/mois</strong>, facturés en une fois.</p><p class="lp-future-price">Puis <strong>399 €/an</strong> pour les nouvelles inscriptions.</p><ul><li>Le même accès complet au Pass</li><li>Une année de musique devant toi</li><li>169 € économisés face à 12 mensualités</li></ul>{passCheckout.annual ? <a class="lp-button" href={passCheckout.annual}>Choisir le Pass annuel</a> : <a class="lp-button" href="#inscription" data-plan="annuel">Choisir le Pass annuel</a>}<p class="lp-small">299 € au lieu de 468 € pour 12 mensualités.</p></article>
+    </div><p class="lp-price-footnote"><strong>Tu gardes ton tarif de lancement</strong> tant que ton abonnement reste actif.</p>
+    {(!passCheckout.monthly || !passCheckout.annual) && <aside id="inscription" class="lp-checkout-note" tabindex="-1"><h3>Rejoindre le Pass MAO</h3><p data-checkout-message>L’inscription en ligne n’est pas encore disponible. Pour rejoindre le Pass, contacte Vince.</p><a class="lp-text-link" href="mailto:contact@lemusicien.fr?subject=Rejoindre%20le%20Pass%20MAO" data-contact>Contacter Vince</a></aside>}
+    </div></section>
 
-    <section class="pass-section pass-next-step" aria-labelledby="next-step-title">
-      <div class="pass-wrap pass-next-step-inner">
-        <div>
-          <p class="pass-eyebrow">Le cœur du Pass</p>
-          <h2 id="next-step-title">Ton prochain pas.</h2>
-          <p>Quand tu te connectes, tu ne devrais pas te demander « Qu’est-ce que je regarde aujourd’hui ? »</p>
-          <p class="pass-large-copy">Le Pass te répond : <strong>« Voilà ce que je te recommande maintenant. »</strong></p>
-        </div>
-        <article class="pass-next-card" aria-label="Exemple de recommandation du Pass">
-          <p class="pass-next-card-label">Ton prochain pas</p>
-          <dl>
-            <div><dt>Focus actuel</dt><dd>Finir ton morceau</dd></div>
-            <div><dt>Prochaine action</dt><dd>Dessine la courbe d’énergie de ton morceau.</dd></div>
-            <div><dt>Durée</dt><dd>10–15 min</dd></div>
-          </dl>
-          <span class="pass-next-card-action">Continuer <i aria-hidden="true">→</i></span>
-        </article>
-      </div>
-    </section>
-
-    <section class="pass-section pass-paths" aria-labelledby="paths-title">
-      <div class="pass-wrap">
-        <header class="pass-section-heading pass-heading-split">
-          <div><p class="pass-eyebrow">Les parcours</p><h2 id="paths-title">Choisis l’objectif qui compte maintenant.</h2></div>
-          <p>Les parcours utilisent les formations, ressources et méthodes déjà présentes dans le Pass. Ce sont des repères, pas un programme scolaire.</p>
-        </header>
-        <div class="pass-paths-grid">
-          {passPaths.map((path) => (
-            <article class:list={['pass-path-card', `option-${path.accent}`]}>
-              <span class="pass-path-number">{path.number}</span>
-              <h3>{path.title}</h3>
-              <p>{path.description}</p>
-              <ul>{path.courses.map((course) => <li>{course}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="pass-section pass-ninety" aria-labelledby="ninety-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">Un objectif, 90 jours</p>
-        <h2 id="ninety-title">Où pourrait en être ta musique dans 90 jours ?</h2>
-        <p>Pas besoin de tout apprendre. Choisis un objectif réaliste et fais-le avancer pendant 90 jours : terminer un morceau, débloquer une production, réaliser un vrai mix, installer un workflow ou développer une compétence précise.</p>
-        <p class="pass-ninety-emphasis">FAIRE DE LA MUSIQUE RESTE LE MEILLEUR MOYEN DE PROGRESSER EN MUSIQUE.</p>
-      </div>
-    </section>
-
-    <section class="pass-section pass-catalogue" aria-labelledby="catalogue-title">
-      <div class="pass-wrap">
-        <header class="pass-section-heading pass-heading-split">
-          <div><p class="pass-eyebrow">La bibliothèque</p><h2 id="catalogue-title">Et quand tu as besoin d’aller plus loin, toute la bibliothèque est là.</h2></div>
-          <p>Voici toutes les ressources auxquelles tu as accès avec le Pass MAO.</p>
-        </header>
-        <div class="pass-training-grid" data-training-grid>
-          {passInteractiveCourses.map((course, index) => (
-            <article class:list={['pass-training-card', `option-${course.accent}`]} data-training-card>
-              <button
-                class="pass-training-summary"
-                type="button"
-                aria-expanded="false"
-                aria-controls={`pass-training-details-${index}`}
-                data-training-trigger
-              >
-                <span class="pass-training-media" aria-hidden="true">
-                  <img src={course.image} alt="" loading="lazy" />
-                </span>
-                <span class="pass-training-meta">{course.category} <i>·</i> {course.format}</span>
-                <h3>{course.title}</h3>
-                <span class="pass-training-promise">{course.promise}</span>
-                <span class="pass-training-value">Valeur {course.value}</span>
-                <span class="pass-training-action">Voir ce que tu vas apprendre <i aria-hidden="true">+</i></span>
-              </button>
-              <div class="pass-training-details" id={`pass-training-details-${index}`} data-training-details aria-hidden="true">
-                <div>
-                  <p>{course.description}</p>
-                  <ul>
-                    {course.benefits.map((benefit) => <li>{benefit}</li>)}
-                  </ul>
-                  <p class="pass-training-included">Valeur {course.value} <span>· Inclus dans le Pass</span></p>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-        <p class="pass-catalogue-more">Et aussi : Comprendre l’EQ, Comprendre la Compression, Arrangements MAO, Workflow Efficace, Musicien Productif, Écouter comme un Producer et d’autres ressources pour créer, produire et faire sonner ta musique.</p>
-      </div>
-    </section>
-
-    <section class="pass-section pass-rhythm" aria-labelledby="rhythm-title">
-      <div class="pass-wrap">
-        <header class="pass-section-heading">
-          <p class="pass-eyebrow">Le rythme du Pass</p>
-          <h2 id="rhythm-title">Chaque mois, une raison simple de faire de la musique.</h2>
-          <p>Avance à ton rythme, garde le cap sans pression.</p>
-        </header>
-        <div class="pass-rhythm-grid">
-          {passRhythm.map((item, index) => (
-            <article>
-              <span>0{index + 1}</span>
-              <h3>{item.label}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="pass-section pass-school" aria-labelledby="school-title">
-      <div class="pass-wrap pass-school-inner">
-        <div class="pass-school-copy">
-          <p class="pass-eyebrow">La PM School</p>
-          <h2 id="school-title">Un espace pour ne pas rester seul avec tes morceaux.</h2>
-          <p>La PM School existe depuis plusieurs années : un espace à taille humaine où tu peux partager un extrait, demander un feedback, publier ton objectif ou participer à un challenge.</p>
-          <p class="pass-school-value">Valeur : <strong>120€/an</strong></p>
-          <ul class="pass-check-list">
-            <li>Un défi créatif chaque mois</li>
-            <li>Un live mensuel d’écoute et feedback</li>
-            <li>Des replays, petits tutos et contenus exclusifs</li>
-            <li>Une communauté de musiciens qui se connaissent et échangent</li>
-            <li>Une application iOS et Android dédiée, pour rester connectés</li>
-          </ul>
-          <p class="pass-school-optional">Tu peux tirer énormément de valeur du Pass sans participer à tout.</p>
-        </div>
-        <figure class="pass-school-shot">
-          <img src="/images/pass/pm-school.png" alt="Aperçu de la PM School" loading="lazy" />
-          <figcaption>Apprendre → mettre en pratique → partager → progresser → continuer.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="pass-section pass-anti-overwhelm" aria-labelledby="overwhelm-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">Une règle importante</p>
-        <h2 id="overwhelm-title">Tu n’as rien à rattraper.</h2>
-        <p>Tu n’as pas besoin de regarder toutes les formations, de participer à tous les lives, de relever tous les challenges ou d’utiliser 100 % du Pass.</p>
-        <p class="pass-large-copy">Tu utilises ce dont tu as besoin <strong>maintenant</strong>. Le Pass doit t’aider à avancer, pas devenir une nouvelle liste de choses à faire.</p>
-      </div>
-    </section>
-
-    <section class="pass-section pass-pricing" id="tarifs" aria-labelledby="pricing-title">
-      <div class="pass-wrap">
-        <header class="pass-section-heading pass-pricing-heading"><h2 id="pricing-title">Choisis le rythme qui te convient.</h2><p>Le tarif Fondateur est conservé tant que ton abonnement reste actif.</p></header>
-        <div class="pass-pricing-grid">
-          {passOffers.map((offer) => (
-            <article class:list={['pass-price-card', { 'pass-price-card--featured': offer.key === 'annual' }]}>
-              {offer.key === 'annual' && <p class="pass-price-ribbon">Meilleur rapport qualité/prix</p>}
-              <p class="pass-price-eyebrow">{offer.eyebrow}</p>
-              <p class="pass-price"><strong>{offer.price}</strong> <span>{offer.suffix}</span> <small>{offer.referencePrice}</small></p>
-              <p class="pass-price-description">{offer.description}</p>
-              <a class:list={['pass-button', { 'pass-button--quiet': offer.key !== 'annual' }]} href={checkoutPlaceholder} data-checkout-placeholder>{offer.cta} <span aria-hidden="true">→</span></a>
-              {offer.note && <p class="pass-price-note pass-price-note--card">{offer.note}</p>}
-            </article>
-          ))}
-        </div>
-        <p class="pass-loyalty-note">Déjà membre de la PM School ? <strong>Contacte-moi dans la School ;)</strong></p>
-      </div>
-    </section>
-
-    <section class="pass-section pass-legacy" aria-labelledby="legacy-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">Déjà client ?</p>
-        <h2 id="legacy-title">Tes anciennes formations restent à toi.</h2>
-        <p>Selon les conditions d’achat initiales, tes formations déjà achetées restent accessibles. Le Pass donne accès au système de progression, à la bibliothèque, aux nouvelles ressources et à la PM School.</p>
-      </div>
-    </section>
-
-    <section class="pass-section pass-faq" aria-labelledby="faq-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">FAQ</p>
-        <h2 id="faq-title">Quelques questions légitimes.</h2>
-        <div class="pass-faq-list">
-          {passFaq.map((item) => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}
-        </div>
-      </div>
-    </section>
-
-    <section class="pass-final" aria-labelledby="final-title">
-      <div class="pass-narrow">
-        <p class="pass-eyebrow">Le Pass MAO</p>
-        <h2 id="final-title">Dans 90 jours, tu peux encore regarder des tutos au hasard. <span>Ou savoir exactement ce que tu es en train de construire.</span></h2>
-        <p>Moins consommer. Plus créer. La technique doit servir la musique, pas l’inverse.</p>
-        <a class="pass-button" href={checkoutPlaceholder} data-checkout-placeholder>Rejoindre le Pass MAO <span aria-hidden="true">→</span></a>
-        <p class="pass-final-price">39€/mois Fondateur ou 299€/an Fondateur<br />Tu gardes ton tarif Fondateur tant que ton abonnement reste actif.</p>
-      </div>
-    </section>
+    <section class="lp-faq lp-wrap" aria-labelledby="faq-title"><h2 id="faq-title">Encore une question ?</h2><div>{passQuestions.map((item) => <details><summary>{item.question}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></summary><p>{item.answer}</p></details>)}</div></section>
+    <section class="lp-close lp-wrap"><h2>Ton prochain morceau<br />a de quoi avancer.</h2><a class="lp-button" href="#tarifs">Choisir mon Pass<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a><p>39 €/mois ou 299 €/an. À toi de jouer.</p></section>
+    <div class="lp-mobile-cta" data-mobile-cta hidden><p><strong>Le Pass MAO</strong><span>39 €/mois ou 299 €/an</span></p><a class="lp-button" href="#tarifs">Choisir mon Pass</a></div>
   </div>
-
-  <script is:inline>
-    (() => {
-      const cards = Array.from(document.querySelectorAll('[data-training-card]'));
-
-      cards.forEach((card) => {
-        const trigger = card.querySelector('[data-training-trigger]');
-        const details = card.querySelector('[data-training-details]');
-
-        trigger?.addEventListener('click', () => {
-          const willOpen = trigger.getAttribute('aria-expanded') !== 'true';
-
-          cards.forEach((item) => {
-            item.classList.remove('is-open');
-            item.querySelector('[data-training-trigger]')?.setAttribute('aria-expanded', 'false');
-            item.querySelector('[data-training-details]')?.setAttribute('aria-hidden', 'true');
-          });
-
-          if (willOpen) {
-            card.classList.add('is-open');
-            trigger.setAttribute('aria-expanded', 'true');
-            details?.setAttribute('aria-hidden', 'false');
-          }
-        });
+  <script>
+    const root = document.querySelector<HTMLElement>('.lp');
+    if (root) {
+      const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-course]'));
+      const filters = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-category]'));
+      const search = root.querySelector<HTMLInputElement>('[data-search]')!;
+      const results = root.querySelector<HTMLElement>('[data-results]')!;
+      const more = root.querySelector<HTMLButtonElement>('[data-more]')!;
+      const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+      let category = 'all', expanded = false;
+      const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      function render() {
+        const query = normalize(search.value.trim());
+        const matches = cards.filter((card) => (category === 'all' || card.dataset.categoryId === category) && normalize(card.dataset.searchText || '').includes(query));
+        const limit = expanded || category !== 'all' || query ? matches.length : 8;
+        const visible = new Set(matches.slice(0, limit));
+        cards.forEach((card) => { card.hidden = !visible.has(card); if (card.hidden) card.querySelector('details')!.open = false; });
+        filters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.category === category)));
+        root!.querySelectorAll<HTMLButtonElement>('[data-need]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.need === category)));
+        results.textContent = `${Math.min(limit, matches.length)} sur ${matches.length} formations & ressources${category === 'all' ? '' : ` — ${filters.find((button) => button.dataset.category === category)?.textContent}`}`;
+        empty.hidden = matches.length !== 0;
+        more.parentElement!.hidden = category !== 'all' || !!query || expanded || matches.length <= 8;
+        more.setAttribute('aria-expanded', String(expanded));
+      }
+      root.querySelectorAll<HTMLElement>('[data-enhanced]').forEach((element) => element.hidden = false);
+      filters.forEach((button) => button.addEventListener('click', () => { category = button.dataset.category!; expanded = false; render(); }));
+      root.querySelectorAll<HTMLButtonElement>('[data-need]').forEach((button) => button.addEventListener('click', () => { category = button.dataset.need!; search.value = ''; expanded = false; render(); }));
+      search.addEventListener('input', render);
+      more.addEventListener('click', () => { expanded = true; render(); cards[8]?.querySelector('summary')?.focus({ preventScroll: true }); });
+      root.querySelector('[data-reset]')?.addEventListener('click', () => { category = 'all'; search.value = ''; expanded = false; render(); search.focus(); });
+      function showCourse(id: string) {
+        const card = document.getElementById(`cours-${id}`);
+        if (!card) return;
+        category = 'all'; search.value = ''; expanded = true; render();
+        card.querySelector('details')!.open = true;
+        card.querySelector('summary')?.focus({ preventScroll: true });
+      }
+      root.querySelectorAll<HTMLAnchorElement>('[data-course-link]').forEach((link) => link.addEventListener('click', () => showCourse(link.dataset.courseLink!)));
+      window.addEventListener('hashchange', () => { if (location.hash.startsWith('#cours-')) showCourse(location.hash.slice(7)); });
+      render();
+      if (location.hash.startsWith('#cours-')) showCourse(location.hash.slice(7));
+      root.querySelectorAll<HTMLAnchorElement>('[data-plan]').forEach((link) => link.addEventListener('click', () => {
+        const plan = link.dataset.plan!;
+        root.querySelector('[data-checkout-message]')!.textContent = `Tu as choisi le Pass ${plan}. L’inscription en ligne n’est pas encore disponible ; contacte Vince pour le rejoindre.`;
+        root.querySelector<HTMLAnchorElement>('[data-contact]')!.href = `mailto:contact@lemusicien.fr?subject=${encodeURIComponent(`Rejoindre le Pass MAO ${plan}`)}`;
+        root.querySelector<HTMLElement>('#inscription')?.focus({ preventScroll: true });
+      }));
+      const sticky = root.querySelector<HTMLElement>('[data-mobile-cta]')!;
+      let pastHero = false, pricingVisible = false, closeVisible = false;
+      const updateSticky = () => { sticky.hidden = !pastHero || pricingVisible || closeVisible; };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.target.classList.contains('lp-hero')) pastHero = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
+          if (entry.target.id === 'tarifs') pricingVisible = entry.isIntersecting;
+          if (entry.target.classList.contains('lp-close')) closeVisible = entry.isIntersecting;
+        }); updateSticky();
       });
-    })();
+      ['.lp-hero', '#tarifs', '.lp-close'].forEach((selector) => observer.observe(root.querySelector(selector)!));
+    }
   </script>
 </BaseLayout>
