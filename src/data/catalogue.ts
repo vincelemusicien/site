@@ -1,5 +1,6 @@
 import { formations } from './formations';
 import { libraryCourses } from './pass-library';
+import { courseVisual } from './course-visuals';
 const key = (title: string) => title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/gi, '').toLowerCase().replace('lamethode', '').replace('methode', '');
 export const catalogueCategories = [
   { id: 'all', label: 'Toutes' }, { id: 'mix', label: 'Mixage' }, { id: 'create', label: 'Composition' }, { id: 'creative', label: 'Créativité' }, { id: 'produce', label: 'Production' }, { id: 'workflow', label: 'Workflow' }, { id: 'logic', label: 'Logic Pro' }, { id: 'release', label: 'Sortie / artiste' },
@@ -11,7 +12,7 @@ const fromSource = formations.map((formation) => {
   return {
     id: formation.slug, title: formation.title, category: category(formation.title, family), tone: family,
     promise: pass?.promise || formation.description, description: formation.description,
-    duration: formation.duration || pass?.format, image: pass?.image || formation.image || '/images/pass/course-production-library.png',
+    duration: formation.duration || pass?.format, image: courseVisual(formation.title) || pass?.image || formation.image,
     url: formation.url === '/pass-mao/' ? `/pass-mao/#cours-${pass?.id || ''}` : formation.url,
     cta: formation.url === '/pass-mao/' ? 'Découvrir dans le Pass' : formation.url.endsWith('/catalogue') ? 'Voir au catalogue' : 'Découvrir la formation',
     exclusive: formation.passExclusive, inPass: Boolean(pass),

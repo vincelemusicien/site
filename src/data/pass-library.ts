@@ -1,5 +1,6 @@
 import { formations } from './formations';
 import { passInteractiveCourses, passBonuses } from './pass-mao';
+import { courseVisual } from './course-visuals';
 
 export const passCheckout = {
   monthly: import.meta.env.PUBLIC_PASS_CHECKOUT_MONTHLY || null,
@@ -26,15 +27,6 @@ const classify = (title: string, fallback = 'create') => {
   return fallback;
 };
 
-const libraryImageByCategory: Record<string, string> = {
-  mix: '/images/pass/course-mix-library.png',
-  create: '/images/pass/course-composition-library.png',
-  workflow: '/images/pass/course-workflow-library.png',
-  produce: '/images/pass/course-production-library.png',
-  logic: '/images/pass/course-workflow-library.png',
-  release: '/images/pass/course-release-library.png',
-};
-
 export interface LibraryCourse {
   id: string;
   title: string;
@@ -50,7 +42,7 @@ export interface LibraryCourse {
 const primary: LibraryCourse[] = passInteractiveCourses.map((course) => ({
   id: normalize(course.title), title: course.title, category: classify(course.title),
   description: course.description, promise: course.promise, format: course.format,
-  image: course.image, benefits: course.benefits, value: course.value,
+  image: courseVisual(course.title) || course.image, benefits: course.benefits, value: course.value,
 }));
 const existing = new Set(primary.map((course) => course.id));
 const additional: LibraryCourse[] = formations.filter((course) => course.includedInPass === true && !existing.has(normalize(course.title))).map((course) => {
@@ -64,7 +56,7 @@ const additional: LibraryCourse[] = formations.filter((course) => course.include
     id: normalize(course.title), title: course.title, category,
     description: passBonuses.find((bonus) => normalize(bonus.title) === normalize(course.title))?.text || course.description,
     promise: course.description, format: course.duration,
-    image: specificImage || libraryImageByCategory[category],
+    image: courseVisual(course.title) || specificImage || course.image,
     benefits: [], value: null,
   };
 });

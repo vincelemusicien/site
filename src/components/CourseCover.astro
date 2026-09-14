@@ -1,9 +1,13 @@
 ---
+import { courseVisual } from '../data/course-visuals';
 interface Props { title: string; category: string; image?: string | null; badge?: string; }
 const { title, category, image, badge = 'Inclus' } = Astro.props;
 ---
-<div class:list={['lp-cover', { 'lp-cover-type': !image, 'lp-cover-long': title.length > 25 }]}>
+<div class:list={['lp-cover', { 'lp-cover-type': !image, 'lp-cover-long': title.length > 25, 'lp-cover-original': courseVisual(title)?.includes('/catalogue/') }]}>
   <span class="lp-cover-category">{category}</span><h3>{title}</h3>
   {image ? <img src={image} alt={`Visuel de la formation ${title}`} width="640" height="380" loading="lazy" decoding="async" /> : <span class="lp-type-caption">Le Musicien<span>La bibliothèque de Vince</span></span>}
   {badge && <span class="lp-cover-included">{badge}</span>}
 </div>
+<style>
+  .lp-cover-original img{object-fit:cover;object-position:50% 58%;width:100%;height:0;flex:1;min-height:0}
+</style>

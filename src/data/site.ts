@@ -1,6 +1,7 @@
 export const headerNavigation = [
   { label: 'Formations', href: '/formations/' },
   { label: 'Pass MAO', href: '/pass-mao/' },
+  { label: 'Accompagnement', href: 'https://formations.lemusicien.fr/finisher/', external: true },
   { label: 'PM School', href: 'https://pmschool.fr', external: true },
   { label: 'Tools', href: 'https://lemusicien-shop.fourthwall.com/', external: true },
   { label: 'YouTube', href: 'https://www.youtube.com/@vincelemusicien', external: true },

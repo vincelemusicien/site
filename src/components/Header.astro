@@ -16,9 +16,44 @@ import { headerNavigation } from '../data/site';
       <a class="member-link" href="https://productionmusicale.systeme.io/login" target="_blank" rel="noreferrer">Espace membre</a>
     </nav>
 
+    <details class="mobile-menu">
+      <summary>Menu</summary>
+      <nav class="mobile-menu-panel" aria-label="Navigation mobile">
+        {headerNavigation.map((item) => <a href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>{item.label}</a>)}
+        <a class="member-link" href="https://productionmusicale.systeme.io/login" target="_blank" rel="noreferrer">Espace membre</a>
+      </nav>
+    </details>
+
     <button class="theme-toggle" type="button" aria-label="Activer le mode sombre" aria-pressed="false" data-theme-toggle>
       <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
       <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.1A8.4 8.4 0 0 1 8.9 4a8.5 8.5 0 1 0 11.1 11.1Z"></path></svg>
     </button>
   </div>
 </header>
+
+<style>
+  .mobile-menu{display:none}
+  @media(max-width:1050px){
+    :global(.library-page .header-inner){position:relative;display:flex;align-items:center;flex-wrap:nowrap;gap:12px;padding-block:12px;min-height:68px}
+    :global(.library-page .header-nav){display:none!important}
+    :global(.library-page .theme-toggle){order:3;flex-shrink:0}
+    .mobile-menu{display:block;order:2;margin-left:auto}
+    .mobile-menu summary{cursor:pointer;list-style:none;border:1px solid var(--line);border-radius:7px;padding:10px 14px;font-size:14px;font-weight:650;min-height:44px;display:flex;align-items:center;gap:10px}
+    .mobile-menu summary::-webkit-details-marker{display:none}
+    .mobile-menu summary::after{content:'+';font-size:20px;line-height:1}
+    .mobile-menu[open] summary::after{content:'−'}
+    .mobile-menu-panel{position:absolute;right:0;top:calc(100% - 1px);width:min(340px,calc(100vw - 40px));padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px #182b491c;display:flex;flex-direction:column;gap:0;z-index:30;max-height:calc(100dvh - 90px);overflow-y:auto}
+    .mobile-menu-panel a{display:block;padding:12px 14px;font-size:16px;min-height:48px;border-radius:5px}
+    .mobile-menu-panel a:hover{background:var(--lp-soft)}
+    .mobile-menu-panel .member-link{border-top:1px solid var(--line);margin-top:6px;border-radius:0}
+    .mobile-menu :focus-visible{outline:3px solid var(--lp-blue);outline-offset:2px}
+  }
+</style>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+  if(menu){
+    menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>menu.open=false));
+    document.addEventListener('click',event=>{if(!menu.contains(event.target as Node))menu.open=false});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu.open){menu.open=false;menu.querySelector('summary')?.focus()}});
+  }
+</script>
