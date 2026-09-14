@@ -1,13 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import OptionIcon from '../components/OptionIcon.astro';
-import { homeOptions } from '../data/site';
+import { homeOptions, homePass } from '../data/site';
 import { getImage } from 'astro:assets';
 import portrait from '../../public/images/vince-home-studio.png';
 import '../styles/pass-library.css';
 import '../styles/home-library.css';
 const photo = await getImage({ src: portrait, width: 900, format: 'webp', quality: 82 });
-const tones = ['mix', 'create', 'produce'];
+const tones = ['mix', 'produce', 'create'];
 ---
 <BaseLayout title="Vince — Le Musicien" description="Musicien, producteur et formateur. Des formations, une communauté et des ressources pour créer, produire et terminer davantage de musique en home studio." image="/images/vince-home-studio.png" pageClass="library-page home-library-page">
   <div class="lp">
@@ -22,9 +22,13 @@ const tones = ['mix', 'create', 'produce'];
       <figure class="hl-portrait"><img src={photo.src} alt="Vince au travail dans son home studio" width="900" height="600" fetchpriority="high" /><figcaption>Faire de la musique. Avec ce qu’on a.</figcaption></figure>
     </section>
     <div class="hl-proof lp-wrap"><p><strong>+28 000</strong> abonnés YouTube</p><p><strong>+6 000</strong> musiciens formés</p><p>Production audio notamment pour <strong>RTL</strong></p></div>
+    <section class="hl-pass lp-wrap" aria-labelledby="pass-title">
+      <div class="hl-pass-heading"><span>{homePass.eyebrow}</span><h2 id="pass-title" set:html={homePass.title} /></div>
+      <div class="hl-pass-copy"><p>{homePass.description}</p><ul>{homePass.items.map((item) => <li>{item}</li>)}</ul><a class="lp-button" href={homePass.href}>{homePass.cta}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></div>
+    </section>
     <section class="hl-options lp-wrap" aria-labelledby="options-title">
-      <header class="hl-heading"><h2 id="options-title">À chacun sa façon<br />d’avancer.</h2><p>Six façons de faire avancer ta musique avec moi.<br />Choisis ce qui t’aide, là où tu en es.</p></header>
-      <div class="hl-main-options">{homeOptions.slice(0,3).map((item,index) => <a class:list={['hl-main-option', `lp-tone-${tones[index]}`]} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}><div class="hl-option-top"><OptionIcon name={item.icon}/><svg viewBox="0 0 24 24" aria-hidden="true"><path d={item.external ? 'M6 18 18 6M6 6h12v12' : 'M5 12h14m-6-6 6 6-6 6'}/></svg></div><h3>{item.title}</h3><p>{item.href === '/pass-mao/' ? 'La bibliothèque de formations et la communauté PM School, réunies dans un seul abonnement.' : item.description}</p><span class="hl-option-cta">{item.cta}</span></a>)}</div>
+      <header class="hl-heading"><h2 id="options-title">Sinon, choisis<br />ce qui t’aide.</h2><p>À l’unité, avec un accompagnement, ou dans les contenus que je partage au quotidien.</p></header>
+      <div class="hl-main-options">{homeOptions.slice(0,3).map((item,index) => <a class:list={['hl-main-option', `lp-tone-${tones[index]}`]} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}><div class="hl-option-top"><OptionIcon name={item.icon}/><svg viewBox="0 0 24 24" aria-hidden="true"><path d={item.external ? 'M6 18 18 6M6 6h12v12' : 'M5 12h14m-6-6 6 6-6 6'}/></svg></div><h3>{item.title}</h3><p>{item.description}</p><span class="hl-option-cta">{item.cta}</span></a>)}</div>
       <div class="hl-other-options">{homeOptions.slice(3).map((item) => <a class="hl-other-option" href={item.href} target="_blank" rel="noreferrer"><OptionIcon name={item.icon}/><div><h3>{item.title}</h3><p>{item.description}</p><span class="hl-option-cta">{item.cta}</span></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>)}</div>
     </section>
   </div>
