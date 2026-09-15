@@ -4,9 +4,11 @@ import OptionIcon from '../components/OptionIcon.astro';
 import { homeOptions, homePass } from '../data/site';
 import { getImage } from 'astro:assets';
 import portrait from '../../public/images/vince-home-studio.png';
+import passPackshotWide from '../../public/images/pass/pass-mao-packshot-wide.png';
 import '../styles/pass-library.css';
 import '../styles/home-library.css';
 const photo = await getImage({ src: portrait, width: 900, format: 'webp', quality: 82 });
+const passVisual = await getImage({ src: passPackshotWide, width: 1100, format: 'webp', quality: 82 });
 const tones = ['mix', 'produce', 'create'];
 ---
 <BaseLayout title="Vince — Le Musicien" description="Musicien, producteur et formateur. Des formations, une communauté et des ressources pour créer, produire et terminer davantage de musique en home studio." image="/images/vince-home-studio.png" pageClass="library-page home-library-page">
@@ -25,6 +27,7 @@ const tones = ['mix', 'produce', 'create'];
     <section class="hl-pass lp-wrap" aria-labelledby="pass-title">
       <div class="hl-pass-heading"><span>{homePass.eyebrow}</span><h2 id="pass-title" set:html={homePass.title} /></div>
       <div class="hl-pass-copy"><p>{homePass.description}</p><ul>{homePass.items.map((item) => <li>{item}</li>)}</ul><a class="lp-button" href={homePass.href}>{homePass.cta}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></div>
+      <img class="hl-pass-visual" src={passVisual.src} alt="Visuel du Pass MAO et de ses formations accessibles dans une bibliothèque en ligne" width="1100" height="575" loading="lazy" decoding="async" />
     </section>
     <section class="hl-options lp-wrap" aria-labelledby="options-title">
       <header class="hl-heading"><h2 id="options-title">Sinon, choisis<br />ce qui t’aide.</h2><p>À l’unité, avec un accompagnement, ou dans les contenus que je partage au quotidien.</p></header>
