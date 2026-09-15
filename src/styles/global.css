@@ -41,7 +41,12 @@ h1, h2, h3 { font-weight: 400; }
 
 .site-header { border-bottom: 1px solid var(--line); background: var(--bg); transition: background-color 180ms ease, border-color 180ms ease; }
 .header-inner { min-height: 72px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 25px; }
-.brand { display: inline-flex; align-items: center; gap: 9px; font-family: var(--serif); font-size: 20px; letter-spacing: -0.035em; }
+.brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+.brand-logo-wrap { position: relative; display: block; width: 220px; height: 25px; }
+.brand-logo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 47%; mix-blend-mode: multiply; }
+.brand-logo-bars { display: none; position: absolute; top: 0; left: 44.35%; width: 4.1%; height: 100%; background: linear-gradient(to bottom, #fff000 0 14%, transparent 14% 17%, #ffc900 17% 31%, transparent 31% 34%, #ff9900 34% 48%, transparent 48% 51%, #ff6500 51% 65%, transparent 65% 68%, #f03c19 68% 82%, transparent 82% 85%, #dc2631 85% 100%); }
+html[data-theme='dark'] .brand-logo { filter: invert(1); mix-blend-mode: screen; }
+html[data-theme='dark'] .brand-logo-bars { display: block; }
 .brand-mark { display: flex; align-items: end; gap: 2px; height: 17px; color: var(--coral); }
 .brand-mark i { display: block; width: 3px; background: currentColor; }
 .brand-mark i:nth-child(1) { height: 8px; }
@@ -206,6 +211,7 @@ html[data-theme='dark'] .catalog-daw-backdrop { opacity: 0.78; }
 }
 
 @media (max-width: 620px) {
+  .brand-logo-wrap { width: 190px; height: 22px; }
   .shell, .home-wrap { width: calc(100% - 36px); }
   .catalog-wrap { width: calc(100% - 36px); }
   .profile-intro { padding: 52px 0 49px; }
