@@ -6,13 +6,14 @@ import type { ImageMetadata } from 'astro';
 import { libraryCourses, libraryCategories, passCheckout, passQuestions } from '../data/pass-library';
 import '../styles/pass-library.css';
 
-const sourceImages = import.meta.glob<{ default: ImageMetadata }>('../../public/images/**/*.{png,webp}', { eager: true });
+const sourceImages = import.meta.glob<{ default: ImageMetadata }>('../../public/images/**/*.{png,webp,jpeg}', { eager: true });
 const pmSchoolScreens = [
   { path: '/images/pass/pm-school-training.png', alt: 'Espace de formation continue de la PM School', label: 'Se former' },
   { path: '/images/pass/pm-school-feed.png', alt: 'Fil de discussion et de partage de morceaux de la PM School', label: 'Partager' },
   { path: '/images/pass/pm-school-menu.png', alt: 'Les espaces et rendez-vous de la communauté PM School', label: 'Pratiquer' },
 ];
-const imagePaths = [...new Set([...libraryCourses.map((course) => course.image), '/images/vince-home-studio.png', ...pmSchoolScreens.map((screen) => screen.path)].filter(Boolean))] as string[];
+const pmSchoolLive = '/images/pass/pm-school-live.jpeg';
+const imagePaths = [...new Set([...libraryCourses.map((course) => course.image), '/images/vince-home-studio.png', pmSchoolLive, ...pmSchoolScreens.map((screen) => screen.path)].filter(Boolean))] as string[];
 const pictures = Object.fromEntries(await Promise.all(imagePaths.map(async (path) => {
   const source = sourceImages[`../../public${path}`]?.default;
   return [path, source ? (await getImage({ src: source, width: path.includes('pm-school') ? 1000 : 640, format: 'webp', quality: 78 })).src : path];
@@ -21,7 +22,7 @@ const heroCourses = [libraryCourses[1], libraryCourses[0], libraryCourses[3], li
 const categoryName = (id: string) => libraryCategories.find((category) => category.id === id)?.label;
 ---
 
-<BaseLayout title="PASS MAO — Toute ta musique. Un seul Pass." description="La bibliothèque de formations de Vince pour composer, produire, mixer et finir tes morceaux. Tout le catalogue du Pass et la PM School : 39 €/mois ou 299 €/an." image="/images/pass/pass-mao-visuel.png" pageClass="library-page">
+<BaseLayout title="PASS MAO — Un seul Pass pour faire plein de musique." description="La bibliothèque complète de formations de Vince pour composer, produire, mixer et finir tes morceaux. Tout le catalogue du Pass et la PM School : 39 €/mois ou 299 €/an." image="/images/pass/pass-mao-visuel.png" pageClass="library-page">
   <div class="lp">
     <nav class="lp-subnav lp-wrap" aria-label="Le Pass MAO">
       <a class="lp-wordmark" href="#contenu">PASS MAO<span>par Vince</span></a>
@@ -30,8 +31,8 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
 
     <section class="lp-hero lp-wrap" aria-labelledby="lp-title">
       <div class="lp-hero-copy">
-        <h1 id="lp-title">Toute ta musique.<br />Un seul Pass.</h1>
-        <p class="lp-lead">La bibliothèque de formations pour <strong>composer, produire, mixer et finir tes morceaux.</strong> Et une communauté pour les mettre en pratique, partager et continuer d’avancer.</p>
+        <h1 id="lp-title">Un seul Pass<br />pour faire plein<br />de musique.</h1>
+        <p class="lp-lead">La bibliothèque complète de formations pour <strong>composer, produire, mixer et finir tes morceaux.</strong> Et une communauté pour les mettre en pratique, partager et continuer d’avancer.</p>
         <div class="lp-hero-price"><strong>39 €<span>/mois</span></strong><p>ou <b>299 €/an</b><br />Tout le catalogue du Pass inclus.</p></div>
         <div class="lp-actions"><a class="lp-button" href="#tarifs">Choisir mon Pass<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a><a class="lp-text-link" href="#bibliotheque">Explorer les formations</a></div>
         <p class="lp-small">Tarif de lancement. Mensuel sans engagement.</p>
@@ -77,7 +78,7 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
 
     <section class="lp-manifesto" aria-labelledby="manifesto-title"><div class="lp-wrap lp-manifesto-inner"><h2 id="manifesto-title">Une bibliothèque.<br />Pas une liste de devoirs.</h2><div><p>Tu n’as pas besoin de tout regarder pour que le Pass change quelque chose à ta musique.</p><p><strong>Un problème. Une formation. Un morceau qui avance.</strong> Tu prends ce qu’il te faut, tu l’appliques dans ton DAW, puis tu retournes faire de la musique.</p><a href="#bibliotheque" class="lp-text-link">Trouver mon point de départ</a></div></div></section>
 
-    <section class="lp-vince lp-wrap" aria-labelledby="vince-title"><figure><img src={pictures['/images/vince-home-studio.png']} alt="Vince dans son home studio, au travail dans son logiciel de production musicale" width="640" height="427" loading="lazy" /><figcaption>Vince / Le Musicien</figcaption></figure><div><h2 id="vince-title">Faire de la musique.<br />Avec ce qu’on a.</h2><p>C’est le fil rouge de mes formations : développer ton écoute, garder les choses simples et apprendre en faisant. Tu peux créer avant de tout comprendre parfaitement.</p><p>Je suis Vince. J’enseigne la MAO depuis des années et j’ai accompagné plusieurs milliers de musiciens à travers mes formations. J’ai aussi travaillé comme compositeur, notamment pour RTL.</p><p class="lp-vince-note">Ici, la technique sert tes morceaux.<br />Et pas l’inverse.</p></div></section>
+    <section class="lp-vince lp-wrap" aria-labelledby="vince-title"><figure><img src={pictures['/images/vince-home-studio.png']} alt="Vince dans son home studio, au travail dans son logiciel de production musicale" width="640" height="427" loading="lazy" /><figcaption>Vince / Le Musicien</figcaption></figure><div><h2 id="vince-title">Faire de la musique.<br />Avec ce qu’on a.</h2><p>C’est le fil rouge de mes formations : développer ton écoute, garder les choses simples et apprendre en faisant. Tu peux créer avant de tout comprendre parfaitement.</p><p>Salut, c’est Vince ! J’enseigne la MAO depuis des années et j’ai accompagné plusieurs milliers de musiciens à travers mes formations. J’ai aussi travaillé comme compositeur, notamment pour RTL.</p><p class="lp-vince-note">Ici, la technique sert tes morceaux.<br />Et pas l’inverse.</p></div></section>
 
     <section class="lp-community lp-wrap" aria-labelledby="school-title">
       <div class="lp-community-copy">
@@ -86,10 +87,17 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
         <p>Tu apprends une méthode dans la bibliothèque, puis tu viens l’essayer sur un vrai morceau. Dans la PM School, tu n’avances pas seul : tu peux publier un brouillon, demander un retour et retrouver l’élan pour terminer.</p>
         <ol class="lp-practice-loop" aria-label="Comment le catalogue et la communauté se complètent"><li><span>01</span>Apprendre</li><li><span>02</span>Essayer</li><li><span>03</span>Partager</li><li><span>04</span>Avancer</li></ol>
         <ul><li>Un défi créatif pour passer à l’action chaque mois</li><li>Un live mensuel d’écoute et de retours avec Vince</li><li>Des échanges bienveillants avec d’autres musiciens</li><li>Les replays et ressources sur mobile et ordinateur</li></ul>
+        <p>Retrouve la PM School dans un espace privé, avec une appli iOS et Android pour rester connectés, loin du bruit des réseaux.</p>
         <p class="lp-small">C’est un accompagnement collectif : tu participes quand cela aide ta musique. Aucun rythme ne t’est imposé.</p>
       </div>
-      <div class="lp-community-gallery" aria-label="Aperçu de la PM School">
-        {pmSchoolScreens.map((screen, index) => <figure class={`lp-community-shot lp-community-shot-${index + 1}`}><img src={pictures[screen.path]} alt={screen.alt} loading="lazy" width="520" height="1125" /><figcaption>{screen.label}</figcaption></figure>)}
+      <div class="lp-community-visuals">
+        <div class="lp-community-gallery" aria-label="Aperçu de la PM School">
+          {pmSchoolScreens.map((screen, index) => <figure class={`lp-community-shot lp-community-shot-${index + 1}`}><img src={pictures[screen.path]} alt={screen.alt} loading="lazy" width="520" height="1125" /><figcaption>{screen.label}</figcaption></figure>)}
+        </div>
+        <figure class="lp-community-live">
+          <img src={pictures[pmSchoolLive]} alt="Un live de la PM School réunissant Vince et les membres de la communauté" loading="lazy" width="1010" height="778" />
+          <figcaption><strong>Des rendez-vous en direct.</strong> Pour se retrouver, écouter les morceaux et garder le lien.</figcaption>
+        </figure>
       </div>
     </section>
 

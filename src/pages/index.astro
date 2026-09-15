@@ -29,7 +29,7 @@ const tones = ['mix', 'produce', 'create'];
     <section class="hl-options lp-wrap" aria-labelledby="options-title">
       <header class="hl-heading"><h2 id="options-title">Sinon, choisis<br />ce qui t’aide.</h2><p>À l’unité, avec un accompagnement, ou dans les contenus que je partage au quotidien.</p></header>
       <div class="hl-main-options">{homeOptions.slice(0,3).map((item,index) => <a class:list={['hl-main-option', `lp-tone-${tones[index]}`]} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}><div class="hl-option-top"><OptionIcon name={item.icon}/><svg viewBox="0 0 24 24" aria-hidden="true"><path d={item.external ? 'M6 18 18 6M6 6h12v12' : 'M5 12h14m-6-6 6 6-6 6'}/></svg></div><h3>{item.title}</h3><p>{item.description}</p><span class="hl-option-cta">{item.cta}</span></a>)}</div>
-      <div class="hl-other-options">{homeOptions.slice(3).map((item) => <a class="hl-other-option" href={item.href} target="_blank" rel="noreferrer"><OptionIcon name={item.icon}/><div><h3>{item.title}</h3><p>{item.description}</p><span class="hl-option-cta">{item.cta}</span></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>)}</div>
+      <div class="hl-other-options">{homeOptions.slice(3).map((item) => <a class="hl-other-option" href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}><OptionIcon name={item.icon}/><div><h3>{item.title}</h3><p>{item.description}</p><span class="hl-option-cta">{item.cta}</span></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>)}</div>
     </section>
   </div>
 </BaseLayout>

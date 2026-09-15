@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { videos, categories, startingPoints, channelUrl } from '../data/videos';
+import '../styles/pass-library.css';
+import '../styles/videos.css';
+const formats = [{id:'video',label:'Vidéos'},{id:'live',label:'Lives & replays'},{id:'short',label:'Shorts'}];
+---
+<BaseLayout title="Vidéos MAO, mixage et Logic Pro — Le Musicien" description="Explore les vidéos de Vince : Logic Pro, mixage, composition, créativité et home studio. Trouve ton sujet et regarde la vidéo directement ici." pageClass="library-page videos-page">
+  <div class="lp vl lp-wrap">
+    <header class="vl-intro">
+      <div><p class="vl-kicker">La vidéothèque de Vince</p><h1>Un sujet.<br />Une vidéo.<br />À toi de jouer.</h1></div>
+      <div class="vl-intro-copy"><p>Un mix à éclaircir, une fonction de Logic à découvrir, une idée à débloquer. Retrouve mes vidéos YouTube par sujet, et prends ce qui t’aide à faire de la musique.</p><a class="lp-text-link" href={channelUrl} target="_blank" rel="noreferrer">Retrouver la chaîne YouTube ↗</a><p class="vl-total">{videos.length} vidéos, lives et Shorts à explorer</p></div>
+    </header>
+    <section class="vl-start" aria-labelledby="start-title"><h2 id="start-title">Par où commencer ?</h2><div>{startingPoints.map(point => { const video=videos.find(v=>v.id===point.id)!; return <a href={video.url} data-play={video.id}><span>{point.label}</span><span aria-hidden="true">↗</span></a> })}</div></section>
+    <section class="vl-player" id="lecteur" aria-labelledby="player-title" hidden>
+      <div class="vl-player-top"><p>À regarder maintenant</p><button type="button" id="close-player">Fermer le lecteur ×</button></div>
+      <div id="video-embed"></div><h2 id="player-title" tabindex="-1"></h2>
+      <p class="vl-player-links"><a id="youtube-link" target="_blank" rel="noreferrer">Voir sur YouTube ↗</a><button id="copy-video" type="button">Copier le lien</button><span id="copy-status" role="status"></span></p>
+      <p class="vl-player-note">Si la lecture est indisponible ici, ouvre la vidéo sur YouTube.</p>
+    </section>
+    <section class="vl-library" aria-labelledby="library-title">
+      <div class="vl-library-head"><h2 id="library-title">Trouve ta prochaine vidéo.</h2><label class="vl-search" for="video-search" hidden data-search-control><span>Rechercher une vidéo</span><input id="video-search" type="search" placeholder="Mixage, batterie, inspiration…" autocomplete="off" /></label></div>
+      <div class="vl-controls" hidden data-controls>
+        <div class="vl-formats" role="group" aria-label="Format">{formats.map((format,i)=><button type="button" data-format={format.id} aria-pressed={i===0}>{format.label} <span>{videos.filter(v=>v.format===format.id).length}</span></button>)}</div>
+        <div class="vl-categories" role="group" aria-label="Catégorie"><button type="button" data-category="all" aria-pressed="true">Tous les sujets</button>{categories.map(c=><button type="button" data-category={c.id} aria-pressed="false">{c.label}</button>)}</div>
+      </div>
+      <div class="vl-results-line"><p id="video-count" role="status" aria-live="polite">{videos.length} contenus</p><button type="button" id="reset-videos" hidden>Effacer les filtres</button></div>
+      <noscript><p>Les vidéos s’ouvrent sur YouTube. Active JavaScript pour utiliser les filtres et le lecteur intégré.</p></noscript>
+      <div class="vl-grid" id="video-grid">{videos.map(video=><article class="vl-card" data-video={video.id} data-format={video.format} data-categories={video.categories.join(' ')}>
+        <a href={video.url} data-play={video.id}><div class="vl-thumbnail"><img src={video.thumbnail} alt="" width="480" height="270" loading="lazy" decoding="async" /><span class="vl-play" aria-hidden="true">▶</span><span class="vl-format">{formats.find(f=>f.id===video.format)?.label}</span></div><h3>{video.title}</h3></a><p>{video.categories.slice(0,2).map(id=>categories.find(c=>c.id===id)?.label).join(' · ')}</p>
+      </article>)}</div>
+      <div class="vl-empty" id="video-empty" hidden><h3>Aucune vidéo pour cette recherche.</h3><p>Essaie un mot plus simple ou un autre format : vidéos, lives ou Shorts.</p><button type="button" class="lp-button" id="empty-reset">Voir toutes les vidéos</button></div>
+      <button type="button" class="lp-button lp-button-outline vl-more" id="more-videos" hidden>Afficher plus de vidéos</button>
+    </section>
+    <aside class="vl-pass"><div><h2>Envie d’aller plus loin ?</h2><p>Avec le Pass MAO, retrouve les formations complètes et la PM School pour mettre tout ça en pratique.</p></div><a class="lp-button" href="/pass-mao/">Découvrir le Pass MAO</a></aside>
+  </div>
+</BaseLayout>
+<script>
+  import { videos, normalize } from '../data/videos';
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-video]'));
+  const search = document.querySelector<HTMLInputElement>('#video-search')!;
+  const more = document.querySelector<HTMLButtonElement>('#more-videos')!;
+  const reset = document.querySelector<HTMLButtonElement>('#reset-videos')!;
+  const player = document.querySelector<HTMLElement>('#lecteur')!;
+  const title = document.querySelector<HTMLElement>('#player-title')!;
+  const embed = document.querySelector<HTMLElement>('#video-embed')!;
+  let category = 'all', format = 'video', limit = 18;
+  let origin: HTMLElement | null = null;
+  document.querySelector<HTMLElement>('[data-controls]')!.hidden = false;
+  document.querySelector<HTMLElement>('[data-search-control]')!.hidden = false;
+  function filter() {
+    const words = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+    const matches = videos.filter(v => v.format===format && (category==='all'||v.categories.includes(category)) && words.every(word=>normalize(v.title).includes(word)));
+    const visible = new Set(matches.slice(0,limit).map(v=>v.id));
+    cards.forEach(card=>card.hidden=!visible.has(card.dataset.video!));
+    document.querySelector('#video-count')!.textContent=`${matches.length} résultat${matches.length>1?'s':''} — ${Math.min(limit,matches.length)} affiché${Math.min(limit,matches.length)>1?'s':''}`;
+    document.querySelector<HTMLElement>('#video-empty')!.hidden=matches.length>0;
+    more.hidden=matches.length<=limit;
+    reset.hidden=category==='all'&&!search.value&&format==='video';
+    document.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===category)));
+    document.querySelectorAll<HTMLButtonElement>('button[data-format]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.format===format)));
+  }
+  search.addEventListener('input',()=>{limit=18;filter()});
+  document.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(b=>b.addEventListener('click',()=>{category=b.dataset.category!;limit=18;filter()}));
+  document.querySelectorAll<HTMLButtonElement>('button[data-format]').forEach(b=>b.addEventListener('click',()=>{format=b.dataset.format!;limit=18;filter()}));
+  more.addEventListener('click',()=>{const previous=limit;limit+=18;filter();cards.filter(c=>!c.hidden)[previous]?.querySelector('a')?.focus()});
+  function clear(){category='all';format='video';search.value='';limit=18;filter()}
+  reset.addEventListener('click',clear);
+  document.querySelector('#empty-reset')!.addEventListener('click',()=>{clear();search.focus()});
+  function play(id:string, update=true, focus=true) {
+    const video=videos.find(v=>v.id===id); if(!video)return;
+    player.hidden=false;title.textContent=video.title;
+    const iframe=document.createElement('iframe');
+    iframe.src=`https://www.youtube-nocookie.com/embed/${video.id}`;
+    iframe.title=video.title;iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';iframe.allowFullscreen=true;iframe.referrerPolicy='strict-origin-when-cross-origin';
+    embed.replaceChildren(iframe);
+    document.querySelector<HTMLAnchorElement>('#youtube-link')!.href=video.url;
+    document.querySelector('#copy-status')!.textContent='';
+    if(update){const url=new URL(location.href);url.searchParams.set('v',id);url.hash='lecteur';history.pushState({},'',url)}
+    if(focus){player.scrollIntoView({block:'start'});title.focus({preventScroll:true})}
+  }
+  document.querySelectorAll<HTMLAnchorElement>('[data-play]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();origin=link;play(link.dataset.play!)}));
+  document.querySelector('#close-player')!.addEventListener('click',()=>{embed.replaceChildren();player.hidden=true;const url=new URL(location.href);url.searchParams.delete('v');url.hash='';history.pushState({},'',url);(origin&&!origin.closest('[hidden]')?origin:search).focus()});
+  document.querySelector('#copy-video')!.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);document.querySelector('#copy-status')!.textContent='Lien copié.'}catch{document.querySelector('#copy-status')!.textContent='Copie l’adresse dans la barre du navigateur.'}});
+  function restore(){const id=new URL(location.href).searchParams.get('v');if(id&&videos.some(v=>v.id===id))play(id,false,false);else{player.hidden=true;embed.replaceChildren()}}
+  window.addEventListener('popstate',restore);filter();restore();
+</script>

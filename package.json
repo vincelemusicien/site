@@ -8,7 +8,11 @@
     "build": "astro build",
     "build:sites": "astro build && node scripts/prepare-sites-worker.mjs",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "videos:setup": "python3 -m venv .venv-videos && .venv-videos/bin/pip install -r scripts/videos/requirements.txt",
+    "videos:sync": "node scripts/videos/refresh.mjs",
+    "prebuild": "node scripts/videos/refresh.mjs --optional",
+    "prebuild:sites": "node scripts/videos/refresh.mjs --optional"
   },
   "dependencies": {
     "astro": "^5.12.0"

@@ -4,7 +4,7 @@ export const headerNavigation = [
   { label: 'Accompagnement', href: 'https://formations.lemusicien.fr/finisher/', external: true },
   { label: 'PM School', href: 'https://pmschool.fr', external: true },
   { label: 'Tools', href: 'https://lemusicien-shop.fourthwall.com/', external: true },
-  { label: 'YouTube', href: 'https://www.youtube.com/@vincelemusicien', external: true },
+  { label: 'Vidéos', href: '/videos/' },
 ];
 
 export const homePass = {
@@ -44,11 +44,10 @@ export const homeOptions = [
     icon: 'sliders',
   },
   {
-    title: 'YouTube',
+    title: 'Vidéos YouTube',
     description: 'Mes vidéos sur la production musicale, la créativité et le home studio.',
-    cta: 'Voir YouTube',
-    href: 'https://www.youtube.com/@vincelemusicien',
-    external: true,
+    cta: 'Explorer les vidéos',
+    href: '/videos/',
     accent: 'rose',
     icon: 'play',
   },
