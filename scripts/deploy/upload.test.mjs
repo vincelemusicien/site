@@ -38,6 +38,8 @@ test('lftp ouvre le serveur avant d’exécuter le transfert', () => {
 test('le chemin FTP est envoyé sans guillemets littéraux', () => {
   const commands = transferCommands('/tmp/site', '/home/account/public_html/lemusicien', true);
   assert.equal(commands[0], 'cd /home/account/public_html/lemusicien');
+  assert.match(commands[2], /\/tmp\/site\//);
+  assert.doesNotMatch(commands[2], /"\/tmp\/site/);
 });
 
 async function fixture() {
