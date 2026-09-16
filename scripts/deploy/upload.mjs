@@ -36,8 +36,11 @@ export function configuration(env) {
 
 export function transferCommands(source, remote, dryRun) {
   const flags = '--reverse --transfer-all --no-perms --no-symlinks --overwrite --max-errors=1 --verbose=1' + (dryRun ? ' --dry-run' : '');
+  // Les guillemets sont inclus littéralement par Pure-FTPd dans la commande CWD.
+  // Le chemin est déjà validé ; seuls les espaces nécessitent un échappement lftp.
+  const remotePath = remote.replaceAll(' ', '\\ ');
   return [
-    `cd ${quote(remote)}`,
+    `cd ${remotePath}`,
     'echo "Phase 1/2 : assets (aucune suppression distante)."',
     `mirror ${flags} --parallel=2 --exclude-glob=*.html --exclude-glob=deploy-version.json ${quote(source + '/')} ./`,
     'echo "Phase 2/2 : pages HTML (assets déjà transférés)."',

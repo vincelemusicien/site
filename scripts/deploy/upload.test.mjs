@@ -35,6 +35,11 @@ test('lftp ouvre le serveur avant d’exécuter le transfert', () => {
   assert.match(args.at(-1), /cd "\/"/);
 });
 
+test('le chemin FTP est envoyé sans guillemets littéraux', () => {
+  const commands = transferCommands('/tmp/site', '/home/account/public_html/lemusicien', true);
+  assert.equal(commands[0], 'cd /home/account/public_html/lemusicien');
+});
+
 async function fixture() {
   const root = await mkdtemp(path.join(tmpdir(), 'lemusicien-transfer-test-'));
   const source = path.join(root, 'source');
