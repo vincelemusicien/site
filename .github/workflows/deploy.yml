@@ -1,0 +1,89 @@
+name: Déployer lemusicien.fr
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Simuler le transfert sans modifier l’hébergement
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# Ne jamais interrompre un transfert commencé, ni lancer deux transferts ensemble.
+concurrency:
+  group: lemusicien-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Installer Node pour le build
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Installer les dépendances verrouillées
+        run: npm ci
+
+      - name: Construire le site statique
+        run: npm run build
+
+      - name: Vérifier dist et identifier cette version
+        run: node scripts/deploy/verify-static.mjs --stamp
+
+      - name: Installer les clients de transfert
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lftp openssh-client ca-certificates
+
+      - name: Vérifier le transfert sans suppression sur une destination locale
+        run: npm run test:deploy
+
+      # Les secrets ne sont accessibles qu'à cette étape, pas aux commandes npm.
+      - name: Transférer le contenu de dist sans suppression
+        env:
+          DEPLOY_PROTOCOL: ${{ vars.DEPLOY_PROTOCOL || 'sftp' }}
+          DEPLOY_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+          ALLOW_INSECURE_FTP: ${{ vars.ALLOW_INSECURE_FTP || 'false' }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: node scripts/deploy/upload.mjs
+
+      - name: Vérifier la version servie par le domaine
+        if: github.event_name != 'workflow_dispatch' || !inputs.dry_run
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://lemusicien.fr' }}
+        run: node scripts/deploy/verify-live.mjs
+
+      - name: Résumé du déploiement
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+        run: |
+          {
+            echo "### Déploiement de lemusicien.fr"
+            echo "- Résultat : $JOB_STATUS"
+            echo "- Commit : $GITHUB_SHA"
+            echo "- Simulation : $DRY_RUN"
+            echo "- Source transférée : contenu de dist/"
+            echo "- Suppression des fichiers distants : désactivée"
+          } >> "$GITHUB_STEP_SUMMARY"

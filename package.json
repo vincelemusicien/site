@@ -9,6 +9,8 @@
     "build:sites": "astro build && node scripts/prepare-sites-worker.mjs",
     "preview": "astro preview",
     "check": "astro check",
+    "verify:static": "node scripts/deploy/verify-static.mjs",
+    "test:deploy": "node --test scripts/deploy/upload.test.mjs",
     "videos:setup": "python3 -m venv .venv-videos && .venv-videos/bin/pip install -r scripts/videos/requirements.txt",
     "videos:sync": "node scripts/videos/refresh.mjs",
     "prebuild": "node scripts/videos/refresh.mjs --optional",
