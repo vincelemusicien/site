@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm, symlink } from 'node:
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { configuration, transferCommands, redact } from './upload.mjs';
+import { configuration, lftpArguments, transferCommands, redact } from './upload.mjs';
 import { verifyStatic } from './verify-static.mjs';
 
 const valid = { FTP_HOST: 'hosting.example.org', FTP_USERNAME: 'deployment', FTP_REMOTE_PATH: '/home/deployment/public_html', FTP_PASSWORD: 'a"b,$c;secret', SSH_KNOWN_HOSTS: 'test-host-key' };
@@ -26,6 +26,13 @@ test('SFTP par défaut et validation des réglages', () => {
 
 test('les secrets et leurs formes encodées sont masqués', () => {
   assert.equal(redact(`Erreur ${valid.FTP_PASSWORD} ${encodeURIComponent(valid.FTP_PASSWORD)}`, valid), 'Erreur *** ***');
+});
+
+test('lftp ouvre le serveur avant d’exécuter le transfert', () => {
+  const config = configuration({ ...valid, DEPLOY_PROTOCOL: 'ftps', FTP_REMOTE_PATH: '/' });
+  const args = lftpArguments(config, ['set cmd:fail-exit yes'], ['cd "/"']);
+  assert.ok(args.indexOf('ftp://hosting.example.org') < args.indexOf('-e'));
+  assert.match(args.at(-1), /cd "\/"/);
 });
 
 async function fixture() {

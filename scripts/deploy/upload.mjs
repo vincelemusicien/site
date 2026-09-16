@@ -47,6 +47,13 @@ export function transferCommands(source, remote, dryRun) {
   ];
 }
 
+export function lftpArguments(config, settings, commands) {
+  const scheme = config.protocol === 'sftp' ? 'sftp' : config.protocol === 'ftps-implicit' ? 'ftps' : 'ftp';
+  // lftp exécute -e avant l'URL si l'option apparaît en premier. L'URL doit donc
+  // précéder le script afin que `cd` et `mirror` disposent bien d'une connexion.
+  return ['--norc', ...(config.debug ? ['-d'] : []), '--env-password', '--user', config.username, '-p', config.port, `${scheme}://${config.host}`, '-e', [...settings, ...commands].join('\n')];
+}
+
 export function redact(line, env) {
   const names = ['FTP_PASSWORD', 'FTP_USERNAME', 'FTP_HOST', 'FTP_REMOTE_PATH', 'SSH_PRIVATE_KEY', 'SSH_KNOWN_HOSTS'];
   const values = names.flatMap(name => (env[name] || '').split(/\r?\n/).filter(value => value.length > (name === 'FTP_PASSWORD' ? 0 : 1)))
@@ -96,8 +103,7 @@ export async function upload(env = process.env) {
         ? ['set ftp:ssl-allow no']
         : ['set ftp:ssl-allow yes', 'set ftp:ssl-force yes', 'set ftp:ssl-auth TLS', 'set ftp:ssl-protect-data yes', 'set ftp:ssl-protect-list yes']));
     }
-    const scheme = config.protocol === 'sftp' ? 'sftp' : config.protocol === 'ftps-implicit' ? 'ftps' : 'ftp';
-    const args = ['--norc', ...(config.debug ? ['-d'] : []), '--env-password', '--user', config.username, '-p', config.port, '-e', [...settings, ...transferCommands(source, config.remote, config.dryRun)].join('\n'), `${scheme}://${config.host}`];
+    const args = lftpArguments(config, settings, transferCommands(source, config.remote, config.dryRun));
     console.log(`${config.dryRun ? 'Simulation' : 'Déploiement'} via ${config.protocol.toUpperCase()} ; contenu de dist/ uniquement.`);
     if (config.protocol === 'ftp') console.warn('Attention : ce mode FTP transmet les identifiants et les fichiers sans chiffrement.');
     const childEnv = { ...env, LFTP_PASSWORD: config.key ? '' : env.FTP_PASSWORD, LFTP_HOME: temporary };
