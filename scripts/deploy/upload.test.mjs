@@ -11,6 +11,7 @@ const valid = { FTP_HOST: 'hosting.example.org', FTP_USERNAME: 'deployment', FTP
 
 test('SFTP par défaut et validation des réglages', () => {
   assert.equal(configuration(valid).protocol, 'sftp');
+  assert.equal(configuration(valid).debug, false);
   assert.equal(configuration(valid).port, '22');
   assert.throws(() => configuration({ ...valid, SSH_KNOWN_HOSTS: '' }), /SSH_KNOWN_HOSTS/);
   assert.throws(() => configuration({ ...valid, FTP_REMOTE_PATH: '/' }), /racine SFTP/);

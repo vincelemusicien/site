@@ -30,7 +30,8 @@ export function configuration(env) {
   if (protocol === 'sftp' && !env.SSH_KNOWN_HOSTS?.trim()) throw new Error('Secret SSH_KNOWN_HOSTS manquant : vérifier la clé serveur auprès de GNC.');
   if (!key && !env.FTP_PASSWORD) throw new Error('Secret FTP_PASSWORD manquant (ou SSH_PRIVATE_KEY en SFTP).');
   if (!['true', 'false'].includes(env.DEPLOY_DRY_RUN || 'false')) throw new Error('DEPLOY_DRY_RUN doit être true ou false.');
-  return { protocol, host, username, port, remote, key, dryRun: env.DEPLOY_DRY_RUN === 'true' };
+  if (!['true', 'false'].includes(env.DEPLOY_DEBUG || 'false')) throw new Error('DEPLOY_DEBUG doit être true ou false.');
+  return { protocol, host, username, port, remote, key, dryRun: env.DEPLOY_DRY_RUN === 'true', debug: env.DEPLOY_DEBUG === 'true' };
 }
 
 export function transferCommands(source, remote, dryRun) {
@@ -93,10 +94,10 @@ export async function upload(env = process.env) {
       settings.push('set ftp:passive-mode yes');
       settings.push(...(config.protocol === 'ftp'
         ? ['set ftp:ssl-allow no']
-        : ['set ftp:ssl-allow yes', 'set ftp:ssl-force yes', 'set ftp:ssl-protect-data yes', 'set ftp:ssl-protect-list yes']));
+        : ['set ftp:ssl-allow yes', 'set ftp:ssl-force yes', 'set ftp:ssl-auth TLS', 'set ftp:ssl-protect-data yes', 'set ftp:ssl-protect-list yes']));
     }
     const scheme = config.protocol === 'sftp' ? 'sftp' : config.protocol === 'ftps-implicit' ? 'ftps' : 'ftp';
-    const args = ['--norc', '--env-password', '--user', config.username, '-p', config.port, '-e', [...settings, ...transferCommands(source, config.remote, config.dryRun)].join('\n'), `${scheme}://${config.host}`];
+    const args = ['--norc', ...(config.debug ? ['-d'] : []), '--env-password', '--user', config.username, '-p', config.port, '-e', [...settings, ...transferCommands(source, config.remote, config.dryRun)].join('\n'), `${scheme}://${config.host}`];
     console.log(`${config.dryRun ? 'Simulation' : 'Déploiement'} via ${config.protocol.toUpperCase()} ; contenu de dist/ uniquement.`);
     if (config.protocol === 'ftp') console.warn('Attention : ce mode FTP transmet les identifiants et les fichiers sans chiffrement.');
     const childEnv = { ...env, LFTP_PASSWORD: config.key ? '' : env.FTP_PASSWORD, LFTP_HOME: temporary };
