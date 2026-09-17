@@ -3,8 +3,8 @@ import { passInteractiveCourses, passBonuses } from './pass-mao';
 import { courseVisual } from './course-visuals';
 
 export const passCheckout = {
-  monthly: import.meta.env.PUBLIC_PASS_CHECKOUT_MONTHLY || null,
-  annual: import.meta.env.PUBLIC_PASS_CHECKOUT_ANNUAL || null,
+  monthly: import.meta.env.PUBLIC_PASS_CHECKOUT_MONTHLY || 'https://productionmusicale.systeme.io/pass-mao-bdc',
+  annual: import.meta.env.PUBLIC_PASS_CHECKOUT_ANNUAL || 'https://productionmusicale.systeme.io/pass-mao-bdc',
 };
 
 export const libraryCategories = [
