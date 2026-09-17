@@ -8,6 +8,8 @@ interface Props {
   description: string;
   image?: string;
   pageClass?: string;
+  noindex?: boolean;
+  memberArea?: boolean;
 }
 
 const {
@@ -15,6 +17,8 @@ const {
   description,
   image = '/images/home-studio-background.png',
   pageClass = '',
+  noindex = false,
+  memberArea = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -41,6 +45,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#f2efe8" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -55,7 +60,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class={pageClass}>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
-    <Header />
+    <Header memberArea={memberArea} />
     <main id="contenu">
       <slot />
     </main>

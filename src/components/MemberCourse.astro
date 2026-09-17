@@ -1,0 +1,12 @@
+---
+import CourseCover from './CourseCover.astro';
+import type { memberCourses } from '../data/member-pass';
+interface Props { course: (typeof memberCourses)[number]; image: string; loginUrl: string; }
+const { course, image, loginUrl } = Astro.props;
+---
+<article class:list={['mp-course', `lp-tone-${course.tone}`]} data-member-course data-universes={course.universes.join(' ')} data-search={`${course.title} ${course.promise}`}>
+  <CourseCover title={course.title} category="" image={image} badge="" />
+  <div class="mp-course-copy"><p>{course.promise}</p><small>{course.duration || 'À ton rythme'}</small>
+    <a class="lp-button lp-button-outline" href={course.directUrl || loginUrl} target="_blank" rel="noopener noreferrer" aria-label={`${course.directUrl ? 'Ouvrir la formation' : 'Retrouver dans mes cours'} : ${course.title} (nouvel onglet)`}>{course.directUrl ? 'Ouvrir la formation' : 'Retrouver dans mes cours'} <span aria-hidden="true">↗</span></a>
+  </div>
+</article>

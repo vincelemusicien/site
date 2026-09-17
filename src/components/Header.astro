@@ -1,5 +1,11 @@
 ---
 import { headerNavigation } from '../data/site';
+interface Props { memberArea?: boolean }
+const { memberArea = false } = Astro.props;
+const navigation = memberArea ? [
+  { label: 'Ma bibliothèque', href: '#bibliotheque', external: false },
+  { label: 'PM School', href: '#pm-school', external: false },
+] : headerNavigation;
 ---
 
 <header class="site-header">
@@ -12,7 +18,7 @@ import { headerNavigation } from '../data/site';
     </a>
 
     <nav class="header-nav" aria-label="Navigation principale">
-      {headerNavigation.map((item) => (
+      {navigation.map((item) => (
         <a href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>{item.label}</a>
       ))}
       <a class="member-link" href="https://productionmusicale.systeme.io/login" target="_blank" rel="noreferrer">Espace membre</a>
@@ -21,7 +27,7 @@ import { headerNavigation } from '../data/site';
     <details class="mobile-menu">
       <summary>Menu</summary>
       <nav class="mobile-menu-panel" aria-label="Navigation mobile">
-        {headerNavigation.map((item) => <a href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>{item.label}</a>)}
+        {navigation.map((item) => <a href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>{item.label}</a>)}
         <a class="member-link" href="https://productionmusicale.systeme.io/login" target="_blank" rel="noreferrer">Espace membre</a>
       </nav>
     </details>

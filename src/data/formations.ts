@@ -49,6 +49,22 @@ const catalogueUrl = 'https://productionmusicale.systeme.io/catalogue';
 
 export const formations: Formation[] = [
   {
+    title: 'Écouter comme un Producer',
+    slug: 'ecouter-comme-un-producer',
+    category: 'produce',
+    description: 'Développe ton écoute et ta vision d’ensemble d’un morceau.',
+    url: catalogueUrl,
+    duration: null,
+    image: '/images/pass/course-production-library.png',
+    availableIndividually: false,
+    passExclusive: false,
+    featured: false,
+    badge: null,
+    includedInPass: true,
+    descriptionStatus: 'provisional',
+    availabilityStatus: 'confirmed',
+  },
+  {
     title: 'La méthode PMER',
     slug: 'methode-pmer',
     category: 'create',
@@ -140,7 +156,7 @@ export const formations: Formation[] = [
     passExclusive: false,
     featured: true,
     badge: null,
-    includedInPass: null,
+    includedInPass: true,
     descriptionStatus: 'provisional',
     availabilityStatus: 'provisional',
   },
