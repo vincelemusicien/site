@@ -130,7 +130,7 @@ html[data-theme='dark'] .lp-button:not(.lp-button-outline):hover{background:#c4c
 .lp-price-card h3{font-size:26px;margin:0 0 28px}.lp-price-card>p:not(.lp-price):not(.lp-small){font-size:15px;color:var(--muted);margin-bottom:0}
 .lp-price{display:flex;gap:9px;align-items:baseline;margin-bottom:15px;line-height:1}.lp-price strong{font-family:Bricolage,sans-serif;font-size:64px;letter-spacing:-.035em}.lp-price span{font-size:16px;color:var(--muted)}
 .lp-plan-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px}.lp-plan-heading h3{margin:0}.lp-plan-heading>span{font-size:11px;font-weight:700;background:var(--lp-yellow);color:#493c0c;border-radius:4px;padding:5px 9px;white-space:nowrap}
-.lp-price-card .lp-future-price{margin-top:9px!important;font-size:12px!important;color:var(--text)!important}.lp-future-price strong{font-weight:700}
+.lp-price-card .lp-price-compare{margin:-8px 0 24px!important;font-size:12px!important;color:var(--muted)!important}
 .lp-price-card ul{margin-block:28px 32px;list-style:none;padding:0;display:grid;gap:12px;font-size:14px}.lp-price-card li::before{content:'';display:inline-block;width:6px;height:11px;border-right:1.7px solid currentColor;border-bottom:1.7px solid currentColor;transform:rotate(45deg);margin-right:14px}
 .lp-price-card .lp-button{margin-top:auto}.lp-price-card .lp-small{margin:14px 0 0;font-size:11px;text-align:center}
 .lp-price-annual{background:var(--lp-soft);border-color:transparent}
