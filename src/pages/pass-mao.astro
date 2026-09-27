@@ -14,8 +14,15 @@ const pmSchoolScreens = [
   { path: '/images/pass/pm-school-menu.png', alt: 'Les espaces et rendez-vous de la communauté PM School', label: 'Pratiquer' },
 ];
 const pmSchoolLive = '/images/pass/pm-school-live.jpeg';
+const testimonials = [
+  { path: '/images/pass/testimonials/ecriture.png', alt: 'Témoignage d’un musicien qui a écrit deux titres après une formation d’écriture', label: 'Écriture', width: 1059, height: 826 },
+  { path: '/images/pass/testimonials/mixage.png', alt: 'Témoignage sur l’aide apportée pour améliorer ses mixages', label: 'Mixage', width: 829, height: 839 },
+  { path: '/images/pass/testimonials/mastering.png', alt: 'Témoignage appréciant une formation de mastering', label: 'Mastering', width: 874, height: 988 },
+  { path: '/images/pass/testimonials/progression.png', alt: 'Témoignage sur des progrès dans le mixage et la création musicale', label: 'Progresser', width: 897, height: 1111 },
+  { path: '/images/pass/testimonials/pack-mixage.png', alt: 'Témoignage sur l’utilité d’un pack mixage', label: 'Pack mixage', width: 919, height: 768 },
+];
 const passPackshotImage = await getImage({ src: passPackshot, width: 900, format: 'webp', quality: 82 });
-const imagePaths = [...new Set([...libraryCourses.map((course) => course.image), '/images/vince-home-studio.png', pmSchoolLive, ...pmSchoolScreens.map((screen) => screen.path)].filter(Boolean))] as string[];
+const imagePaths = [...new Set([...libraryCourses.map((course) => course.image), '/images/vince-home-studio.png', pmSchoolLive, ...pmSchoolScreens.map((screen) => screen.path), ...testimonials.map((testimonial) => testimonial.path)].filter(Boolean))] as string[];
 const pictures = Object.fromEntries(await Promise.all(imagePaths.map(async (path) => {
   const source = sourceImages[`../../public${path}`]?.default;
   return [path, source ? (await getImage({ src: source, width: path.includes('pm-school') ? 1000 : 640, format: 'webp', quality: 78 })).src : path];
@@ -107,6 +114,8 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
         </figure>
       </div>
     </section>
+
+    <section class="lp-testimonials" aria-labelledby="testimonials-title"><div class="lp-wrap"><div class="lp-testimonials-intro"><h2 id="testimonials-title">Ce qui compte,<br />c’est ce que tu fais après.</h2><p>Des musiciens qui ont repris leurs morceaux, affiné leurs mixages et retrouvé l’envie de créer. Voici quelques messages reçus au fil des formations.</p></div><div class="lp-testimonial-wall">{testimonials.map((testimonial) => <figure><img src={pictures[testimonial.path]} alt={testimonial.alt} loading="lazy" width={testimonial.width} height={testimonial.height} /><figcaption>{testimonial.label}</figcaption></figure>)}</div></div></section>
 
     <section class="lp-pricing" id="tarifs" aria-labelledby="pricing-title"><div class="lp-wrap"><div class="lp-section-intro"><h2 id="pricing-title">Tout le Pass.<br />À ton rythme.</h2><p>La bibliothèque, les ressources et la PM School.<br />Le même accès, deux façons de le rejoindre.</p></div><div class="lp-pricing-grid">
       <article class="lp-price-card"><div class="lp-plan-heading"><h3>Un mois à la fois</h3><span>Offre de lancement</span></div><p class="lp-price"><strong>39 €</strong><span>/mois</span></p><p class="lp-price-compare">Au lieu de 49 €/mois</p><p>Pour explorer librement, sans engagement.</p><ul><li>Tout le catalogue du Pass</li><li>La PM School et ses rendez-vous</li><li>La bibliothèque grossit régulièrement</li></ul>{passCheckout.monthly ? <a class="lp-button lp-button-outline" href={passCheckout.monthly}>Choisir le Pass mensuel</a> : <a class="lp-button lp-button-outline" href="#inscription" data-plan="mensuel">Choisir le Pass mensuel</a>}<p class="lp-small">Facturation mensuelle. Résiliable à tout moment.</p></article>
