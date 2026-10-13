@@ -32,3 +32,17 @@ document.querySelectorAll<HTMLButtonElement>('[data-sound-filter]').forEach(butt
 document.querySelectorAll<HTMLButtonElement>('[data-gallery-image]').forEach(button=>button.addEventListener('click',()=>{const main=document.querySelector<HTMLImageElement>('[data-gallery-main]');if(main&&button.dataset.galleryImage)main.src=button.dataset.galleryImage;document.querySelectorAll('[data-gallery-image]').forEach(el=>el.setAttribute('aria-pressed',String(el===button)))}));
 render();
 
+
+const checkout=document.querySelector<HTMLButtonElement>('[data-checkout]');
+checkout?.addEventListener('click',async()=>{
+ if(!cart.length||checkout.disabled)return;
+ const error=document.querySelector<HTMLElement>('[data-checkout-error]');
+ checkout.disabled=true;checkout.textContent='Ouverture de Stripe…';if(error)error.hidden=true;
+ try{
+ const response=await fetch('https://tools-checkout.vercel.app/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:cart}),signal:AbortSignal.timeout(25000)});
+ const data=await response.json();if(!response.ok)throw Error(data.error||'Paiement indisponible.');
+ const url=new URL(data.url);if(url.protocol!=='https:'||url.hostname!=='checkout.stripe.com')throw Error('Adresse de paiement invalide.');
+ window.location.assign(url.href);
+ }catch(e){if(error){error.textContent=e instanceof Error?e.message:'Connexion impossible. Réessaie.';error.hidden=false;}checkout.disabled=cart.length===0;checkout.textContent='Passer au paiement';}
+});
+
