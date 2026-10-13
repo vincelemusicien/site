@@ -3,7 +3,7 @@ export const headerNavigation = [
   { label: 'Pass MAO', href: '/pass-mao/' },
   { label: 'Accompagnement', href: 'https://formations.lemusicien.fr/finisher/', external: true },
   { label: 'PM School', href: 'https://pmschool.fr', external: true },
-  { label: 'Tools', href: 'https://lemusicien-shop.fourthwall.com/', external: true },
+  { label: 'Sounds', href: '/sounds/' },
   { label: 'Vidéos', href: '/videos/' },
 ];
 
@@ -52,11 +52,10 @@ export const homeOptions = [
     icon: 'play',
   },
   {
-    title: 'Tools by Vince',
+    title: 'Sounds by Vince',
     description: 'Racks, templates, outils créatifs et ressources conçues pour faciliter la création musicale.',
-    cta: 'Explorer les Tools',
-    href: 'https://lemusicien-shop.fourthwall.com/',
-    external: true,
+    cta: 'Explorer les Sounds',
+    href: '/sounds/',
     accent: 'slate',
     icon: 'sliders',
   },

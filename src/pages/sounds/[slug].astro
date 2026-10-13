@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SoundCard from '../../components/SoundCard.astro';
+import SoundsCart from '../../components/SoundsCart.astro';
+import { sounds, euro } from '../../data/sounds';
+import '../../styles/sounds.css';
+export function getStaticPaths(){return sounds.map(product=>({params:{slug:product.slug},props:{product}}));}
+const {product:p}=Astro.props;
+---
+<BaseLayout title={`${p.name} | Sounds - Le Musicien`} description={p.description} image={p.images[0]} pageClass="sounds-page">
+  <div class="sounds-subnav shell"><a href="/sounds/" class="sounds-wordmark">SOUNDS<span>by Vince</span></a><button class="cart-trigger" type="button" data-open-cart>Panier <span data-cart-count>0</span></button></div>
+  <div class="shell sound-breadcrumb"><a href="/sounds/">Tous les sons</a><span>/</span><span>{p.name}</span></div>
+  <section class="sound-product shell">
+    <div class="sound-gallery"><img class="sound-main-image" src={p.images[0]} alt={p.name} width="900" height="900" data-gallery-main fetchpriority="high"/>{p.images.length>1&&<div class="sound-thumbnails">{p.images.map((image,i)=><button type="button" data-gallery-image={image} aria-label={`Voir ${p.name}, visuel ${i+1}`} aria-pressed={i===0?'true':'false'}><img src={image} alt="" width="120" height="120" loading="lazy"/></button>)}</div>}</div>
+    <div class="sound-product-copy"><span class="sound-eyebrow">{p.category}</span><h1>{p.name}</h1><p class="sound-tagline">{p.tagline}</p><p>{p.description}</p><div class="sound-price">{euro(p.price)}<span>Produit numérique</span></div><button class="sound-primary" type="button" data-add-sound={p.slug}>Ajouter au panier <span>+</span></button><p class="sounds-preview">Boutique en préparation. Paiement bientôt disponible.</p><div class="sound-specs"><h2>Dans ce pack</h2><ul>{p.contents.map(item=><li>{item}</li>)}</ul><h2>Compatibilité</h2><p>{p.compatibility}</p></div><a class="sound-demo-link" href="#demo">Découvrir la démo ↓</a></div>
+  </section>
+  <section class="sound-demo shell" id="demo"><span class="sound-eyebrow">En images & en musique</span><h2>Écoute ce qu’il a dans le ventre.</h2>{p.video?<iframe src={`${p.video}?dnt=1`} title={`Démonstration de ${p.name}`} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen/>:<p>La démonstration sera ajoutée prochainement.</p>}</section>
+  <section class="sound-faq shell"><h2>Avant de te lancer.</h2><details><summary>Comment installer le produit ?</summary><p>Les instructions propres à ce produit seront ajoutées à la fiche et au fichier téléchargé avant l’ouverture des ventes. Vérifie la compatibilité indiquée ci-dessus.</p></details><details><summary>Comment récupérer mes fichiers ?</summary><p>À l’ouverture de la boutique, les fichiers seront accessibles après validation du paiement. Pour le moment, le panier permet uniquement de préparer une sélection.</p></details><details><summary>Une question sur ce produit ?</summary><p>Écris-moi à <a href="mailto:contact@lemusicien.fr">contact@lemusicien.fr</a>.</p></details></section>
+  <section class="sounds-collection shell"><div class="sounds-section-heading"><h2>Encore une autre couleur ?</h2><a href="/sounds/">Toute la collection ↗</a></div><div class="sounds-grid sounds-related">{sounds.filter(item=>item.slug!==p.slug).map(product=><SoundCard product={product}/>)}</div></section>
+  <SoundsCart/>
+</BaseLayout>

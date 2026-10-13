@@ -1,0 +1,17 @@
+---
+import { euro, type SoundProduct } from '../data/sounds';
+interface Props { product: SoundProduct }
+const { product: p } = Astro.props;
+---
+<article class="sound-card" data-category={p.category} data-product-name={p.name.toLowerCase()}>
+  <a class="sound-art" href={`/sounds/${p.slug}/`} style={`--sound-accent:${p.accent}`}>
+    <img src={p.images[0]} alt={p.name} loading="lazy" width="800" height="800" />
+    <span class="sound-art-link">Découvrir ↗</span>
+  </a>
+  <div class="sound-card-copy">
+    <span class="sound-eyebrow">{p.category}</span>
+    <div class="sound-card-title"><h3><a href={`/sounds/${p.slug}/`}>{p.name}</a></h3><strong>{euro(p.price)}</strong></div>
+    <p>{p.tagline}</p>
+    <div class="sound-card-actions"><a href={`/sounds/${p.slug}/#demo`}>Voir la démo ↗</a><button type="button" data-add-sound={p.slug} aria-label={`Ajouter ${p.name} au panier`}>Ajouter +</button></div>
+  </div>
+</article>

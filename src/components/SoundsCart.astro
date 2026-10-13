@@ -1,0 +1,11 @@
+---
+import { sounds } from '../data/sounds';
+---
+<dialog class="sounds-cart" aria-labelledby="cart-title" data-sounds-cart>
+  <div class="cart-header"><div><span class="sound-eyebrow">Ta sélection</span><h2 id="cart-title">Le panier.</h2></div><button type="button" data-close-cart aria-label="Fermer le panier">×</button></div>
+  <div class="cart-items" data-cart-items></div>
+  <div class="cart-footer"><div class="cart-total"><span>Total</span><strong data-cart-total>0 €</strong></div><p>Produits numériques. Aucun frais de livraison.</p><button class="sound-primary" type="button" disabled>Commande bientôt disponible</button><p class="cart-preview-note">La boutique est en préparation. Les achats ouvriront prochainement.</p><p data-checkout-error role="alert" hidden></p><button class="cart-continue" type="button" data-close-cart>Continuer à explorer</button></div>
+</dialog>
+<p class="sounds-announcement" role="status" aria-live="polite" data-cart-status></p>
+<script type="application/json" id="sounds-catalogue" set:html={JSON.stringify(sounds.map(({slug,name,price,images})=>({slug,name,price,image:images[0]}))).replace(/</g,'\\u003c')} />
+<script>import '../scripts/sounds';</script>
