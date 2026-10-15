@@ -10,8 +10,8 @@ const { product: p } = Astro.props;
   </a>
   <div class="sound-card-copy">
     <span class="sound-eyebrow">{p.category}</span>
-    <div class="sound-card-title"><h3><a href={`/sounds/${p.slug}/`}>{p.name}</a></h3><strong>{euro(p.price)}</strong></div>
+    <div class="sound-card-title"><h3><a href={`/sounds/${p.slug}/`}>{p.name}</a></h3><strong>{p.available === false ? 'Bientôt' : euro(p.price)}</strong></div>
     <p>{p.tagline}</p>
-    <div class="sound-card-actions"><a href={`/sounds/${p.slug}/#demo`}>Voir la démo ↗</a><button type="button" data-add-sound={p.slug} aria-label={`Ajouter ${p.name} au panier`}>Ajouter +</button></div>
+    <div class="sound-card-actions">{p.available === false ? <><a href={`/sounds/${p.slug}/`}>Voir la fiche ↗</a><span>Bientôt</span></> : <><a href={`/sounds/${p.slug}/#demo`}>Voir la démo ↗</a><button type="button" data-add-sound={p.slug} aria-label={`Ajouter ${p.name} au panier`}>Ajouter +</button></>}</div>
   </div>
 </article>

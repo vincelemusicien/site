@@ -1,6 +1,6 @@
 export interface SoundProduct {
-  slug: string; name: string; category: 'Instruments' | 'Presets Logic Pro';
-  price: number; tagline: string; description: string; compatibility: string;
+  slug: string; name: string; category: 'Instruments' | 'Presets Logic Pro' | 'Sounds & Patches Logic Pro';
+  price: number; available?: boolean; tagline: string; description: string; compatibility: string;
   contents: string[]; images: string[]; video?: string; accent: string;
 }
 export const sounds: SoundProduct[] = [
@@ -16,5 +16,8 @@ export const sounds: SoundProduct[] = [
   { slug: 'dream-vocals', name: 'Dream Vocals', category: 'Presets Logic Pro', price: 15,
     tagline: 'Une autre dimension pour ta voix.', description: 'Un rack vocal pour Logic Pro, piloté avec les Smart Controls. Explore de nouvelles textures vocales avec les effets de Logic, sans plugins tiers.',
     compatibility: 'Logic Pro 10.8+ · sans plugins tiers', contents: ['Rack vocal complet pour Logic Pro', 'Smart Controls déjà mappés', 'Reverb, delay et élargissement stéréo', 'Compression parallèle, saturation et texture', 'Mini-guide d’installation et d’utilisation'], images: ["/images/sounds/dream-vocals-0.webp", "/images/sounds/dream-vocals-1.webp"], video: "https://player.vimeo.com/video/1207758210", accent: '#af8bac' },
+  { slug: 'palette-indie-essentials', name: 'Palette Vol. 1 - Indie Essentials', category: 'Sounds & Patches Logic Pro', price: 0, available: false,
+    tagline: 'Une palette sonore prête à jouer.', description: 'Une collection de sons, instruments virtuels et patches audio pensée pour donner rapidement une couleur indie, organique et texturée à tes productions dans Logic Pro.',
+    compatibility: 'Logic Pro · version exacte à confirmer', contents: ['Instruments virtuels pour Logic Pro', 'Patches audio prêts à charger', 'Sons indie, organiques et texturés', 'Contenu final en cours de préparation'], images: ["/images/sounds/palette-indie-essentials-0.webp"], accent: '#b97a58' },
 ];
 export const euro = (price: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);

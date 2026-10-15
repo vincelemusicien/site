@@ -7,5 +7,5 @@ import { sounds } from '../data/sounds';
   <div class="cart-footer"><div class="cart-total"><span>Total</span><strong data-cart-total>0 €</strong></div><p>Produits numériques. Aucun frais de livraison.</p><button class="sound-primary" type="button" data-checkout disabled>Passer au paiement</button><p class="cart-preview-note">Paiement sécurisé. Tes liens de téléchargement seront disponibles après validation du paiement.</p><p data-checkout-error role="alert" hidden></p><button class="cart-continue" type="button" data-close-cart>Continuer à explorer</button></div>
 </dialog>
 <p class="sounds-announcement" role="status" aria-live="polite" data-cart-status></p>
-<script type="application/json" id="sounds-catalogue" set:html={JSON.stringify(sounds.map(({slug,name,price,images})=>({slug,name,price,image:images[0]}))).replace(/</g,'\\u003c')} />
+<script type="application/json" id="sounds-catalogue" set:html={JSON.stringify(sounds.filter(({available})=>available!==false).map(({slug,name,price,images})=>({slug,name,price,image:images[0]}))).replace(/</g,'\\u003c')} />
 <script>import '../scripts/sounds';</script>
