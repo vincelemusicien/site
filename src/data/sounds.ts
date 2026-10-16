@@ -1,6 +1,6 @@
 export interface SoundProduct {
   slug: string; name: string; category: 'Instruments' | 'Presets Logic Pro' | 'Sounds & Patches Logic Pro';
-  price: number; available?: boolean; tagline: string; description: string; compatibility: string;
+  price: number; launchPrice?: number; available?: boolean; checkoutAvailable?: boolean; tagline: string; description: string; compatibility: string;
   contents: string[]; images: string[]; video?: string; accent: string;
 }
 export const sounds: SoundProduct[] = [
@@ -16,8 +16,8 @@ export const sounds: SoundProduct[] = [
   { slug: 'dream-vocals', name: 'Dream Vocals', category: 'Presets Logic Pro', price: 15,
     tagline: 'Une autre dimension pour ta voix.', description: 'Un rack vocal pour Logic Pro, piloté avec les Smart Controls. Explore de nouvelles textures vocales avec les effets de Logic, sans plugins tiers.',
     compatibility: 'Logic Pro 10.8+ · sans plugins tiers', contents: ['Rack vocal complet pour Logic Pro', 'Smart Controls déjà mappés', 'Reverb, delay et élargissement stéréo', 'Compression parallèle, saturation et texture', 'Mini-guide d’installation et d’utilisation'], images: ["/images/sounds/dream-vocals-0.webp", "/images/sounds/dream-vocals-1.webp"], video: "https://player.vimeo.com/video/1207758210", accent: '#af8bac' },
-  { slug: 'palette-indie-essentials', name: 'Palette Vol. 1 - Indie Essentials', category: 'Sounds & Patches Logic Pro', price: 0, available: false,
-    tagline: 'Une palette sonore prête à jouer.', description: 'Une collection de sons, instruments virtuels et patches audio pensée pour donner rapidement une couleur indie, organique et texturée à tes productions dans Logic Pro.',
-    compatibility: 'Logic Pro · version exacte à confirmer', contents: ['Instruments virtuels pour Logic Pro', 'Patches audio prêts à charger', 'Sons indie, organiques et texturés', 'Contenu final en cours de préparation'], images: ["/images/sounds/palette-indie-essentials-0.webp"], accent: '#b97a58' },
+  { slug: 'palette-indie-essentials', name: 'PALETTE by Vince - Vol. 1: Indie Essentials', category: 'Sounds & Patches Logic Pro', price: 19, launchPrice: 15, checkoutAvailable: false,
+    tagline: '32 patches pour donner une couleur indie à tes productions.', description: 'Une sélection de 32 patches 100 % Logic Pro : 19 patches audio pour transformer tes prises de basse, de batterie et de guitare, et 13 patches instruments pour jouer immédiatement des synthés et des textures. Une palette organique, texturée et prête à créer — sans aucun plugin tiers.',
+    compatibility: 'Logic Pro uniquement · aucun plugin tiers', contents: ['4 patches audio Bass : Da Crunch, In Your Fuzz, Submarine, The Clean One', '7 patches audio Drums : A Bit Grumpy, Hypnoz, Indie, Massiv, So Tight, Squeeze, Tiny Boy', '8 patches audio Guitars : Big Fat Fuzz, British Crunch, Cleaner, Dreamy, Filler, Old Dream, The Vibe, Viby Brit', '5 patches instruments Textures : Bell Souvenir, Cinematic Strings Spicato, Cinematic Strings Sustain, Destroy The Harp, Dreamy Guitar', '8 patches instruments Synth : A Softy, Classico, Dreamy Chaos, Floating Memories, Gritty Boy, Lost Memory, Plucked Alive, Pure Cinema', '19 patches audio à utiliser avec un signal entrant · 13 patches instruments à jouer directement'], images: ["/images/sounds/palette-indie-essentials-0.webp"], accent: '#b97a58' },
 ];
 export const euro = (price: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);

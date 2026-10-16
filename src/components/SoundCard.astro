@@ -1,7 +1,9 @@
 ---
 import { euro, type SoundProduct } from '../data/sounds';
+import '../styles/sounds-palette.css';
 interface Props { product: SoundProduct }
 const { product: p } = Astro.props;
+const purchasable = p.available !== false && p.checkoutAvailable !== false;
 ---
 <article class="sound-card" data-category={p.category} data-product-name={p.name.toLowerCase()}>
   <a class="sound-art" href={`/sounds/${p.slug}/`} style={`--sound-accent:${p.accent}`}>
@@ -10,8 +12,8 @@ const { product: p } = Astro.props;
   </a>
   <div class="sound-card-copy">
     <span class="sound-eyebrow">{p.category}</span>
-    <div class="sound-card-title"><h3><a href={`/sounds/${p.slug}/`}>{p.name}</a></h3><strong>{p.available === false ? 'Bientôt' : euro(p.price)}</strong></div>
+    <div class="sound-card-title"><h3><a href={`/sounds/${p.slug}/`}>{p.name}</a></h3>{p.launchPrice ? <span class="sound-card-price sound-card-price--launch"><s>{euro(p.price)}</s><strong>{euro(p.launchPrice)}</strong></span> : <strong>{p.available === false ? 'Bientôt' : euro(p.price)}</strong>}</div>
     <p>{p.tagline}</p>
-    <div class="sound-card-actions">{p.available === false ? <><a href={`/sounds/${p.slug}/`}>Voir la fiche ↗</a><span>Bientôt</span></> : <><a href={`/sounds/${p.slug}/#demo`}>Voir la démo ↗</a><button type="button" data-add-sound={p.slug} aria-label={`Ajouter ${p.name} au panier`}>Ajouter +</button></>}</div>
+    <div class="sound-card-actions">{purchasable ? <><a href={`/sounds/${p.slug}/#demo`}>Voir la démo ↗</a><button type="button" data-add-sound={p.slug} aria-label={`Ajouter ${p.name} au panier`}>Ajouter +</button></> : <a href={`/sounds/${p.slug}/`}>Voir la fiche ↗</a>}</div>
   </div>
 </article>
