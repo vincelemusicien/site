@@ -4,17 +4,19 @@ import SoundCard from '../../components/SoundCard.astro';
 import SoundsCart from '../../components/SoundsCart.astro';
 import { sounds } from '../../data/sounds';
 import '../../styles/sounds.css';
+const featuredSound = sounds.find(({slug}) => slug === 'palette-indie-essentials')!;
+const collectionSounds = [featuredSound, ...sounds.filter(({slug}) => slug !== featuredSound.slug)];
 ---
 <BaseLayout title="Sounds | Instruments & presets - Le Musicien" description="Les instruments, sons et presets créatifs de Vince. Explore Ether Scape, The Machine, Merlin, Dream Vocals et Palette Vol. 1 - Indie Essentials." pageClass="sounds-page">
   <div class="sounds-subnav shell"><a href="/sounds/" class="sounds-wordmark">SOUNDS<span>by Vince</span></a><button class="cart-trigger" type="button" data-open-cart>Panier <span data-cart-count>0</span></button></div>
   <section class="sounds-hero shell">
     <div><span class="sound-eyebrow">Instruments · Presets · Inspiration</span><h1>Une nouvelle<br/>couleur pour<br/><em>ta musique.</em></h1><p>Des sons que j’ai créés pour mes morceaux.<br/>Et pour les tiens, maintenant.</p><a class="sound-primary" href="#collection">Explorer les sons <span>↓</span></a><p class="sounds-preview">Boutique en préparation · Découvre les produits et compose ton panier.</p></div>
-    <a class="sounds-hero-art" href="/sounds/ether-scape/"><img src={sounds[0].images[0]} alt="Ether Scape, instrument ambient" width="900" height="900" fetchpriority="high"/><div><span class="sound-eyebrow">À explorer</span><strong>Ether Scape</strong><span>Textures & atmosphères ↗</span></div></a>
+    <a class="sounds-hero-art" href={`/sounds/${featuredSound.slug}/`}><img src={featuredSound.images[0]} alt="PALETTE - Vol. 1: Indie Essentials, 33 patches Logic Pro" width="900" height="900" fetchpriority="high"/><div><span class="sound-eyebrow">Nouveau · 15 € lancement</span><strong>PALETTE · Vol. 1</strong><span>33 patches Logic Pro ↗</span></div></a>
   </section>
   <section class="sounds-collection shell" id="collection">
     <div class="sounds-section-heading"><div><span class="sound-eyebrow">La collection</span><h2>Trouve ton prochain déclic.</h2></div><span class="sounds-result" data-results>{sounds.length} produits</span></div>
     <div class="sounds-toolbar"><div class="sounds-filters" role="group" aria-label="Filtrer les produits"><button type="button" data-sound-filter="all" aria-pressed="true">Tous les sons</button><button type="button" data-sound-filter="Instruments" aria-pressed="false">Instruments</button><button type="button" data-sound-filter="Presets Logic Pro" aria-pressed="false">Presets Logic Pro</button><button type="button" data-sound-filter="Sounds & Patches Logic Pro" aria-pressed="false">Sounds & Patches</button></div><label class="sounds-search"><span class="sr-only">Rechercher un produit</span><input type="search" placeholder="Rechercher un son…" data-sound-search/></label></div>
-    <div class="sounds-grid">{sounds.map(product=><SoundCard product={product}/>)}</div><p class="sounds-no-results" data-no-results hidden>Aucun produit ne correspond à ta recherche.</p>
+    <div class="sounds-grid">{collectionSounds.map(product=><SoundCard product={product}/>)}</div><p class="sounds-no-results" data-no-results hidden>Aucun produit ne correspond à ta recherche.</p>
   </section>
   <section class="sounds-about shell"><span class="sound-eyebrow">Faits par un musicien</span><h2>Moins de recherche.<br/>Plus de musique.</h2><p>Je suis Vince, musicien et producteur. Sounds rassemble mes instruments, mes sons et mes presets : des outils créatifs pour essayer une idée, changer une texture et retrouver l’envie de jouer.</p><a href="/">Découvrir mon univers ↗</a></section>
   <SoundsCart/>
