@@ -7,6 +7,18 @@ const status=document.querySelector<HTMLElement>('[data-cart-status]');
 const money=(n:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
 function readCart(){try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?[...new Set(value.filter((slug:unknown)=>typeof slug==='string'&&products.some(p=>p.slug===slug))) ] as string[]:[]}catch{return []}}
 let cart=readCart();
+const logicBumpSlugs=['palette-indie-essentials','dream-vocals'];
+const decentBumpSlugs=['ether-scape','the-machine','merlin'];
+function getCartBump(){
+ if(cart.length>=4)return null;
+ const group=cart.some(slug=>logicBumpSlugs.includes(slug))?logicBumpSlugs:cart.some(slug=>decentBumpSlugs.includes(slug))?decentBumpSlugs:[];
+ return products.find(p=>group.includes(p.slug)&&!cart.includes(p.slug))||null;
+}
+function cartBumpDescription(slug:string){
+ if(slug==='dream-vocals')return 'Un rack vocal Logic Pro pour finaliser tes idées, sans plugin tiers.';
+ if(slug==='palette-indie-essentials')return '33 patches Logic Pro pour nourrir tes prochaines productions.';
+ return 'Une autre banque Decent Sampler pour prolonger ta sélection.';
+}
 function announce(message:string){if(status)status.textContent=message;}
 function render(){
  const pay=document.querySelector<HTMLButtonElement>('[data-checkout]');if(pay)pay.disabled=cart.length===0;
@@ -14,7 +26,8 @@ function render(){
  const selected=products.filter(p=>cart.includes(p.slug));
  const total=document.querySelector('[data-cart-total]');if(total)total.textContent=money(selected.reduce((n,p)=>n+p.price,0));
  if(items){items.replaceChildren();if(!selected.length){const empty=document.createElement('p');empty.className='cart-empty';empty.textContent='Ton panier attend son premier son.';items.append(empty)}
- for(const p of selected){const row=document.createElement('div');row.className='cart-item';const img=document.createElement('img');img.src=p.image;img.alt='';const copy=document.createElement('div');const link=document.createElement('a');link.href=`/sounds/${p.slug}/`;link.textContent=p.name;const price=document.createElement('span');price.textContent=money(p.price);copy.append(link,price);const remove=document.createElement('button');remove.type='button';remove.textContent='Retirer';remove.setAttribute('aria-label',`Retirer ${p.name} du panier`);remove.addEventListener('click',()=>{cart=cart.filter(slug=>slug!==p.slug);save();announce(`${p.name} retiré du panier.`);items?.querySelector<HTMLButtonElement>('button')?.focus()});row.append(img,copy,remove);items.append(row)}}
+ for(const p of selected){const row=document.createElement('div');row.className='cart-item';const img=document.createElement('img');img.src=p.image;img.alt='';const copy=document.createElement('div');const link=document.createElement('a');link.href=`/sounds/${p.slug}/`;link.textContent=p.name;const price=document.createElement('span');price.textContent=money(p.price);copy.append(link,price);const remove=document.createElement('button');remove.type='button';remove.textContent='Retirer';remove.setAttribute('aria-label',`Retirer ${p.name} du panier`);remove.addEventListener('click',()=>{cart=cart.filter(slug=>slug!==p.slug);save();announce(`${p.name} retiré du panier.`);items?.querySelector<HTMLButtonElement>('button')?.focus()});row.append(img,copy,remove);items.append(row)}
+ const bump=getCartBump();if(bump){const card=document.createElement('aside');card.className='cart-bump';const eyebrow=document.createElement('span');eyebrow.className='sound-eyebrow';eyebrow.textContent='Suggestion pour compléter';const title=document.createElement('strong');title.textContent=bump.name;const description=document.createElement('p');description.textContent=cartBumpDescription(bump.slug);const add=document.createElement('button');add.type='button';add.className='cart-bump-button';add.textContent=`Ajouter au panier — ${money(bump.price)}`;add.addEventListener('click',()=>{cart.push(bump.slug);save();announce(`${bump.name} ajouté au panier.`)});card.append(eyebrow,title,description,add);items.append(card)}}
  document.querySelectorAll<HTMLButtonElement>('[data-add-sound]').forEach(button=>{const added=cart.includes(button.dataset.addSound||'');button.textContent=added?'Dans le panier ✓':(button.classList.contains('sound-primary')?'Ajouter au panier +':'Ajouter +')});
 }
 function save(){try{localStorage.setItem(key,JSON.stringify(cart))}catch{announce('Le panier est conservé sur cette page uniquement.')}render()}
@@ -24,7 +37,7 @@ document.querySelectorAll('[data-open-cart]').forEach(button=>button.addEventLis
 document.querySelectorAll('[data-close-cart]').forEach(button=>button.addEventListener('click',close));
 dialog?.addEventListener('close',()=>document.body.style.overflow='');
 dialog?.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close()}});
-document.querySelectorAll<HTMLButtonElement>('[data-add-sound]').forEach(button=>button.addEventListener('click',()=>{const slug=button.dataset.addSound;const p=products.find(p=>p.slug===slug);if(!p)return;if(!cart.includes(p.slug)){cart.push(p.slug);save();announce(`${p.name} ajouté au panier.`)}open()}));
+document.querySelectorAll<HTMLButtonElement>('[data-add-sound]').forEach(button=>button.addEventListener('click',()=>{const slug=button.dataset.addSound;const p=products.find(p=>p.slug===slug);if(!p)return;if(cart.length>=4&&!cart.includes(p.slug)){announce('Ton panier peut contenir jusqu’à 4 produits.');open();return}if(!cart.includes(p.slug)){cart.push(p.slug);save();announce(`${p.name} ajouté au panier.`)}open()}));
 window.addEventListener('storage',event=>{if(event.key===key||event.key===null){cart=readCart();render()}});
 let filter='all';const search=document.querySelector<HTMLInputElement>('[data-sound-search]');
 function filterProducts(){let count=0;document.querySelectorAll<HTMLElement>('.sound-card[data-category]').forEach(card=>{const visible=(filter==='all'||card.dataset.category===filter)&&(card.dataset.productName||'').includes((search?.value||'').toLowerCase().trim());card.hidden=!visible;if(visible)count++});const result=document.querySelector('[data-results]');if(result)result.textContent=`${count} produit${count>1?'s':''}`;const empty=document.querySelector<HTMLElement>('[data-no-results]');if(empty)empty.hidden=count!==0}
