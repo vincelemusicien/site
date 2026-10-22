@@ -3,7 +3,7 @@ const products:Product[]=JSON.parse(document.getElementById('sounds-catalogue')?
 const key='lemusicien-sounds-cart-v1';
 const dialog=document.querySelector<HTMLDialogElement>('[data-sounds-cart]');
 const items=document.querySelector<HTMLElement>('[data-cart-items]');
-const status=document.querySelector<HTMLElement>('[data-cart-status]');
+const statusRegion=document.querySelector<HTMLElement>('[data-cart-status]');
 const money=(n:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
 function readCart(){try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?[...new Set(value.filter((slug:unknown)=>typeof slug==='string'&&products.some(p=>p.slug===slug))) ] as string[]:[]}catch{return []}}
 let cart=readCart();
@@ -19,7 +19,7 @@ function cartBumpDescription(slug:string){
  if(slug==='palette-indie-essentials')return '33 patches Logic Pro pour nourrir tes prochaines productions.';
  return 'Une autre banque Decent Sampler pour prolonger ta sélection.';
 }
-function announce(message:string){if(status)status.textContent=message;}
+function announce(message:string){if(statusRegion)statusRegion.textContent=message;}
 function render(){
  const pay=document.querySelector<HTMLButtonElement>('[data-checkout]');if(pay)pay.disabled=cart.length===0;
  document.querySelectorAll('[data-cart-count]').forEach(el=>el.textContent=String(cart.length));
@@ -58,4 +58,3 @@ checkout?.addEventListener('click',async()=>{
  window.location.assign(url.href);
  }catch(e){if(error){error.textContent=e instanceof Error?e.message:'Connexion impossible. Réessaie.';error.hidden=false;}checkout.disabled=cart.length===0;checkout.textContent='Passer au paiement';}
 });
-

@@ -79,7 +79,7 @@ const categoryName = (id: string) => libraryCategories.find((category) => catego
       </div>
       <p class="lp-result-count" data-enhanced hidden aria-live="polite" aria-atomic="true" data-results></p>
       <div class="lp-course-grid" data-grid>
-        {libraryCourses.map((course, index) => (
+        {libraryCourses.map((course) => (
           <article class:list={['lp-course', `lp-tone-${course.category}`]} data-course data-category-id={course.category} data-search-text={`${course.title} ${course.promise} ${course.description}`} id={`cours-${course.id}`}>
             <details>
               <summary>
