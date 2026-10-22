@@ -35,7 +35,7 @@ export function configuration(env) {
 }
 
 export function transferCommands(source, remote, dryRun) {
-  const flags = '--reverse --transfer-all --no-perms --no-symlinks --overwrite --max-errors=1 --verbose=1' + (dryRun ? ' --dry-run' : '');
+  const flags = '--reverse --no-perms --no-symlinks --overwrite --max-errors=1 --verbose=1' + (dryRun ? ' --dry-run' : '');
   // Les guillemets sont inclus littéralement par Pure-FTPd dans la commande CWD.
   // Le chemin est déjà validé ; seuls les espaces nécessitent un échappement lftp.
   const remotePath = remote.replaceAll(' ', '\\ ');
@@ -43,9 +43,9 @@ export function transferCommands(source, remote, dryRun) {
   return [
     `cd ${remotePath}`,
     'echo "Phase 1/2 : assets (aucune suppression distante)."',
-    `mirror ${flags} --parallel=2 --exclude-glob=*.html --exclude-glob=deploy-version.json ${sourcePath}/ ./`,
+    `mirror ${flags} --ignore-time --parallel=1 --exclude-glob=*.html --exclude-glob=deploy-version.json ${sourcePath}/ ./`,
     'echo "Phase 2/2 : pages HTML (assets déjà transférés)."',
-    `mirror ${flags} --parallel=1 --exclude-glob=* --include-glob=*/ --include-glob=*.html ${sourcePath}/ ./`,
+    `mirror ${flags} --transfer-all --parallel=1 --exclude-glob=* --include-glob=*/ --include-glob=*.html ${sourcePath}/ ./`,
     ...(dryRun ? ['echo "Simulation terminée : aucun fichier envoyé."'] : [`put ${sourcePath}/deploy-version.json -o deploy-version.json`]),
     'exit',
   ];
@@ -78,8 +78,8 @@ export async function upload(env = process.env) {
   try {
     const settings = [
       'set cmd:fail-exit yes', 'set cmd:trace no', 'set net:max-retries 2',
-      'set net:timeout 25', 'set net:reconnect-interval-base 5',
-      'set net:reconnect-interval-max 15', 'set xfer:timeout 120',
+      'set net:timeout 60', 'set net:reconnect-interval-base 5',
+      'set net:reconnect-interval-max 15', 'set xfer:timeout 300',
       'set xfer:use-temp-file yes', 'set xfer:temp-file-name .*.uploading',
       'set ssl:verify-certificate yes', 'set ssl:check-hostname yes',
     ];
