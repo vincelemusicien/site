@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import vincePhoto from '../../public/images/vince-home-studio.png';
+import collectionComplete from '../../public/images/collections/collection-complete.webp';
+import {
+  collections,
+  checkoutLinks,
+  collectionCheckoutKey,
+  choiceGuide,
+  faq,
+  integralPricing,
+  offerEndsAt,
+  offerEndsLabel,
+} from '../data/collections-mao';
+import '../styles/collections-mao.css';
+
+const vince = await getImage({ src: vincePhoto, width: 900, format: 'webp', quality: 80 });
+const heroVisual = await getImage({ src: collectionComplete, width: 900, format: 'webp', quality: 82 });
+const collectionSources = import.meta.glob<{ default: ImageMetadata }>('../../public/images/collections/*.webp', { eager: true });
+const collectionPictures = Object.fromEntries(await Promise.all(collections.map(async (collection) => {
+  const source = collectionSources[`../../public${collection.image}`]?.default;
+  if (!source) throw new Error(`Image introuvable pour ${collection.title}: ${collection.image}`);
+  const picture = await getImage({ src: source, width: 640, format: 'webp', quality: 80 });
+  return [collection.id, picture.src];
+})));
+const money = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+const integralCheckout = checkoutLinks.CHECKOUT_INTEGRALE;
+const missingCheckouts = Object.entries(checkoutLinks).filter(([, url]) => !url).map(([key]) => key);
+---
+
+<BaseLayout
+  title="Collections MAO — 16 formations, offre flash | Le Musicien"
+  description="Quatre collections de quatre formations MAO à 129 € ou 2 × 69 €, ou l’intégrale de 16 formations à 349 €. Offre flash jusqu’au 25 octobre 2026."
+  image="/images/pass/pass-mao-visuel.png"
+  pageClass="collections-page library-page"
+>
+  <div class="cm">
+    <nav class="cm-subnav cm-wrap" aria-label="Collections MAO">
+      <a class="cm-wordmark" href="#contenu">COLLECTIONS MAO<span>par Vince</span></a>
+      <div><a href="#collections">Les collections</a><a href="#integrale">L’intégrale</a><a href="#faq">Questions</a></div>
+    </nav>
+
+    <section class="cm-hero cm-wrap" aria-labelledby="cm-title">
+      <div class="cm-hero-copy">
+        <p class="cm-kicker">OFFRE FLASH — JUSQU’AU DIMANCHE 25 OCTOBRE</p>
+        <h1 id="cm-title">4 collections.<br />16 formations.<br /><span>Une seule envie&nbsp;:</span>faire plus de musique.</h1>
+        <p class="cm-lead">Composition, mixage, productivité, Logic Pro et sound design : quatre parcours pour développer les compétences qui comptent vraiment dans ton home studio.</p>
+        <div class="cm-actions"><a class="cm-button" href="#collections">Découvrir les collections</a><a class="cm-link" href="#integrale">Je veux les 16 formations</a></div>
+        <p class="cm-note">Sans abonnement.</p>
+      </div>
+      <figure class="cm-hero-visual">
+        <img src={heroVisual.src} alt="Le parcours complet avec les quatre collections Créer & Finir, Mixer & Finaliser, Producteur Efficace et Logic & Sound Design" width="900" height="900" decoding="async" />
+      </figure>
+    </section>
+
+    <aside class="cm-deadline" data-sale-banner data-offer-end={offerEndsAt}>
+      <div class="cm-wrap">
+        <p><strong data-sale-label>Fin de l’offre dans</strong><span>Fermeture le 25 octobre à 23h59, heure de Paris.</span></p>
+        <div class="cm-countdown" data-countdown aria-live="polite" aria-atomic="true">
+          <span><strong data-days>—</strong>jours</span><span><strong data-hours>—</strong>heures</span><span><strong data-minutes>—</strong>minutes</span><span><strong data-seconds>—</strong>secondes</span>
+        </div>
+      </div>
+    </aside>
+
+    {missingCheckouts.length > 0 && (
+      <aside class="cm-config cm-wrap" aria-label="État de mise en vente">
+        <strong>Page en préparation.</strong>
+        <span>Les paiements ne sont pas encore ouverts : {missingCheckouts.length} checkout{missingCheckouts.length > 1 ? 's' : ''} reste{missingCheckouts.length > 1 ? 'nt' : ''} à brancher.</span>
+      </aside>
+    )}
+
+    <section class="cm-intro cm-wrap" aria-labelledby="intro-title">
+      <h2 id="intro-title">Tu n’as pas besoin de tout apprendre. Tu as besoin d’avancer.</h2>
+      <p>Tu veux composer davantage ? Améliorer tes mixages ? Gagner du temps ? Ou mieux exploiter ton home studio ? J’ai rassemblé 16 de mes formations dans quatre collections complémentaires. Choisis celle qui répond à ton besoin actuel, ou récupère le parcours complet.</p>
+    </section>
+
+    <section class="cm-collections cm-wrap" id="collections" aria-labelledby="collections-title">
+      <div class="cm-section-heading"><p>Quatre points de départ</p><h2 id="collections-title">Pars de ce qui te bloque aujourd’hui.</h2></div>
+      <div class="cm-collection-grid">
+        {collections.map((collection) => {
+          const checkout = checkoutLinks[collectionCheckoutKey[collection.id]];
+          return (
+            <article class={`cm-collection cm-tone-${collection.id}`} id={`collection-${collection.id}`}>
+              <header><span class="cm-number">{collection.number}</span><div><p>{collection.hook}</p><h3>{collection.title}</h3></div></header>
+              <p class="cm-promise">{collection.promise}</p>
+              <div class="cm-collection-body">
+                <img class="cm-collection-visual" src={collectionPictures[collection.id]} alt={collection.imageAlt} width="640" height="800" loading="lazy" decoding="async" />
+                <ol>{collection.courses.map((course, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><div><strong>{course.title}</strong><p>{course.benefit}</p></div></li>)}</ol>
+              </div>
+              <footer>
+                <p class="cm-collection-price">
+                  <span class="cm-collection-value">Les 4 formations séparément&nbsp;: <s>{money.format(collection.separateValue)}</s></span>
+                  <strong>{money.format(collection.price)}</strong>
+                  <span>en un paiement</span>
+                  <span class="cm-installment-price">ou <b>{collection.installmentCount} × {money.format(collection.installmentPrice)}</b> <small>({money.format(collection.installmentTotal)} au total)</small></span>
+                </p>
+                {checkout ? <a class="cm-button cm-button-small" href={checkout} data-offer-cta data-checkout={checkout} target="_blank" rel="noreferrer">{collection.cta}</a> : <span class="cm-button cm-button-small is-disabled" aria-disabled="true">Bon de commande à configurer</span>}
+              </footer>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="cm-integral" id="integrale" aria-labelledby="integral-title">
+      <div class="cm-wrap cm-integral-inner">
+        <div class="cm-integral-copy">
+          <p class="cm-integral-label">Le parcours complet</p>
+          <h2 id="integral-title">Et si tu prenais les quatre ?</h2>
+          <p>Composition, workflow, son, mixage : un parcours complet pour faire progresser tes productions.</p>
+          <ul><li>4 collections</li><li>16 formations différentes</li><li>Paiement unique, sans abonnement</li></ul>
+        </div>
+        <div class="cm-integral-map" aria-hidden="true">{collections.map((collection) => <span class={`cm-tone-${collection.id}`}><b>{collection.number}</b>{collection.title}</span>)}</div>
+        <div class="cm-integral-price">
+          <p><span class="cm-integral-reference">Les 4 collections séparément</span><s>{money.format(integralPricing.separateCollectionsValue)}</s><strong>{money.format(integralPricing.price)}</strong><span>{money.format(integralPricing.savings)} économisés · environ {integralPricing.savingsPercent} %</span></p>
+          {integralCheckout ? <a class="cm-button cm-button-light" href={integralCheckout} data-offer-cta data-checkout={integralCheckout} target="_blank" rel="noreferrer">Je récupère les 16 formations pour 349 €</a> : <span class="cm-button cm-button-light is-disabled" aria-disabled="true">Je récupère les 16 formations pour 349 €</span>}
+          <small>Un seul paiement. Ce prix compare uniquement les quatre collections achetées séparément pendant l’opération.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="cm-choice cm-wrap" aria-labelledby="choice-title">
+      <div><p class="cm-section-label">Aide au choix</p><h2 id="choice-title">Commence par ton problème, pas par le programme.</h2><p>Une question suffit pour trouver le bon point de départ.</p></div>
+      <ul>{choiceGuide.map((item) => <li><a href={item.href}><span>{item.problem}</span><strong>{item.answer}</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></li>)}</ul>
+    </section>
+
+    <section class="cm-about cm-wrap" aria-labelledby="about-title">
+      <figure><img src={vince.src} alt="Vince dans son home studio" width="900" height="600" loading="lazy" decoding="async" /><figcaption>Vince / Le Musicien</figcaption></figure>
+      <div><p class="cm-section-label">À propos</p><h2 id="about-title">Des méthodes de musicien, pour des musiciens.</h2><p>Je suis Vince, musicien, producteur, formateur et créateur de la chaîne YouTube « Le Musicien ». Je conçois ces formations pour t’aider à faire avancer de vrais morceaux dans ton home studio, avec une approche simple et concrète.</p><a class="cm-link" href="https://lemusicien.fr">Découvrir Le Musicien</a></div>
+    </section>
+
+    <section class="cm-faq cm-wrap" id="faq" aria-labelledby="faq-title">
+      <div><p class="cm-section-label">Avant de choisir</p><h2 id="faq-title">Questions fréquentes.</h2></div>
+      <div>{faq.map((item) => <details><summary>{item.question}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></summary><p>{item.answer.includes('vincent@lemusicien.fr') ? <>{item.answer.replace('vincent@lemusicien.fr.', '')}<a href="mailto:vincent@lemusicien.fr">vincent@lemusicien.fr</a>.</> : item.answer}</p></details>)}</div>
+    </section>
+
+    <section class="cm-close cm-wrap" aria-labelledby="close-title">
+      <p class="cm-section-label">Jusqu’au dimanche 25 octobre</p>
+      <h2 id="close-title">Moins de dispersion.<br />Plus de musique.</h2>
+      <p>Créer & Finir, Mixer & Finaliser, Producteur Efficace et Logic & Sound Design : choisis ton parcours, ou réunis les quatre.</p>
+      {integralCheckout ? <a class="cm-button" href={integralCheckout} data-offer-cta data-checkout={integralCheckout} target="_blank" rel="noreferrer">Je récupère les 16 formations pour 349 €</a> : <span class="cm-button is-disabled" aria-disabled="true">Je récupère les 16 formations pour 349 €</span>}
+      <small>L’offre prend fin le {offerEndsLabel}.</small>
+    </section>
+  </div>
+
+  <script define:vars={{ offerEndsAt }}>
+    const end = Date.parse(offerEndsAt);
+    const countdown = document.querySelector('[data-countdown]');
+    const banner = document.querySelector('[data-sale-banner]');
+    let timer;
+
+    const updateSale = () => {
+      const remaining = end - Date.now();
+      if (remaining <= 0) {
+        if (timer) window.clearInterval(timer);
+        banner?.classList.add('is-ended');
+        const label = document.querySelector('[data-sale-label]');
+        if (label) label.textContent = 'Offre terminée';
+        if (countdown) countdown.innerHTML = '<strong class="cm-ended">Offre terminée</strong>';
+        document.querySelectorAll('[data-offer-cta]').forEach((element) => {
+          element.removeAttribute('href');
+          element.removeAttribute('target');
+          element.setAttribute('aria-disabled', 'true');
+          element.setAttribute('tabindex', '-1');
+          element.classList.add('is-disabled');
+          element.textContent = 'Offre terminée';
+        });
+        return;
+      }
+      const totalSeconds = Math.floor(remaining / 1000);
+      const values = {
+        days: Math.floor(totalSeconds / 86400),
+        hours: Math.floor((totalSeconds % 86400) / 3600),
+        minutes: Math.floor((totalSeconds % 3600) / 60),
+        seconds: totalSeconds % 60,
+      };
+      Object.entries(values).forEach(([key, value]) => {
+        const node = document.querySelector(`[data-${key}]`);
+        if (node) node.textContent = String(value).padStart(2, '0');
+      });
+    };
+
+    updateSale();
+    if (Date.now() < end) timer = window.setInterval(updateSale, 1000);
+  </script>
+</BaseLayout>
