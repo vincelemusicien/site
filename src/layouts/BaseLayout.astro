@@ -10,6 +10,8 @@ interface Props {
   pageClass?: string;
   noindex?: boolean;
   memberArea?: boolean;
+  hideHeader?: boolean;
+  metaDisclaimer?: boolean;
 }
 
 const {
@@ -19,6 +21,8 @@ const {
   pageClass = '',
   noindex = false,
   memberArea = false,
+  hideHeader = false,
+  metaDisclaimer = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -60,11 +64,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class={pageClass}>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
-    <Header memberArea={memberArea} />
+    {!hideHeader && <Header memberArea={memberArea} />}
     <main id="contenu">
       <slot />
     </main>
-    <Footer />
+    <Footer metaDisclaimer={metaDisclaimer} />
     <script is:inline>
       (() => {
         const root = document.documentElement;

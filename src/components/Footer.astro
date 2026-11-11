@@ -1,3 +1,11 @@
+---
+interface Props {
+  metaDisclaimer?: boolean;
+}
+
+const { metaDisclaimer = false } = Astro.props;
+---
+
 <footer class="site-footer">
   <div class="shell footer-simple">
     <p>© {new Date().getFullYear()} Vince / Le Musicien</p>
@@ -9,4 +17,28 @@
       <a href="#">CGV</a>
     </nav>
   </div>
+  {metaDisclaimer && (
+    <p class="shell meta-disclaimer">
+      Ce site ne fait pas partie de Facebook™ ni de Meta Platforms, Inc. Il n’est ni sponsorisé, ni approuvé, ni administré par Facebook™ ou Meta. Facebook™ et Meta™ sont des marques de Meta Platforms, Inc.
+    </p>
+  )}
 </footer>
+
+<style>
+  .meta-disclaimer {
+    margin: -12px auto 0;
+    padding: 0 0 25px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  @media (max-width: 620px) {
+    .meta-disclaimer {
+      margin-top: -14px;
+      padding-bottom: 30px;
+      text-align: left;
+    }
+  }
+</style>
