@@ -39,6 +39,8 @@ jobs:
         run: npm ci
 
       - name: Construire le site statique
+        env:
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
         run: npm run build
 
       - name: Vérifier dist et identifier cette version
