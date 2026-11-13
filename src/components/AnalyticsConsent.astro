@@ -1,0 +1,129 @@
+---
+interface Props {
+  measurementId?: string;
+}
+const { measurementId = '' } = Astro.props;
+const enabled = /^G-[A-Z0-9]+$/i.test(measurementId.trim());
+---
+
+{enabled && (
+  <>
+    <aside
+      id="lm-analytics-consent"
+      class="analytics-consent"
+      data-measurement-id={measurementId.trim()}
+      aria-labelledby="lm-analytics-consent-title"
+      hidden
+    >
+      <div class="analytics-consent__copy">
+        <strong id="lm-analytics-consent-title">Un peu de statistiques ?</strong>
+        <p>
+          J'utilise Google Analytics pour comprendre quelles pages et vidéos sont consultées.
+          Aucun cookie de mesure n'est déposé avant ton accord. Tu peux changer d'avis
+          à tout moment via « Gérer les cookies » en bas du site.
+        </p>
+      </div>
+      <div class="analytics-consent__actions">
+        <button type="button" data-analytics-reject>Refuser</button>
+        <button type="button" data-analytics-accept>Accepter les statistiques</button>
+      </div>
+    </aside>
+
+    <script is:inline>
+      (() => {
+        const banner = document.getElementById('lm-analytics-consent');
+        if (!banner) return;
+        const measurementId = banner.getAttribute('data-measurement-id');
+        if (!/^G-[A-Z0-9]+$/i.test(measurementId || '')) return;
+
+        const storageKey = 'lemusicien-analytics-consent-v1';
+        const readChoice = () => {
+          try { return localStorage.getItem(storageKey); } catch { return null; }
+        };
+        const saveChoice = (value) => {
+          try { localStorage.setItem(storageKey, value); } catch {}
+        };
+
+        let loaded = false;
+        const enableAnalytics = () => {
+          if (loaded) return;
+          loaded = true;
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', measurementId, {
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false,
+          });
+
+          const tag = document.createElement('script');
+          tag.async = true;
+          tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+          document.head.appendChild(tag);
+        };
+
+        if (readChoice() === 'accepted') enableAnalytics();
+        else if (readChoice() !== 'rejected') banner.hidden = false;
+
+        banner.querySelector('[data-analytics-accept]')?.addEventListener('click', () => {
+          saveChoice('accepted');
+          banner.hidden = true;
+          enableAnalytics();
+        });
+
+        banner.querySelector('[data-analytics-reject]')?.addEventListener('click', () => {
+          const wasAccepted = readChoice() === 'accepted';
+          saveChoice('rejected');
+          banner.hidden = true;
+          if (wasAccepted) {
+            window['ga-disable-' + measurementId] = true;
+            window.location.reload();
+          }
+        });
+
+        document.querySelector('[data-analytics-settings]')?.addEventListener('click', () => {
+          banner.hidden = false;
+          banner.querySelector('[data-analytics-accept]')?.focus();
+        });
+      })();
+    </script>
+
+    <style>
+      .analytics-consent[hidden] { display: none !important; }
+      .analytics-consent {
+        position: fixed;
+        z-index: 1000;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(620px, calc(100% - 32px));
+        padding: 20px;
+        display: grid;
+        gap: 14px;
+        color: #23221f;
+        background: #fffdf8;
+        border: 1px solid #c9c4b9;
+        border-radius: 14px;
+        box-shadow: 0 12px 42px rgb(0 0 0 / 18%);
+      }
+      .analytics-consent__copy { display: grid; gap: 6px; }
+      .analytics-consent__copy p { margin: 0; font-size: 0.9rem; line-height: 1.55; }
+      .analytics-consent__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .analytics-consent__actions button {
+        border: 1px solid #2c2a25;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font: inherit;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+      [data-analytics-reject] { background: transparent; color: #2c2a25; }
+      [data-analytics-accept] { background: #2c2a25; color: white; }
+      .analytics-consent__actions button:focus-visible { outline: 3px solid #c49a3b; outline-offset: 3px; }
+      @media (max-width: 480px) {
+        .analytics-consent__actions { flex-direction: column; }
+        .analytics-consent__actions button { width: 100%; }
+      }
+    </style>
+  </>
+)}
