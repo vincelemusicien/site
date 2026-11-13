@@ -1,9 +1,10 @@
 ---
 interface Props {
   metaDisclaimer?: boolean;
+  analyticsEnabled?: boolean;
 }
 
-const { metaDisclaimer = false } = Astro.props;
+const { metaDisclaimer = false, analyticsEnabled = false } = Astro.props;
 ---
 
 <footer class="site-footer">
@@ -14,6 +15,7 @@ const { metaDisclaimer = false } = Astro.props;
       <a href="https://productionmusicale.systeme.io/login" target="_blank" rel="noreferrer">Espace membre <span aria-hidden="true">↗</span></a>
       <a href="#">Mentions légales</a>
       <a href="#">Confidentialité</a>
+      {analyticsEnabled && <button type="button" data-analytics-settings aria-controls="lm-analytics-consent">Gérer les cookies</button>}
       <a href="#">CGV</a>
     </nav>
   </div>
@@ -25,6 +27,19 @@ const { metaDisclaimer = false } = Astro.props;
 </footer>
 
 <style>
+  .site-footer nav button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .site-footer nav button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
   .meta-disclaimer {
     margin: -12px auto 0;
     padding: 0 0 25px;
