@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AnalyticsConsent from '../components/AnalyticsConsent.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -25,6 +26,8 @@ const {
   metaDisclaimer = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const gaMeasurementId = String(import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '').trim();
+const analyticsEnabled = /^G-[A-Z0-9]+$/i.test(gaMeasurementId);
 ---
 
 <!doctype html>
@@ -68,7 +71,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <main id="contenu">
       <slot />
     </main>
-    <Footer metaDisclaimer={metaDisclaimer} />
+    <Footer metaDisclaimer={metaDisclaimer} analyticsEnabled={analyticsEnabled} />
+    <AnalyticsConsent measurementId={gaMeasurementId} />
     <script is:inline>
       (() => {
         const root = document.documentElement;
