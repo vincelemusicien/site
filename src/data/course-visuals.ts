@@ -20,5 +20,13 @@ const covers: Record<string, string> = Object.fromEntries([
   ['Masterclass Monétisation des indés', 'monetisation'],
 ].map(([title, file]) => [visualKey(title), `/images/catalogue/${file}.webp`]));
 covers[visualKey('Fondations MAO')] = '/images/pass/course-fmao.png';
+covers[visualKey('Logic Pro Secrets')] = '/images/pass/logic-pro-training.webp';
+covers[visualKey('Étincelle')] = '/images/pass/etincelle.png';
+covers[visualKey('Plugin Mastery')] = '/images/pass/plugin-mastery.png';
+covers[visualKey('Mastering Maison')] = '/images/pass/course-mastering.png';
+covers[visualKey('La méthode PMER')] = '/images/pass/course-pmer.png';
+covers[visualKey('Smart Controls / Logic Pro')] = '/images/pass/smart-tools-logic.webp';
+covers[visualKey('La Méthode Finish Line')] = '/images/pass/finishline.png';
+covers[visualKey('L’Art de finir')] = '/images/pass/art-de-finir.png';
 
 export const courseVisual = (title: string): string | undefined => covers[visualKey(title)];
