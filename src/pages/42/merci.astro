@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { birthdayCourses, birthdayContact } from '../../data/anniversaire42';
+---
+<BaseLayout title="Merci pour ta commande anniversaire | Le Musicien" description="Confirme ton choix de formation pour l'offre anniversaire de Vince." noindex={true} pageClass="birthday-confirm">
+<main class="confirmation">
+  <p class="eyebrow">🎉 MERCI ET BIENVENUE !</p>
+  <h1>C'est dans la boîte.<br/><i>Ou presque.</i></h1>
+  <p>Ton paiement a été effectué sur Systeme.io ? Parfait. Pour que je puisse t'ajouter à la bonne formation, il me reste juste à connaître <strong>ton choix définitif</strong>.</p>
+  <div class="panel"><h2>Confirme-moi ta formation</h2><label for="course">Ta formation</label><select id="course" data-course>{birthdayCourses.map((c)=><option value={c.title}>{c.title}</option>)}</select><label for="email">L'adresse e-mail utilisée lors du paiement</label><input id="email" data-email type="email" autocomplete="email" placeholder="ton@email.fr" /><a href={'mailto:'+birthdayContact} data-submit class="cta">Envoyer mon choix à Vince ↗</a><p class="hint">Ce bouton prépare un e-mail dans ta messagerie. <strong>Pense à l'envoyer.</strong> Si la messagerie ne s'ouvre pas, écris directement à <a href={'mailto:'+birthdayContact}>{birthdayContact}</a> avec le nom du cours et l'adresse de ta commande.</p></div>
+  <p class="footnote">Je traite les accès à la main, donc ton cours n'apparaîtra pas immédiatement. Merci pour ta patience, et merci d'avoir fêté mes 42 ans avec moi ! 🎂</p>
+</main>
+</BaseLayout>
+<script>
+const picker=document.querySelector('[data-course]');
+const email=document.querySelector('[data-email]');
+const submit=document.querySelector('[data-submit]');
+try{const saved=localStorage.getItem('anniversaire42-formation');if(saved&&Array.from(picker.options).some(o=>o.value===saved))picker.value=saved;}catch(e){}
+function update(){const subject='Anniversaire 42 - Mon choix de formation';const body='Bonjour Vince,\n\nJ’ai profité de l’offre anniversaire à 42 €.\n\nFormation choisie : '+picker.value+'\nE-mail utilisé pour ma commande : '+(email.value.trim()||'[à compléter]')+'\n\nMerci et joyeux anniversaire !';submit.href='mailto:vincent@lemusicien.fr?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);}
+picker.addEventListener('change',update);email.addEventListener('input',update);update();
+submit.addEventListener('click',e=>{if(!email.value.trim()||!email.checkValidity()){e.preventDefault();email.focus();email.reportValidity();}});
+</script>
+<style>
+.confirmation{max-width:720px;margin:auto;padding:82px 24px 120px;color:var(--text);font-family:Inter,system-ui,sans-serif}.confirmation .eyebrow{color:var(--coral);font-size:12px;font-weight:800;letter-spacing:.12em}.confirmation h1{font:400 clamp(55px,9vw,86px)/1 Georgia,serif;letter-spacing:-.07em;margin:17px 0 22px}.confirmation h1 i{color:var(--coral)}.confirmation>p{font-size:16px;line-height:1.7}.confirmation .panel{background:var(--surface);border:1px solid var(--line-strong);border-radius:13px;padding:30px;margin:33px 0}.confirmation h2{font:400 31px Georgia,serif;letter-spacing:-.04em}.confirmation label{display:block;font-size:13px;font-weight:750;margin:20px 0 7px}.confirmation select,.confirmation input{width:100%;padding:14px 12px;border-radius:6px;border:1px solid var(--line-strong);background:var(--bg);color:var(--text);font:inherit}.confirmation .cta{display:block;border-radius:6px;background:var(--coral);color:white;font-weight:800;text-align:center;padding:16px;margin-top:24px}.confirmation .hint{font-size:12px;line-height:1.7;color:var(--muted);margin:19px 0 0}.confirmation .hint a{text-decoration:underline}.confirmation .footnote{font-size:14px;color:var(--muted)}
+</style>
