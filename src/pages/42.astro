@@ -1,43 +1,138 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { birthdayCourses, birthdayCategories, birthdayDeadline, birthdayCheckout } from '../data/anniversaire42';
 ---
-<BaseLayout title="42 ans, 42 € la formation | Le Musicien" description="Pour mes 42 ans, une formation MAO au choix pour 42 € seulement, pendant 24 heures." noindex={true} pageClass="birthday-page">
-<div class="birthday">
-<header class="b-nav wrap"><a href="/">LE MUSICIEN <small>par Vince</small></a><a href="#catalogue">Les formations ↓</a></header>
-<section class="hero wrap">
-<p class="eyebrow">🎂 21 novembre 2026 · Offre éclair 24 h</p>
-<div class="hero-grid"><div><h1>42 ans.<br/><i>42 euros.</i></h1><p class="intro">C'est mon anniversaire ! Et pour fêter ça, je t'offre une occasion de te former à petit prix : <strong>n'importe quelle formation de cette sélection pour 42 € seulement.</strong></p><p>Que tu veuilles mixer, composer, maîtriser Logic Pro ou enfin finir tes morceaux, il y a de quoi faire.</p><a class="b-button" href="#catalogue">Je choisis ma formation ↗</a></div><div class="ticket"><span>OFFRE ANNIVERSAIRE</span><div class="figure">42<sup>€</sup></div><p>1 formation au choix<br/>1 paiement unique<br/>0 abonnement</p><div class="countdown"><small>L'offre se termine dans</small><strong data-countdown>24:00:00</strong><small>22 novembre à 10 h 40, heure de Londres</small></div></div></div>
-<p class="aside">Petite particularité : <strong>je t'ajoute moi-même à la formation choisie</strong> après l'achat. Pas de robot, pas d'usine à gaz. C'est mon anniv, j'ai le droit de me simplifier la vie. 😉</p>
-</section>
-<section class="how"><div class="wrap"><p class="eyebrow">01 / COMMENT ÇA MARCHE</p><h2>Trois étapes. Et c'est tout.</h2><div class="steps"><article><b>01</b><h3>Choisis</h3><p>Parcours les formations et sélectionne celle qui t'intéresse.</p></article><article><b>02</b><h3>Règle 42 €</h3><p>Un paiement unique et sécurisé sur Systeme.io, sans abonnement.</p></article><article><b>03</b><h3>Je t'ajoute</h3><p>Après paiement, confirme ton choix par e-mail. Je t'ouvre l'accès manuellement, donc pas instantanément.</p></article></div></div></section>
-<section class="wrap catalog" id="catalogue"><p class="eyebrow">02 / TON CHOIX</p><h2>À toi de piocher.</h2><p class="subtitle">Des formations complètes pour avancer sur tes morceaux. Une formation de la liste par commande. Pas de packs ni d'accompagnement individuel.</p><div class="controls"><div class="filters">{birthdayCategories.map((c)=><button type="button" data-filter={c.id} aria-pressed={c.id==='all'?'true':'false'}>{c.label}</button>)}</div><input data-search type="search" aria-label="Rechercher une formation" placeholder="Rechercher une formation…" /></div><p class="results" data-results>{birthdayCourses.length} formations disponibles</p><div class="courses">{birthdayCourses.map((c)=><button type="button" class="course" data-course data-title={c.title} data-category={c.category} data-keywords={c.title+' '+c.description} aria-pressed="false"><span class="course-top"><small>{birthdayCategories.find((g)=>g.id===c.category)?.label}</small><span class="tick">✓</span></span><strong>{c.title}</strong><span class="description">{c.description}</span>{c.note && <em>{c.note}</em>}<span class="course-foot">Choisir cette formation <b>↗</b></span></button>)}</div><p data-empty hidden>Rien de trouvé. Essaie un autre mot-clé.</p></section>
-<section class="wrap bottom"><div class="order" id="commander"><div><p class="eyebrow">03 / PASSER COMMANDE</p><h2>Ta formation. 42 €.</h2><p data-choice>Choisis ta formation dans le catalogue ci-dessus.</p><small>Accès ajouté manuellement après paiement et confirmation de ton choix.</small></div><div class="order-action"><a class="b-button disabled" href={birthdayCheckout} data-buy aria-disabled="true">Choisis d'abord un cours ↗</a><small data-expiry>Offre limitée à 24 heures.</small></div></div><div class="pass"><div><span class="eyebrow">ET SI TU VOULAIS TOUT ?</span><h3>Le Pass MAO, pour ceux qui veulent toute la bibliothèque.</h3><p>Accès à de nombreuses formations et à la communauté PM School. C'est une offre distincte, non incluse dans les 42 €.</p></div><a href="/pass-mao/">Découvrir le Pass MAO ↗</a></div><div class="faq"><h2>Petites questions</h2><details><summary>Est-ce que l'accès est immédiat ?</summary><p>Non, je procède à l'inscription manuellement. Tu recevras ton accès après traitement de ton achat et confirmation de la formation choisie.</p></details><details><summary>Comment indiquer ma formation ?</summary><p>Après paiement, tu arrives sur une page de confirmation qui te permet de m'envoyer le nom de la formation par e-mail. Vérifie ton message et envoie-le bien !</p></details><details><summary>Je peux acheter plusieurs cours ?</summary><p>Oui, avec une commande distincte de 42 € par formation, tant que l'offre est ouverte.</p></details><details><summary>Le Pass MAO est compris ?</summary><p>Non. L'offre porte sur une seule formation individuelle de la sélection, pas les packs, abonnements ni accompagnements.</p></details></div></section>
-<div class="mobile" data-mobile hidden><span><b data-mobile-title>Une formation</b><small>42 €</small></span><a href="#commander">Commander ↗</a></div>
-</div>
-<script define:vars={{ deadline: birthdayDeadline }}>
-const root=document.querySelector('.birthday');
-if(root){
- const cards=Array.from(root.querySelectorAll('[data-course]'));
- const buttons=Array.from(root.querySelectorAll('[data-filter]'));
- const search=root.querySelector('[data-search]'); const results=root.querySelector('[data-results]');
- const buy=root.querySelector('[data-buy]'); const choice=root.querySelector('[data-choice]');
- const mobile=root.querySelector('[data-mobile]'); let filter='all';let selected='';
- const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- function render(){let n=0;cards.forEach(c=>{const visible=(filter==='all'||c.dataset.category===filter)&&norm(c.dataset.keywords).includes(norm(search.value));c.hidden=!visible;if(visible)n++;});results.textContent=n+' formation'+(n===1?'':'s')+' disponible'+(n===1?'':'s');root.querySelector('[data-empty]').hidden=n>0;}
- buttons.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;buttons.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render();}));
- search.addEventListener('input',render);
- function activate(name){selected=name;try{localStorage.setItem('anniversaire42-formation',name);}catch(e){}cards.forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.title===name)));choice.textContent='Ta formation : '+name;buy.textContent='Commander ma formation ↗';buy.classList.remove('disabled');buy.removeAttribute('aria-disabled');root.querySelector('[data-mobile-title]').textContent=name;mobile.hidden=false;}
- cards.forEach(c=>c.addEventListener('click',()=>{activate(c.dataset.title);root.querySelector('#commander').scrollIntoView({behavior:'smooth'});}));
- try{const saved=localStorage.getItem('anniversaire42-formation');if(saved&&cards.some(c=>c.dataset.title===saved))activate(saved);}catch(e){}
- buy.addEventListener('click',e=>{if(!selected||Date.now()>=Date.parse(deadline)){e.preventDefault();return;}try{localStorage.setItem('anniversaire42-formation',selected);}catch(e){}});
- function tick(){let remaining=Math.max(0,Date.parse(deadline)-Date.now());const h=Math.floor(remaining/3600000),m=Math.floor(remaining/60000)%60,s=Math.floor(remaining/1000)%60;root.querySelector('[data-countdown]').textContent=[h,m,s].map(n=>String(n).padStart(2,'0')).join(':');if(!remaining){buy.classList.add('disabled');buy.setAttribute('aria-disabled','true');buy.textContent="L'offre est terminée";root.querySelector('[data-expiry]').textContent="L'offre anniversaire est terminée.";}}
- tick();setInterval(tick,1000);render();
-}
-</script>
-<style>
-.birthday{--ink:#231d1a;--cream:#f7f0e4;--rust:#c8543c;--line:#ded0bd;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif}.birthday .wrap{max-width:1130px;margin:0 auto;padding-left:24px;padding-right:24px}.birthday .b-nav{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);min-height:62px;font-weight:800;font-size:12px;letter-spacing:.04em}.birthday .b-nav small{font-weight:400}.birthday .b-nav a:last-child{font-weight:500}.birthday .hero{padding-top:76px;padding-bottom:55px}.birthday .eyebrow{font-size:11px;font-weight:800;letter-spacing:.15em;color:var(--rust);text-transform:uppercase}.birthday .hero-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:64px;align-items:center}.birthday h1{font:400 clamp(76px,10vw,140px)/.9 Georgia,serif;letter-spacing:-.085em;margin:25px 0 28px}.birthday h1 i{font-style:italic;color:var(--rust)}.birthday .intro{font-size:20px;line-height:1.55;max-width:590px}.birthday .hero-grid>div>p:not(.intro){font-size:15px;line-height:1.65;max-width:570px;color:#695f55}.birthday .b-button{display:inline-flex;align-items:center;justify-content:center;padding:17px 22px;border-radius:5px;background:var(--ink);color:white;font-size:14px;font-weight:750;margin-top:20px;transition:transform .2s}.birthday .b-button:hover{transform:translateY(-2px)}.birthday .ticket{border:2px solid var(--ink);border-radius:13px;padding:30px;background:#fffaf2;box-shadow:12px 12px #e5c3ad}.birthday .ticket>span{font-size:10px;letter-spacing:.15em;font-weight:800}.birthday .figure{font:400 clamp(125px,13vw,190px)/1 Georgia,serif;letter-spacing:-.09em;margin:22px 0 8px}.birthday .figure sup{font:750 42px Inter,system-ui,sans-serif;vertical-align:top;position:relative;top:14px}.birthday .ticket p{line-height:1.6}.birthday .countdown{border-top:1px solid var(--line);margin-top:22px;padding-top:18px;display:flex;flex-direction:column;gap:8px}.birthday .countdown small{font-size:11px;color:#6d625a}.birthday .countdown strong{font-size:30px;font-variant-numeric:tabular-nums}.birthday .aside{color:#695f55;font-size:13px;margin:50px 0 0}.birthday .how{background:#e6d9c7;padding:60px 0}.birthday h2{font:400 clamp(40px,5vw,64px)/1.08 Georgia,serif;letter-spacing:-.05em;margin:14px 0 25px}.birthday .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:32px}.birthday .steps article{border-top:1px solid #b6a38c;padding-top:18px}.birthday .steps b{color:var(--rust);font-size:13px}.birthday .steps h3{font:400 27px Georgia,serif;margin:14px 0 8px}.birthday .steps p{font-size:14px;line-height:1.6;color:#62594e}.birthday .catalog{padding-top:80px;padding-bottom:90px}.birthday .subtitle{color:#695f55;max-width:680px;line-height:1.65}.birthday .controls{display:flex;justify-content:space-between;gap:24px;align-items:center;margin:36px 0 23px}.birthday .filters{display:flex;gap:7px;flex-wrap:wrap}.birthday .filters button{background:none;border:1px solid var(--line);border-radius:100px;padding:9px 12px;color:var(--ink);font:650 11px Inter,system-ui,sans-serif;cursor:pointer}.birthday .filters button[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}.birthday input[type=search]{font:13px Inter,system-ui,sans-serif;background:transparent;border:0;border-bottom:1px solid var(--ink);padding:12px 5px;color:var(--ink);min-width:190px}.birthday .results{color:#74685e;font-size:12px}.birthday .courses{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.birthday .course{display:flex;flex-direction:column;text-align:left;min-height:215px;padding:22px;background:#fffbf6;border:1px solid var(--line);border-radius:9px;color:var(--ink);cursor:pointer;transition:transform .2s,border-color .2s}.birthday .course:hover{transform:translateY(-3px);border-color:var(--ink)}.birthday .course[hidden]{display:none}.birthday .course[aria-pressed=true]{outline:2px solid var(--rust);background:#fff1e6}.birthday .course-top{display:flex;justify-content:space-between;align-items:center;color:var(--rust);text-transform:uppercase;font-weight:850;letter-spacing:.08em}.birthday .course-top small{font-size:10px}.birthday .tick{display:grid;place-items:center;width:23px;height:23px;border:1px solid var(--line);border-radius:50%;color:transparent}.birthday .course[aria-pressed=true] .tick{background:var(--rust);color:white}.birthday .course>strong{font:400 25px/1.15 Georgia,serif;letter-spacing:-.025em;margin-top:20px}.birthday .description{font-size:12px;line-height:1.6;color:#76695f;margin-top:9px}.birthday .course em{font-size:10px;color:var(--rust);margin-top:8px}.birthday .course-foot{display:flex;justify-content:space-between;font-size:11px;font-weight:800;margin-top:auto;padding-top:21px}.birthday .course-foot b{font-size:19px;color:var(--rust)}.birthday .bottom{padding-bottom:90px}.birthday .order{background:#e3d0b9;border-radius:12px;padding:45px;display:flex;gap:50px;align-items:center;justify-content:space-between}.birthday .order h2{margin-bottom:16px}.birthday .order p:not(.eyebrow){font-size:17px}.birthday .order small{font-size:12px;color:#6f5f54;line-height:1.5}.birthday .order-action{display:flex;flex-direction:column;align-items:center;min-width:270px;gap:12px}.birthday .order-action .b-button{width:100%;margin:0}.birthday .disabled{opacity:.55;cursor:not-allowed;pointer-events:none}.birthday .pass{display:flex;justify-content:space-between;align-items:center;gap:40px;border-bottom:1px solid var(--line);padding:45px 0}.birthday .pass h3{font:400 30px Georgia,serif;max-width:620px;letter-spacing:-.035em;margin:12px 0}.birthday .pass p{font-size:13px;color:#75695c;max-width:660px}.birthday .pass>a{white-space:nowrap;text-decoration:underline;text-underline-offset:5px;font-size:13px;font-weight:800}.birthday .faq{margin:55px auto 0;max-width:770px}.birthday .faq h2{font-size:37px}.birthday .faq details{padding:18px 0;border-bottom:1px solid var(--line)}.birthday .faq summary{font-size:14px;font-weight:750;cursor:pointer}.birthday .faq details p{font-size:13px;line-height:1.6;color:#695f55}.birthday .mobile{display:none}.birthday [hidden]{display:none!important}html[data-theme=dark] .birthday{background:#f7f0e4;color:#231d1a}
-@media(max-width:940px){.birthday .hero-grid{gap:25px}.birthday .courses{grid-template-columns:repeat(2,1fr)}.birthday .controls{align-items:stretch;flex-direction:column}.birthday input[type=search]{width:100%}}
-@media(max-width:650px){.birthday .wrap{padding-left:20px;padding-right:20px}.birthday .hero{padding-top:35px;padding-bottom:46px}.birthday .hero-grid{grid-template-columns:1fr;gap:33px}.birthday h1{font-size:clamp(72px,17vw,110px)}.birthday .intro{font-size:17px}.birthday .ticket{max-width:390px;box-shadow:7px 7px #e5c3ad}.birthday .figure{font-size:138px}.birthday .aside{margin-top:35px}.birthday .how{padding:48px 0}.birthday .steps{grid-template-columns:1fr;gap:10px}.birthday .steps h3{margin:8px 0}.birthday .catalog{padding-top:52px;padding-bottom:50px}.birthday .courses{grid-template-columns:1fr}.birthday .course{min-height:180px}.birthday .order{padding:25px;flex-direction:column;align-items:stretch;gap:20px}.birthday .order-action{min-width:0}.birthday .pass{flex-direction:column;align-items:flex-start;gap:13px}.birthday .pass>a{white-space:normal}.birthday .mobile:not([hidden]){display:flex;position:fixed;z-index:20;bottom:0;left:0;right:0;align-items:center;justify-content:space-between;gap:12px;background:#231d1a;color:white;padding:12px 16px;box-shadow:0 -5px 20px #0003}.birthday .mobile span{display:flex;flex-direction:column;min-width:0}.birthday .mobile b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:190px}.birthday .mobile small{font-size:11px;color:#e5b59f}.birthday .mobile a{padding:12px;background:#c8543c;border-radius:4px;font-size:12px;font-weight:800}.birthday .bottom{padding-bottom:110px}}
-</style>
+
+<BaseLayout
+  title="Offre anniversaire terminée | Le Musicien"
+  description="L'offre éclair de Vince pour ses 42 ans est terminée. Découvre le Pass MAO pour continuer à créer, produire et mixer ta musique."
+  pageClass="birthday-closed-page"
+  noindex={true}
+  image="/images/pass/pass-mao-visuel.png"
+  hideHeader={true}
+>
+  <div class="b42">
+    <header class="b42-nav">
+      <div class="b42-wrap b42-nav-inner">
+        <a href="/" class="b42-brand" aria-label="Le Musicien, accueil">LE MUSICIEN <span>par Vince</span></a>
+        <a href="/formations/" class="b42-nav-link">Toutes les formations <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main class="b42-main b42-wrap">
+      <div class="b42-label"><span aria-hidden="true">●</span> L'OFFRE ANNIVERSAIRE EST TERMINÉE</div>
+      <div class="b42-hero">
+        <div class="b42-hero-copy">
+          <p class="b42-eyebrow">42 ans, une offre éclair… et puis s'en va.</p>
+          <h1>Tu as raté<br /><em>l'offre !</em> <span aria-label="Un gâteau d'anniversaire">🎂</span></h1>
+          <p class="b42-lead">Pour mes 42 ans, j'avais proposé <strong>une formation au choix pour 42 €</strong>. Mais c'était une offre de 24 heures, et les 24 heures sont passées.</p>
+          <p>Merci à ceux qui en ont profité, vous m'avez fait un joli cadeau d'anniversaire ! 😁</p>
+          <p>Pour les autres, il reste plein de façons de faire avancer votre musique. Pas besoin d'attendre que j'aie 43 ans.</p>
+        </div>
+        <div class="b42-stamp" aria-label="Offre à 42 euros terminée">
+          <span class="b42-stamp-top">ÉDITION ANNIVERSAIRE</span>
+          <div class="b42-stamp-price">42<sup>€</sup></div>
+          <div class="b42-stamp-closed">C'EST TERMINÉ</div>
+          <p>21 - 22 novembre 2026</p>
+        </div>
+      </div>
+
+      <section class="b42-pass" aria-labelledby="b42-pass-title">
+        <div class="b42-pass-copy">
+          <span class="b42-pass-label">ENVIE DE CONTINUER ?</span>
+          <h2 id="b42-pass-title">Une formation, c'est bien.<br /><em>Une bibliothèque entière…</em></h2>
+          <p>Avec le <strong>Pass MAO</strong>, tu retrouves une bibliothèque de formations pour composer, produire, mixer et terminer tes morceaux, ainsi que la communauté PM School pour partager, pratiquer et progresser.</p>
+          <div class="b42-pass-actions">
+            <a class="b42-button" href="/pass-mao/">Découvrir le Pass MAO <span aria-hidden="true">↗</span></a>
+            <span>Abonnement distinct de l'offre anniversaire</span>
+          </div>
+        </div>
+        <div class="b42-pass-image">
+          <img
+            src="/images/pass/pass-mao-packshot-wide.png"
+            alt="Visuel de la bibliothèque de formations du Pass MAO"
+            width="700"
+            height="366"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </section>
+
+      <p class="b42-last">Tu préfères choisir une formation à l'unité ? <a href="/formations/">Parcourir le catalogue habituel <span aria-hidden="true">↗</span></a></p>
+    </main>
+  </div>
 </BaseLayout>
+
+<style>
+  .b42 {
+    --b42-bg: #f7f0e4;
+    --b42-ink: #231d1a;
+    --b42-rust: #c8543c;
+    --b42-muted: #685d53;
+    --b42-line: #dacbbb;
+    background: var(--b42-bg);
+    color: var(--b42-ink);
+    min-height: calc(100vh - 80px);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  }
+  .b42-wrap { width: min(1120px, calc(100% - 44px)); margin-inline: auto; }
+  .b42-nav { border-bottom: 1px solid var(--b42-line); }
+  .b42-nav-inner { display: flex; justify-content: space-between; align-items: center; min-height: 74px; gap: 15px; }
+  .b42-brand { font-size: 13px; letter-spacing: .1em; font-weight: 850; }
+  .b42-brand span { font-size: 11px; letter-spacing: 0; font-weight: 400; padding-left: 5px; }
+  .b42-nav-link { font-size: 12px; font-weight: 700; }
+  .b42-nav-link:hover, .b42-last a:hover { color: var(--b42-rust); }
+  .b42-main { padding-top: 76px; padding-bottom: 95px; }
+  .b42-label { display: inline-flex; align-items: center; gap: 12px; border: 1px solid var(--b42-rust); color: var(--b42-rust); padding: 9px 13px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+  .b42-label span { font-size: 11px; }
+  .b42-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, .7fr); gap: 64px; align-items: center; padding: 42px 0 78px; }
+  .b42-eyebrow { color: var(--b42-rust); font-size: 14px; font-weight: 750; margin-bottom: 18px; }
+  .b42-hero h1 { font: 400 clamp(68px, 9.3vw, 122px)/.98 Georgia, 'Times New Roman', serif; letter-spacing: -.07em; margin: 0 0 32px; }
+  .b42-hero h1 em { color: var(--b42-rust); font-weight: 400; }
+  .b42-hero h1 span { font: 400 clamp(35px, 4vw, 50px)/1 system-ui, sans-serif; vertical-align: .15em; letter-spacing: 0; white-space: nowrap; }
+  .b42-hero-copy > p:not(.b42-eyebrow) { max-width: 655px; font-size: 15px; line-height: 1.75; color: var(--b42-muted); margin-bottom: 15px; }
+  .b42-hero-copy .b42-lead { color: var(--b42-ink) !important; font-size: 18px !important; }
+  .b42-stamp { background: #fffaf2; border: 2px solid var(--b42-ink); border-radius: 13px; box-shadow: 10px 10px 0 #e5c3ad; padding: 32px 26px 27px; text-align: center; transform: rotate(2deg); }
+  .b42-stamp-top { font-size: 10px; letter-spacing: .15em; font-weight: 850; }
+  .b42-stamp-price { position: relative; font: 400 clamp(110px, 13vw, 170px)/1 Georgia, serif; letter-spacing: -.1em; margin: 25px 0; opacity: .65; }
+  .b42-stamp-price::after { content: ""; position: absolute; left: 7%; right: 7%; top: 48%; transform: rotate(-13deg); height: 7px; border-radius: 10px; background: var(--b42-rust); }
+  .b42-stamp-price sup { font: 800 40px Inter, sans-serif; vertical-align: top; position: relative; top: 13px; }
+  .b42-stamp-closed { display: inline-block; padding: 9px 15px; background: var(--b42-ink); color: white; font-size: 13px; letter-spacing: .09em; font-weight: 850; border-radius: 3px; }
+  .b42-stamp > p { margin: 20px 0 0; color: var(--b42-muted); font-size: 12px; }
+  .b42-pass { display: grid; grid-template-columns: 1.2fr .85fr; align-items: center; gap: 36px; padding: 46px 47px; background: #e6d7c3; border: 1px solid #d6c2ab; border-radius: 14px; overflow: hidden; }
+  .b42-pass-label { color: var(--b42-rust); font-size: 10px; letter-spacing: .13em; font-weight: 850; }
+  .b42-pass h2 { font: 400 clamp(34px, 4.3vw, 53px)/1.12 Georgia, serif; letter-spacing: -.047em; margin: 15px 0 20px; }
+  .b42-pass h2 em { font-weight: 400; color: var(--b42-rust); }
+  .b42-pass p { font-size: 15px; line-height: 1.7; color: #5c5046; max-width: 640px; margin-bottom: 23px; }
+  .b42-pass-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .b42-button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; padding: 16px 22px; background: var(--b42-ink); color: #fff; border-radius: 5px; font-size: 13px; font-weight: 800; transition: background .2s, transform .2s; }
+  .b42-button:hover { transform: translateY(-2px); background: #42352c; }
+  .b42-pass-actions > span { font-size: 11px; color: #67594d; }
+  .b42-pass-image { display: flex; justify-content: center; align-items: center; }
+  .b42-pass-image img { width: 100%; height: auto; max-height: 370px; object-fit: contain; filter: drop-shadow(0 12px 18px rgba(48, 38, 27, .15)); }
+  .b42-last { color: var(--b42-muted); font-size: 13px; text-align: center; margin: 30px 0 0; }
+  .b42-last a { color: var(--b42-ink); font-weight: 750; text-decoration: underline; text-underline-offset: 4px; margin-left: 3px; }
+  html[data-theme="dark"] .b42 { background: var(--b42-bg); color: var(--b42-ink); }
+  @media (max-width: 860px) {
+    .b42-hero { grid-template-columns: 1fr .75fr; gap: 30px; }
+    .b42-hero h1 { font-size: clamp(65px, 9vw, 95px); }
+    .b42-pass { grid-template-columns: 1fr .75fr; padding: 32px; }
+  }
+  @media (max-width: 650px) {
+    .b42-wrap { width: min(100% - 36px, 500px); }
+    .b42-nav-inner { min-height: 62px; }
+    .b42-nav-link { font-size: 11px; }
+    .b42-main { padding-top: 40px; padding-bottom: 70px; }
+    .b42-hero { grid-template-columns: 1fr; gap: 29px; padding: 30px 0 54px; }
+    .b42-hero h1 { font-size: clamp(62px, 13vw, 88px); }
+    .b42-hero-copy .b42-lead { font-size: 16px !important; }
+    .b42-stamp { max-width: 320px; width: 100%; margin: auto; padding: 19px 25px; box-shadow: 7px 7px 0 #e5c3ad; transform: rotate(1deg); }
+    .b42-stamp-price { font-size: 112px; margin: 12px 0; }
+    .b42-stamp-price sup { font-size: 30px; }
+    .b42-pass { grid-template-columns: 1fr; padding: 27px 22px 15px; gap: 6px; }
+    .b42-pass h2 { font-size: 36px; }
+    .b42-pass-image img { max-height: 230px; }
+    .b42-pass-actions { align-items: flex-start; flex-direction: column; }
+    .b42-last { text-align: left; line-height: 1.7; }
+  }
+</style>
