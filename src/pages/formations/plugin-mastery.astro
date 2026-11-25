@@ -1,0 +1,367 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/plugin-mastery.css';
+
+const checkoutUrl = 'https://productionmusicale.systeme.io/plugin-mastery-bdc';
+
+const problems = [
+  ['La collectionnite', 'Des dizaines de plugins installés. Trois vraiment maîtrisés. Et encore, les bons jours.'],
+  ['Le preset mystère', 'Tu cliques sur « Warm Vocal » et tu espères que le nom du preset sait quelque chose que tu ignores.'],
+  ['Le compresseur invisible', 'Tu tournes Threshold, Ratio, Attack, Release… puis tu te demandes si tu entends vraiment une différence.'],
+  ['La chaîne réflexe', 'EQ, compresseur, saturation, reverb. Parce que tout le monde fait comme ça, paraît-il.'],
+  ['Le panier sans fond', 'Tu compares encore trois nouveautés alors que ton DAW contient déjà tout ce qu’il faut pour avancer.'],
+  ['Le morceau toujours flou', 'Plus de traitements, plus de fenêtres, plus de réglages. Mais pas forcément plus de musique.'],
+];
+
+const transformations = [
+  ['Choisir', 'Identifier le traitement utile selon le résultat que tu cherches.'],
+  ['Comprendre', 'Relier chaque paramètre à une conséquence sonore concrète.'],
+  ['Écouter', 'Savoir quoi entendre avant de décider si un réglage fonctionne.'],
+  ['Simplifier', 'Tirer davantage des plugins natifs de ton logiciel.'],
+  ['Transférer', 'Retrouver les mêmes principes derrière des interfaces différentes.'],
+  ['Créer', 'Utiliser les effets comme des outils de couleur et de mouvement.'],
+  ['Avancer', 'Passer moins de temps à tester au hasard et plus de temps à produire.'],
+];
+
+const modules = [
+  {
+    name: 'Les plugins qui sculptent',
+    signal: 'Forme · équilibre · largeur',
+    intro: 'Transforme la forme et la place d’un son avant d’empiler d’autres traitements.',
+    lessons: [
+      ['EQ et filtres', 'Nettoyer un son brouillon, corriger un déséquilibre et faire de la place.'],
+      ['Image stéréo', 'Comprendre la largeur et replacer une source dans le champ stéréo.'],
+      ['Transient shaper', 'Agir sur l’attaque et le sustain pour modifier la présence et la texture.'],
+    ],
+  },
+  {
+    name: 'Les plugins qui contrôlent',
+    signal: 'Dynamique · niveau · précision',
+    intro: 'Gère les écarts de niveau sans écraser ce qui rend ton interprétation vivante.',
+    lessons: [
+      ['Compression', 'Stabiliser une source et comprendre ce que les paramètres changent vraiment.'],
+      ['Limiteur et clipping', 'Contrôler les crêtes et distinguer deux façons de contenir le niveau.'],
+      ['Gate et de-esser', 'Nettoyer ou calmer une zone gênante sans traiter tout le signal.'],
+    ],
+  },
+  {
+    name: 'Les plugins qui colorent',
+    signal: 'Grain · densité · caractère',
+    intro: 'Donne une identité à une source trop plate, avec une intention plutôt qu’un réflexe.',
+    lessons: [
+      ['Saturation', 'Ajouter du grain, de la densité ou de la chaleur sans perdre le contrôle.'],
+      ['Distorsion', 'Salir et transformer une source de façon assumée.'],
+      ['Exciter', 'Renforcer une sensation de présence et de brillance en comprenant le compromis.'],
+    ],
+  },
+  {
+    name: 'Les plugins qui spatialisent et animent',
+    signal: 'Profondeur · mouvement · espace',
+    intro: 'Crée de la profondeur et du mouvement sans éloigner tout le morceau au fond du couloir.',
+    lessons: [
+      ['Reverb et delay', 'Rapprocher, éloigner et inscrire une source dans un espace cohérent.'],
+      ['Chorus, flanger et phaser', 'Comprendre trois mouvements proches, mais pas interchangeables.'],
+      ['Tremolo', 'Faire vivre un son grâce à une modulation de niveau volontaire.'],
+    ],
+  },
+];
+
+const bonuses = [
+  {
+    title: 'Le Sélecteur de Plugin',
+    copy: 'Pars de ce que tu entends pour retrouver une piste d’action concrète et choisir la bonne famille de traitement.',
+    image: '/images/plugin-mastery/bonus-selecteur.webp',
+    alt: 'Aperçu du Sélecteur de Plugin inclus avec Plugin Mastery',
+  },
+  {
+    title: '10 chaînes de plugins simples',
+    copy: 'Des points de départ pour une voix claire, une basse stable, un kick solide, un synthé plus large et d’autres cas courants.',
+    image: null,
+    alt: '',
+  },
+  {
+    title: 'Le mémo des équivalents DAW',
+    copy: 'Retrouve les outils équivalents dans Ableton Live, Cubase, FL Studio et les autres grands logiciels.',
+    image: '/images/plugin-mastery/bonus-equivalents.webp',
+    alt: 'Aperçu du mémo des équivalents DAW inclus avec Plugin Mastery',
+  },
+  {
+    title: 'L’ordre des plugins',
+    copy: 'Une vidéo bonus pour comprendre pourquoi EQ puis compression ne réagit pas comme compression puis EQ.',
+    image: null,
+    alt: '',
+  },
+  {
+    title: 'De la sinusoïde au son original',
+    copy: 'Une démonstration créative où Vince transforme une simple onde sinus avec plusieurs plugins.',
+    image: '/images/plugin-mastery/bonus-creative.webp',
+    alt: 'Aperçu de la vidéo bonus créative de Plugin Mastery',
+  },
+];
+
+const faqs = [
+  ['Est-ce réservé aux utilisateurs de Logic Pro ?', 'Non. Les démonstrations sont réalisées dans Logic Pro, mais les principes enseignés s’appliquent aux traitements équivalents dans tous les grands DAW. Le bonus des équivalents t’aide à retrouver les bons outils.'],
+  ['Dois-je acheter des plugins supplémentaires ?', 'Non. Tu peux suivre et appliquer la formation avec les plugins natifs de ton logiciel et les outils que tu possèdes déjà.'],
+  ['Est-ce adapté aux débutants ?', 'Oui. Chaque famille est présentée depuis son rôle de base, avec des repères simples pour comprendre ce qu’il faut écouter.'],
+  ['Est-ce pertinent si je fais déjà de la MAO depuis plusieurs années ?', 'Oui, surtout si tu connais le nom des traitements mais que tu hésites encore sur leur choix, leur dosage ou leur ordre. La formation remet de la logique entre des connaissances souvent dispersées.'],
+  ['Est-ce uniquement une formation de mixage ?', 'Non. Les plugins servent à corriger et équilibrer, mais aussi à créer des textures, de l’espace et du mouvement. Les compétences enseignées servent en production comme en mixage.'],
+  ['Combien de temps ai-je accès à la formation ?', 'L’achat donne un accès immédiat et à vie aux contenus achetés. Il n’y a aucun abonnement.'],
+  ['Comment accéder aux vidéos après mon achat ?', 'Après le paiement sécurisé sur Systeme.io, tu reçois les informations pour accéder à ton espace membre et commencer la formation.'],
+];
+---
+
+<BaseLayout
+  title="Plugin Mastery : maîtrise enfin tes plugins | Le Musicien"
+  description="Comprends tes EQ, compresseurs, saturations, reverbs et delays. 22 vidéos, 5 bonus, tous DAW, accès à vie pour 49 €."
+  image="/images/plugin-mastery/offer.webp"
+  pageClass="plugin-mastery-page"
+  hideHeader={true}
+  metaDisclaimer={true}
+>
+  <!-- Un seul PageView. Le pixel n'est pas chargé par le layout global. -->
+  <script is:inline>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','1536067661659756');fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1536067661659756&ev=PageView&noscript=1" alt="" /></noscript>
+
+  <div class="pm-page" id="haut">
+    <header class="pm-nav pm-wrap">
+      <a class="pm-brand" href="/" aria-label="Le Musicien, accueil">LE MUSICIEN<span>par Vince</span></a>
+      <nav aria-label="Navigation Plugin Mastery">
+        <a href="#programme">Programme</a>
+        <a href="#bonus">Bonus</a>
+        <a href="#questions">Questions</a>
+      </nav>
+      <a class="pm-nav-cta" href={checkoutUrl} data-checkout>Accéder · 49 €</a>
+    </header>
+
+    <section class="pm-hero pm-wrap" aria-labelledby="pm-title">
+      <div class="pm-hero-copy">
+        <p class="pm-label">Plugin Mastery <span>|</span> Formation MAO</p>
+        <h1 id="pm-title">Tu n’as probablement pas besoin d’un nouveau plugin.</h1>
+        <p class="pm-hero-punch">Apprends enfin à utiliser ceux que tu as déjà.</p>
+        <p class="pm-lead">Comprends réellement tes EQ, compresseurs, saturations, reverbs, delays et autres effets audio. Choisis le bon outil, entends ce qu’il fait et règle-le avec intention pour améliorer tes productions.</p>
+        <div class="pm-hero-action">
+          <a class="pm-button" href={checkoutUrl} data-checkout>Je veux maîtriser mes plugins <span>49 €</span></a>
+          <p>Accès immédiat · Tous DAW · Accès à vie</p>
+        </div>
+      </div>
+      <div class="pm-product-stage" aria-label="Présentation de Plugin Mastery">
+        <svg class="pm-spectrum" viewBox="0 0 700 360" role="img" aria-label="Analyseur de spectre stylisé">
+          <path class="grid" d="M0 60H700M0 120H700M0 180H700M0 240H700M0 300H700M100 0V360M200 0V360M300 0V360M400 0V360M500 0V360M600 0V360" />
+          <path class="trace trace-back" d="M0 290 C45 270 58 305 92 258 S150 220 182 252 S236 298 271 212 S342 124 380 178 S449 264 486 143 S548 42 590 118 S654 216 700 154" />
+          <path class="trace" d="M0 305 C52 297 65 262 103 274 S157 308 194 248 S260 199 300 225 S365 282 405 180 S475 75 515 131 S575 238 615 167 S671 94 700 112" />
+        </svg>
+        <div class="pm-product-readout"><span>INPUT</span><strong>-12.4</strong><small>dBFS</small></div>
+        <img src="/images/plugin-mastery/hero.webp" alt="Packshot de la formation Plugin Mastery" width="900" height="1125" fetchpriority="high" />
+        <div class="pm-knob pm-knob-one"><span></span><small>INTENTION</small></div>
+        <div class="pm-knob pm-knob-two"><span></span><small>ÉCOUTE</small></div>
+      </div>
+    </section>
+
+    <div class="pm-console-strip" aria-label="Contenu de la formation">
+      <div class="pm-wrap">
+        <span><strong>22</strong> vidéos</span>
+        <span><strong>4 h</strong> environ</span>
+        <span><strong>5</strong> bonus</span>
+        <span><strong>49 €</strong> une fois</span>
+      </div>
+    </div>
+
+    <section class="pm-section pm-problem pm-wrap" aria-labelledby="problem-title">
+      <div class="pm-heading">
+        <p class="pm-kicker">Le syndrome du dossier Plugins</p>
+        <h2 id="problem-title">Encore un plugin ? Sérieusement ?</h2>
+        <p>Le problème n’est pas que tu manques d’outils. C’est que personne ne t’a vraiment appris à décider lequel ouvrir, ce qu’il faut écouter et quand t’arrêter.</p>
+      </div>
+      <div class="pm-problem-list">
+        {problems.map(([title, copy], index) => (
+          <article>
+            <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <div><h3>{title}</h3><p>{copy}</p></div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="pm-proof" aria-labelledby="proof-title">
+      <div class="pm-wrap">
+        <div class="pm-proof-intro"><p class="pm-kicker">Ce qu’ils en disent</p><h2 id="proof-title">Des explications qui donnent envie d’essayer.</h2><p>Retours d’élèves des formations Le Musicien et du tunnel Plugin Mastery.</p></div>
+        <div class="pm-quotes">
+          <blockquote><p>« Très instructive cette formation, je viens de la finir, et j’ai beaucoup de choses à mettre en place maintenant ! »</p><footer>Pierre</footer></blockquote>
+          <blockquote><p>« J’ai appris énormément d’astuces grâce à toi. Tes formations sont complètes et très faciles d’accès. »</p><footer>Jean-Philippe</footer></blockquote>
+          <blockquote><p>« On a l’impression d’être avec un pote qui partage son savoir avec passion. »</p><footer>Jean-Philippe</footer></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="pm-section pm-transform pm-wrap" aria-labelledby="transform-title">
+      <div class="pm-heading pm-heading-wide">
+        <div><p class="pm-kicker">Après Plugin Mastery</p><h2 id="transform-title">Des plugins que tu comprends. Des décisions que tu maîtrises.</h2></div>
+        <p>Tu ne mémorises pas une recette liée à une marque. Tu apprends des principes que tu peux réutiliser dans chaque session, même quand l’interface change.</p>
+      </div>
+      <div class="pm-transform-grid">
+        {transformations.map(([title, copy], index) => (
+          <article class:list={{ 'pm-transform-main': index === 0 }}>
+            <div class="pm-mini-processor" aria-hidden="true"><i></i><i></i><i></i><span style={`--level:${24 + index * 9}%`}></span></div>
+            <h3>{title}</h3><p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="pm-programme" id="programme" aria-labelledby="programme-title">
+      <div class="pm-wrap">
+        <div class="pm-heading pm-heading-wide">
+          <div><p class="pm-kicker">Le programme vérifié</p><h2 id="programme-title">Tout ce que tu vas enfin comprendre.</h2></div>
+          <p>Les 22 vidéos sont réparties en quatre familles. Le détail ci-dessous reprend uniquement les traitements confirmés dans le programme actuel.</p>
+        </div>
+        <div class="pm-module-list">
+          {modules.map((module, index) => (
+            <details open={index === 0}>
+              <summary>
+                <span class="pm-module-number">M{index + 1}</span>
+                <span><strong>{module.name}</strong><small>{module.signal}</small></span>
+                <span class="pm-module-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="pm-module-content">
+                <p>{module.intro}</p>
+                <div>{module.lessons.map(([name, copy]) => <article><h3>{name}</h3><p>{copy}</p></article>)}</div>
+              </div>
+            </details>
+          ))}
+        </div>
+        <div class="pm-programme-cta"><p><strong>22 vidéos, environ 4 heures.</strong> À suivre dans l’ordre ou à consulter selon le traitement qui te bloque.</p><a class="pm-text-link" href={checkoutUrl} data-checkout>Accéder à la formation · 49 €</a></div>
+      </div>
+    </section>
+
+    <section class="pm-section pm-demo pm-wrap" aria-labelledby="demo-title">
+      <div class="pm-demo-copy">
+        <p class="pm-kicker">Démonstration créative incluse</p>
+        <h2 id="demo-title">D’une simple sinusoïde à un son original.</h2>
+        <p>Dans la vidéo bonus créative, Vince part du signal le plus simple possible et le transforme progressivement. Tu vois les plugins devenir autre chose que des outils de correction : de vrais instruments de création.</p>
+        <ol>
+          <li><span>01</span>Partir d’un signal simple</li>
+          <li><span>02</span>Entendre chaque transformation</li>
+          <li><span>03</span>Construire une intention sonore</li>
+        </ol>
+      </div>
+      <!-- Emplacement prêt pour un futur extrait vidéo officiel. -->
+      <div class="pm-demo-poster">
+        <img src="/images/plugin-mastery/bonus-creative.webp" alt="Aperçu de la démonstration créative de Plugin Mastery" width="820" height="547" loading="lazy" decoding="async" />
+        <div><span>VIDÉO BONUS</span><strong>De la sine wave au son original</strong></div>
+      </div>
+    </section>
+
+    <section class="pm-compat" aria-labelledby="compat-title">
+      <div class="pm-wrap">
+        <div class="pm-heading pm-heading-wide">
+          <div><p class="pm-kicker">Compatible avec ton studio</p><h2 id="compat-title">Peu importe ton logiciel.</h2></div>
+          <p>Les démonstrations sont réalisées dans Logic Pro. Les principes enseignés sont universels et s’appliquent aux traitements équivalents de ton DAW.</p>
+        </div>
+        <div class="pm-daws" aria-label="Logiciels compatibles">
+          {['Logic Pro', 'Ableton Live', 'Cubase', 'FL Studio', 'Reaper', 'Studio One', 'Pro Tools'].map((daw, index) => <span style={`--daw:${index}`}>{daw}</span>)}
+        </div>
+        <p class="pm-compat-note">Les interfaces changent. L’écoute, la dynamique, les fréquences et l’espace restent les mêmes.</p>
+      </div>
+    </section>
+
+    <section class="pm-section pm-invest pm-wrap" aria-labelledby="invest-title">
+      <div class="pm-invest-title"><p class="pm-kicker">Un autre calcul</p><h2 id="invest-title">Le prix d’un plugin. Des compétences pour tous les autres.</h2></div>
+      <div class="pm-price-rack" aria-label="Comparaison de prix typiques de plugins">
+        {[29, 49, 79, 99].map((price, index) => <div style={`--meter:${28 + index * 19}%`}><span>PLUGIN {index + 1}</span><i></i><strong>{price} €</strong></div>)}
+      </div>
+      <div class="pm-invest-card">
+        <div><span>PLUGIN MASTERY</span><strong>49 €</strong><small>Paiement unique</small></div>
+        <p>Un outil finit par être remplacé. Une compétence reste disponible d’un logiciel, d’un plugin et d’un morceau à l’autre.</p>
+        <a class="pm-button" href={checkoutUrl} data-checkout>Investir dans mes compétences <span>49 €</span></a>
+      </div>
+    </section>
+
+    <section class="pm-bonus" id="bonus" aria-labelledby="bonus-title">
+      <div class="pm-wrap">
+        <div class="pm-heading"><p class="pm-kicker">5 bonus inclus</p><h2 id="bonus-title">Des raccourcis pour passer de « j’ai compris » à « je l’ai fait ».</h2><p>Pas de remplissage. Chaque bonus répond à une question qui revient au moment d’ouvrir une session.</p></div>
+        <div class="pm-bonus-grid">
+          {bonuses.map((bonus, index) => (
+            <article class:list={{ 'pm-bonus-visual': bonus.image }}>
+              {bonus.image && <img src={bonus.image} alt={bonus.alt} width="720" height={index === 4 ? '480' : '1080'} loading="lazy" decoding="async" />}
+              <div><span>BONUS {index + 1}</span><h3>{bonus.title}</h3><p>{bonus.copy}</p></div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pm-section pm-teacher pm-wrap" aria-labelledby="teacher-title">
+      <div class="pm-teacher-photo"><img src="/images/plugin-mastery/vince.webp" alt="Vince dans son home studio" width="828" height="552" loading="lazy" decoding="async" /><span>VINCE / LE MUSICIEN</span></div>
+      <div class="pm-teacher-copy">
+        <p class="pm-kicker">Ton formateur</p>
+        <h2 id="teacher-title">Un musicien qui veut remettre la technique à sa place.</h2>
+        <p>Je suis Vince, musicien, producteur et formateur MAO. Cela fait plus de 20 ans que je pratique le home studio, avec le même objectif : comprendre assez bien la technique pour qu’elle cesse de couper l’élan créatif.</p>
+        <p>Depuis 2015, mes formations ont accompagné plus de 6 000 musiciens. Mon approche reste simple : écouter, comprendre, essayer dans un vrai morceau et devenir plus autonome.</p>
+        <div class="pm-teacher-proof"><span><strong>20+</strong> ans de home studio</span><span><strong>6 000+</strong> musiciens formés</span><span><strong>28 000+</strong> abonnés YouTube</span></div>
+      </div>
+    </section>
+
+    <section class="pm-offer pm-wrap" id="offre" aria-labelledby="offer-title">
+      <div class="pm-offer-product">
+        <img src="/images/plugin-mastery/offer.webp" alt="Formation Plugin Mastery et ses bonus" width="820" height="820" loading="lazy" decoding="async" />
+      </div>
+      <div class="pm-offer-copy">
+        <p class="pm-label">Formation complète · Accès à vie</p>
+        <h2 id="offer-title">Plugin Mastery</h2>
+        <p class="pm-offer-price"><strong>49 €</strong><span>une fois · TTC</span></p>
+        <ul>
+          <li>22 vidéos, environ 4 heures de formation</li>
+          <li>EQ, compression, saturation, espace et modulation</li>
+          <li>Démonstrations dans Logic Pro, principes tous DAW</li>
+          <li>5 bonus pratiques inclus</li>
+          <li>Accès immédiat et à vie</li>
+          <li>Aucun abonnement, aucun plugin à acheter</li>
+          <li>Garantie satisfait ou remboursé pendant 14 jours</li>
+        </ul>
+        <a class="pm-button pm-button-wide" href={checkoutUrl} data-checkout>Je veux maîtriser mes plugins <span>49 €</span></a>
+        <p class="pm-secure">Paiement sécurisé via Systeme.io · Accès après paiement</p>
+      </div>
+    </section>
+
+    <section class="pm-section pm-faq pm-wrap" id="questions" aria-labelledby="faq-title">
+      <div class="pm-heading"><p class="pm-kicker">Questions fréquentes</p><h2 id="faq-title">Tu hésites encore ?</h2></div>
+      <div class="pm-faq-list">{faqs.map(([question, answer]) => <details><summary>{question}<span aria-hidden="true"></span></summary><p>{answer}</p></details>)}</div>
+    </section>
+
+    <section class="pm-final">
+      <svg viewBox="0 0 1200 180" preserveAspectRatio="none" aria-hidden="true"><path d="M0 90 C70 88 78 52 132 66 S206 116 263 91 S330 28 392 70 S477 130 536 74 S620 32 681 88 S756 132 817 79 S900 24 963 69 S1052 125 1200 61" /></svg>
+      <div class="pm-wrap"><p>Tu as probablement déjà les outils nécessaires.</p><h2>Il est temps d’apprendre vraiment à t’en servir.</h2><a class="pm-button" href={checkoutUrl} data-checkout>Commencer Plugin Mastery <span>49 €</span></a></div>
+    </section>
+  </div>
+
+  <a class="pm-mobile-cta" href={checkoutUrl} data-checkout aria-label="Accéder à Plugin Mastery pour 49 euros"><span><strong>Plugin Mastery</strong><small>Accès à vie</small></span><b>49 €</b></a>
+
+  <script>
+    const checkoutLinks = document.querySelectorAll<HTMLAnchorElement>('[data-checkout]');
+    const trackingParams = new URLSearchParams(window.location.search);
+    checkoutLinks.forEach((link) => {
+      const target = new URL(link.href);
+      trackingParams.forEach((value, key) => target.searchParams.set(key, value));
+      link.href = target.toString();
+      link.addEventListener('click', () => {
+        const state = window as Window & { __pmCheckoutTracked?: boolean; fbq?: (...args: unknown[]) => void };
+        if (!state.__pmCheckoutTracked && typeof state.fbq === 'function') {
+          state.__pmCheckoutTracked = true;
+          state.fbq('track', 'InitiateCheckout', { value: 49, currency: 'EUR', content_name: 'Plugin Mastery' });
+        }
+      });
+    });
+
+    const mobileCta = document.querySelector<HTMLElement>('.pm-mobile-cta');
+    const offer = document.querySelector<HTMLElement>('.pm-offer');
+    if (mobileCta && offer) {
+      const toggleSticky = () => mobileCta.classList.toggle('is-visible', window.scrollY > 520);
+      toggleSticky();
+      window.addEventListener('scroll', toggleSticky, { passive: true });
+      new IntersectionObserver(([entry]) => mobileCta.classList.toggle('is-obscured', entry.isIntersecting), { threshold: 0.15 }).observe(offer);
+    }
+  </script>
+</BaseLayout>
