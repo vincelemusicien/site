@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlackFridayCoursePicker from '../../components/BlackFridayCoursePicker.astro';
+---
+<BaseLayout title="Ton pack Black Friday | Le Musicien" description="Confirme tes trois formations." noindex={true}>
+<main class="bf-confirm"><p class="eyebrow">BLACK FRIDAY 2026</p><h1>À toi de choisir.</h1><p>Tu as acheté le pack à 99 € ? Indique les trois formations que tu souhaites garder sans limite de durée.</p><BlackFridayCoursePicker mode="pack"/><p>Les accès sont attribués manuellement après vérification de ta commande. Merci pour ta patience !</p></main>
+</BaseLayout>
+<style>.bf-confirm{max-width:720px;margin:auto;padding:80px 24px 100px;color:var(--text)}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--coral)}h1{font:400 clamp(48px,8vw,80px)/1 Georgia,serif;letter-spacing:-.06em}p{line-height:1.7}</style>
