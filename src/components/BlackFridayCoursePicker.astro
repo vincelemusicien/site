@@ -1,0 +1,41 @@
+---
+import { birthdayCourses, birthdayContact } from '../data/anniversaire42';
+interface Props { mode: 'pack' | 'bonus' }
+const { mode } = Astro.props;
+const bonus = mode === 'bonus';
+---
+<div class="bf-picker" data-picker data-mode={mode} data-contact={birthdayContact}>
+  <form data-form>
+    {Array.from({length:3},(_,i)=><div class="field"><label for={'bf-course-'+i}>Formation {i+1}</label><select id={'bf-course-'+i} required data-course><option value="">Choisis une formation</option>{birthdayCourses.map(c=><option value={c.title}>{c.title}{c.note?' (téléchargement)':''}</option>)}</select></div>)}
+    <label for="bf-email">L’adresse email utilisée pour ta commande</label>
+    <input id="bf-email" type="email" required autocomplete="email" placeholder="ton@email.fr" data-email />
+    <p aria-live="polite" data-count>0/3 formations sélectionnées</p>
+    <button type="submit" data-submit disabled>Envoyer mes 3 choix à Vince</button>
+    <p class="hint">Ce bouton ouvre ta messagerie avec tes choix. Pense à envoyer le message. Vince vérifie {bonus ? 'ton achat, la fin de ton premier Pass et ton droit au bonus' : 'ton paiement'} avant de t’attribuer les accès. En cas de souci, écris à <a href={'mailto:'+birthdayContact}>{birthdayContact}</a>.</p>
+  </form>
+</div>
+<script>
+for (const root of document.querySelectorAll<HTMLElement>('[data-picker]')) {
+ const form=root.querySelector<HTMLFormElement>('[data-form]')!;
+ const selects=Array.from(root.querySelectorAll<HTMLSelectElement>('[data-course]'));
+ const email=root.querySelector<HTMLInputElement>('[data-email]')!;
+ const submit=root.querySelector<HTMLButtonElement>('[data-submit]')!;
+ const count=root.querySelector<HTMLElement>('[data-count]')!;
+ function update(){
+   const chosen=selects.map(s=>s.value);
+   selects.forEach((s,i)=>Array.from(s.options).forEach(o=>{o.disabled=!!o.value&&chosen.some((v,j)=>j!==i&&v===o.value);}));
+   count.textContent=chosen.filter(Boolean).length+'/3 formations sélectionnées';
+   submit.disabled=chosen.some(v=>!v)||new Set(chosen).size!==3||!email.validity.valid||!email.value.trim();
+ }
+ form.addEventListener('input',update); form.addEventListener('change',update);
+ form.addEventListener('submit',e=>{e.preventDefault();update();if(submit.disabled||!form.reportValidity())return;
+   const subject=root.dataset.mode==='bonus'?'Pass MAO 365 - Mes 3 formations offertes':'Black Friday 2026 - Mes 3 formations';
+   const body=['Bonjour Vince,','','Voici mes 3 choix :',...selects.map((s,i)=>(i+1)+'. '+s.value),'','Email utilisé pour mon achat : '+email.value.trim(),'','Merci !'].join('\n');
+   window.location.href='mailto:'+root.dataset.contact+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+ }); update();
+}
+</script>
+<style>
+.bf-picker{padding:clamp(18px,4vw,32px);border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);margin:28px 0}
+.bf-picker label{display:block;font-weight:700;font-size:14px;margin:18px 0 7px}.bf-picker select,.bf-picker input{width:100%;padding:13px;border:1px solid var(--line-strong);border-radius:6px;background:var(--bg);color:var(--text);font:inherit}.bf-picker button{width:100%;background:var(--coral);color:white;border:0;border-radius:6px;padding:15px;font:inherit;font-weight:800;cursor:pointer}.bf-picker button:disabled{opacity:.5;cursor:not-allowed}.hint{font-size:13px;line-height:1.6;color:var(--muted)}.hint a{text-decoration:underline}
+</style>
