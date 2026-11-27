@@ -6,13 +6,62 @@ const packReady = true;
 const passReady = true;
 const packCheckout = 'https://productionmusicale.systeme.io/960b960c-7458ec4f';
 const passCheckout = 'https://productionmusicale.systeme.io/960b960c-61e25cae';
+
+const packPaths = [
+  {
+    problem: "Je débute en MAO et je pars dans tous les sens",
+    courses: ["Fondations MAO", "Écouter comme un Producer", "La méthode PMER"],
+    outcome: "Pose tes bases, apprends à décortiquer tes morceaux préférés, puis construis le tien.",
+  },
+  {
+    problem: "J’ai 40 boucles et toujours rien à faire écouter",
+    courses: ["Melody Maker", "Arrangements MAO", "Finish Line"],
+    outcome: "Développe une mélodie, structure ton idée et emmène une de tes boucles jusqu’au morceau fini.",
+  },
+  {
+    problem: "Je sèche devant la page blanche",
+    courses: ["Étincelle", "Le défi Songwriting", "Songwriting Mastery"],
+    outcome: "Retrouve des idées de chansons, écris régulièrement et retravaille celles qui te ressemblent.",
+  },
+  {
+    problem: "Mon mix est brouillon",
+    courses: ["Comprendre l'EQ", "Comprendre la Compression", "Mastering Maison"],
+    outcome: "Fais de la place aux pistes, gère leur dynamique et prépare ton mix final pour la sortie.",
+  },
+  {
+    problem: "Je perds trop de temps dans Logic Pro",
+    courses: ["Workflow Efficace", "Logic Pro Secrets", "Smart Tools Logic"],
+    outcome: "Organise tes sessions et gagne du temps avec les raccourcis et les outils intelligents de Logic.",
+  },
+  {
+    problem: "Mon titre est prêt. Comment je le fais écouter ?",
+    courses: ["Les 7 piliers pour vendre sa musique", "Réussir sa sortie digitale", "Les 7 emails pour vendre sa musique"],
+    outcome: "Clarifie à qui tu veux parler, prépare ta sortie et écris aux gens qui suivent déjà ta musique.",
+  },
+];
 ---
 <BaseLayout title="Black Friday 2026 | Le Musicien" description="Trois formations au choix ou un an de Pass MAO sans reconduction." noindex={true}>
 <main class="bf">
 <section class="hero"><p class="eyebrow">BLACK FRIDAY 2026 · LE MUSICIEN</p><h1>Fais plein<br/><em>de musique.</em></h1><p>Avant d'acheter ton 47e compresseur, offre-toi de quoi faire de la meilleure musique avec les outils que tu as déjà. Deux offres, zéro abonnement.</p><p class="deadline">Offres Black Friday jusqu’au 30 novembre à 23h59 (heure française).</p></section>
 <section class="offers" aria-label="Les deux offres">
-<article><img class="offer-art" src="/images/black-friday/black-friday-pack-3.webp" alt="Black Friday : 3 formations au choix, 99 euros" width="727" height="951" onerror="this.hidden=true" /><p class="eyebrow">À LA CARTE</p><h2>3 formations au choix</h2><p class="price">99 <span>€</span></p><p>33 € par formation. Choisis exactement ce dont tu as besoin.</p><ul><li>3 formations différentes du catalogue éligible</li><li>Accès sans limite de durée</li><li>Paiement unique</li><li>Choix confirmé après achat</li></ul>{packReady?<a class="cta" href={packCheckout}>Je commande mes 3 formations</a>:<span class="cta pending">Offre en préparation</span>}</article>
+<article><img class="offer-art" src="/images/black-friday/black-friday-pack-3.webp" alt="Black Friday : 3 formations au choix, 99 euros" width="727" height="951" onerror="this.hidden=true" /><p class="eyebrow">À LA CARTE</p><h2>3 formations au choix</h2><p class="price">99 <span>€</span></p><p>33 € par formation. Choisis exactement ce dont tu as besoin.</p><ul><li>3 formations différentes du catalogue éligible</li><li>Accès sans limite de durée</li><li>Paiement unique</li><li>Choix confirmé après achat</li></ul>{packReady?<a class="cta" href={packCheckout}>Je commande mes 3 formations</a>:<span class="cta pending">Offre en préparation</span>}<a class="pack-paths-link" href="#parcours">Voir des exemples de parcours</a></article>
 <article class="pass"><img class="offer-art" src="/images/black-friday/black-friday-pass-365.webp" alt="Pass MAO 365, 299 euros, trois formations à conserver" width="725" height="951" onerror="this.hidden=true" /><p class="eyebrow">UNE ANNÉE DE MUSIQUE</p><h2>Pass MAO 365</h2><p class="old">Tarif annuel classique : 399 €</p><p class="price">299 <span>€</span></p><p class="no-renewal"><strong>299 € une seule fois. 365 jours d’accès. Sans abonnement ni reconduction.</strong></p><p>Une année entière pour avancer dans ton home studio.</p><ul><li>Catalogue complet du Pass MAO pendant 365 jours</li><li>Nouveautés incluses pendant ton accès</li><li>PM School, communauté, défis et lives</li><li>Aucun renouvellement automatique, aucune démarche de résiliation</li></ul><div class="bonus"><strong>Et à la fin ?</strong><p>Garde trois formations éligibles de ton choix sans limite de durée. Ce bonus reste acquis même si tu renouvelles.</p></div>{passReady?<a class="cta" href={passCheckout}>Je prends mon Pass 365</a>:<span class="cta pending">Offre en préparation</span>}</article>
+</section>
+<section class="pack-paths" id="parcours" aria-labelledby="parcours-title">
+  <h2 id="parcours-title">Quel parcours te correspond ?</h2>
+  <p class="pack-paths-intro">Pars de ce qui te bloque en ce moment. Tu peux suivre un de ces parcours ou piocher dans le catalogue pour composer ton trio.</p>
+  <div class="pack-paths-grid">
+    {packPaths.map(({ problem, courses, outcome }) => (
+      <article class="pack-path">
+        <h3>{problem}</h3>
+        <p>{outcome}</p>
+        <ol>
+          {courses.map(course => <li>{course}</li>)}
+        </ol>
+      </article>
+    ))}
+  </div>
+  {packReady && <a class="cta" href={packCheckout}>Je commande mes 3 formations</a>}
 </section>
 <section class="catalogue"><p class="eyebrow">LE CATALOGUE À LA CARTE</p><h2>Quelles compétences veux-tu développer ?</h2><p>Voici les cours parmi lesquels tu peux composer ton pack. Les packs, abonnements et coachings ne font pas partie de la sélection.</p>{birthdayCategories.filter(c=>c.id!=='all').map(cat=><details><summary>{cat.label}</summary><div class="courses">{birthdayCourses.filter(c=>c.category===cat.id).map(c=><div><strong>{c.title}</strong><p>{c.description}</p>{c.note&&<small>{c.note}</small>}</div>)}</div></details>)}</section>
 <section class="faq"><h2>Les questions que tu te poses</h2><details><summary>Et si j'ai déjà acheté des formations ?</summary><p>Choisis trois autres cours qui t'intéressent. Tes accès achetés séparément restent les tiens.</p></details><details><summary>Le Pass se renouvelle-t-il tout seul ?</summary><p>Non, le renouvellement automatique est désactivé dès ton achat. Tu paies une seule fois et ton accès prend fin après 365 jours, sans aucun prélèvement supplémentaire ni démarche de résiliation. À l’approche de l’échéance, je te proposerai de renouveler pour une nouvelle année au tarif fidélité de 299 € si tu le souhaites. Dans tous les cas, tu peux choisir les trois formations que tu conserveras sans limite de durée.</p></details><details><summary>Quand vais-je choisir mes trois cours ?</summary><p>Juste après le paiement pour le pack à la carte, ou à l'issue de ton premier Pass 365 pour le bonus.</p></details></section>
@@ -20,4 +69,68 @@ const passCheckout = 'https://productionmusicale.systeme.io/960b960c-61e25cae';
 </BaseLayout>
 <style>
 .bf{max-width:1120px;margin:auto;padding:60px 24px 100px;color:var(--text)}.hero{text-align:center;padding:40px 0 50px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.13em;color:var(--coral)}h1{font:400 clamp(58px,9vw,116px)/.95 Georgia,serif;letter-spacing:-.07em;margin:18px 0}h1 em{color:var(--coral)}.hero>p:last-child{max-width:620px;margin:24px auto;font-size:18px;line-height:1.6}.offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.offers article{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:clamp(22px,4vw,40px)}.offers .pass{border:2px solid var(--coral)}h2{font:400 clamp(26px,4vw,42px)/1.1 Georgia,serif;letter-spacing:-.04em;margin:12px 0}.price{font-size:clamp(56px,8vw,88px);font-weight:800;line-height:1;letter-spacing:-.07em;margin:12px 0}.price span{font-size:.5em}.old{color:var(--muted);font-size:14px;margin:8px 0 0}.offers ul{padding-left:20px;line-height:1.8;margin:14px 0 24px}.bonus{border-left:3px solid var(--coral);padding:14px 18px;margin:0 0 20px}.bonus p{margin:6px 0 0}.cta{display:block;margin-top:auto;text-align:center;background:var(--coral);color:white;padding:15px;border-radius:6px;font-weight:800}.pending{opacity:.6}.catalogue,.faq{max-width:860px;margin:75px auto 0}details{border-bottom:1px solid var(--line-strong);padding:16px 0}summary{cursor:pointer;font-weight:750}.courses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;padding:20px 0}.courses>div{border:1px solid var(--line-strong);padding:16px;border-radius:8px}.courses p{font-size:14px;margin:8px 0;line-height:1.5}p{line-height:1.6}@media(max-width:680px){.offers,.courses{grid-template-columns:1fr}.bf{padding-top:28px}}
-.offer-art{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:22px}.offer-art[hidden]{display:none}.deadline{font-weight:700;color:var(--coral);font-size:14px!important}.no-renewal{padding:14px 16px;border:1px solid var(--coral);border-radius:8px;line-height:1.5;margin:8px 0 12px;color:var(--text)}.no-renewal strong{font-weight:800}</style>
+.offer-art{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:22px}.offer-art[hidden]{display:none}.deadline{font-weight:700;color:var(--coral);font-size:14px!important}.no-renewal{padding:14px 16px;border:1px solid var(--coral);border-radius:8px;line-height:1.5;margin:8px 0 12px;color:var(--text)}.no-renewal strong{font-weight:800}
+.pack-paths {
+  margin: 64px auto 0;
+  scroll-margin-top: 100px;
+}
+.pack-paths h2 {
+  margin: 0 0 12px;
+}
+.pack-paths-intro {
+  max-width: 64ch;
+  margin: 0 0 24px;
+}
+.pack-paths-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.pack-path {
+  padding: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.pack-path h3 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+  margin: 0;
+}
+.pack-path p {
+  margin: 8px 0 14px;
+}
+.pack-path ol {
+  margin: 0;
+  padding-left: 1.4em;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.pack-path li + li {
+  margin-top: 4px;
+}
+.pack-path li::marker {
+  color: var(--coral);
+}
+.pack-paths .cta {
+  display: inline-block;
+}
+.pack-paths-link {
+  align-self: center;
+  margin-top: 14px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 850px) {
+  .pack-paths-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 540px) {
+  .pack-paths-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
